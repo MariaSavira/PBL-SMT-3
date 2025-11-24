@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const navbar = document.querySelector(".navbar");
-    const menu = document.querySelector(".menu");
+    // const menu = document.querySelector(".menu");
     const hero = document.querySelector("#hero");
 
     window.addEventListener("scroll", function () {
