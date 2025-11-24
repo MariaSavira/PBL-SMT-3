@@ -18,8 +18,17 @@ body {
 
 
 /* ini buat per navbar an ya rek */
-header.custom-navbar {
-    position: fixed;
+@media (min-width: 1024px) {}
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    overflow-x: hidden;
+}
+
+header.navbar {
+    position: absolute;
     top: 0;
     width: 100%;
     z-index: 999;
@@ -30,38 +39,33 @@ header.custom-navbar {
     max-width: 1500px;
     margin: 0 auto;
     padding: 0 40px;
-    height: 95px; /* diperkecil agar proporsional */
-    
+    height: 110px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-/* Logo diperkecil agar tidak makan tempat */
 .navbar-container .logo img {
-    height: 75px; /* dari 90px → 75px */
+    height: 90px;
 }
 
-/* Menu */
 nav.menu {
     display: flex;
-    gap: 22px;          /* dari 30px → 22px (lebih rapat) */
-    padding-right: 90px; /* dari 165px → 90px */
+    gap: 30px;
+    padding-right: 165px;
 }
 
 nav.menu span a {
     color: white;
-    font-size: 14.5px;  /* dari 16px → 14.5px (biar muat 1 baris) */
+    font-size: 16px;
     font-weight: 600;
     text-decoration: none;
     position: relative;
-    white-space: nowrap; /* jaga biar tidak turun ke baris bawah */
 }
 
-/* Underline hover tetap seperti punyamu */
 nav.menu span a::after {
     content: "";
-    position: fixed;
+    position: absolute;
     left: 50%;
     bottom: -3px;
     width: 0%;
@@ -75,9 +79,9 @@ nav.menu span a:hover::after {
     width: 100%;
 }
 
-.custom-navbar.navbar-scrolled {
+.navbar.navbar-scrolled {
     background: #0C2A4C;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 /* end */
@@ -397,6 +401,7 @@ nav.menu span a:hover::after {
 }
 
 /* ngatur footer di sini ya rek */
+
 .footer {
     background: linear-gradient(to bottom,rgba(3, 37, 76, 1) 40%,rgba(11, 74, 143, 1) 100%);
     text-align: center;
@@ -404,8 +409,7 @@ nav.menu span a:hover::after {
     color: white;
     width: 100vw;
     margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw); /* ✔ sama kiri-kanan */
-    overflow-x: hidden; /* antisipasi agar aman */
+    margin-right: calc(50% - 50vw); 
 }
 
 .footer-logo img {
