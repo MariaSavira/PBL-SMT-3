@@ -1,4 +1,4 @@
-  body {
+   body {
         margin: 0;
         font-family: "Poppins", sans-serif;
         background: #f2f6ff;
@@ -29,8 +29,8 @@
 
     nav.menu {
         display: flex;
-        gap: 20px;
-        padding-right: 0px;
+        gap: 30px;
+        padding-right: 165px;
     }
 
     nav.menu span a {
@@ -67,11 +67,10 @@
         background: #4CA8FF;
         transform: translateX(-50%);
     }
-
     /* end */
 
-     .heading {
-        background: url('../Image/Homepage/Background.png') center/cover no-repeat;
+    .heading {
+        background: url('../Image/Heading/Heading.png') center/cover no-repeat;
         color: white;
         margin-top: 110px;
         padding: 100px 20px;

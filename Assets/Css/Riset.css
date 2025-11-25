@@ -202,8 +202,7 @@
         transform: translateY(-3px);
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
     }
-
-    .footer {
+.footer {
         background: linear-gradient(to bottom,
                 rgba(3, 37, 76, 1) 40%,
                 rgba(11, 74, 143, 1) 100%);
@@ -265,3 +264,5 @@
         font-size: 14px;
         opacity: 0.8;
     }
+
+    
