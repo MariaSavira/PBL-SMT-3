@@ -101,7 +101,7 @@
                     <button type="button" class="file-link" id="fileViewBtn">Lihat</button>
                 </div>
 
-                <button type="submit" class="btn">Kirim Pesan</button>
+                <button type="button" class="btn" id="btnKirim">Kirim Pesan</button>
             </div>
 
             <div class="right">
@@ -158,63 +158,87 @@
     </section>
 
     <script>
+    // Navbar efek scroll
+    window.addEventListener("scroll", function () {
+        const navbar = document.querySelector("header.navbar"); // pakai class, bukan id
+        if (!navbar) return;
 
-        window.addEventListener("scroll", function () {
-            const navbar = document.getElementById("navbar");
-            if (window.scrollY > 20) {
-                navbar.classList.add("navbar-scrolled");
-            } else {
-                navbar.classList.remove("navbar-scrolled");
+        if (window.scrollY > 20) {
+            navbar.classList.add("navbar-scrolled");
+        } else {
+            navbar.classList.remove("navbar-scrolled");
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const fileInput   = document.getElementById('fileInput');
+        const uploadBtn   = document.getElementById('uploadTrigger');
+        const filePreview = document.getElementById('filePreview');
+        const fileNameEl  = document.getElementById('fileName');
+        const fileSizeEl  = document.getElementById('fileSize');
+        const fileViewBtn = document.getElementById('fileViewBtn');
+        const kirimBtn    = document.getElementById('btnKirim');
+
+
+        // Trigger pilih file
+        uploadBtn.addEventListener('click', function () {
+            fileInput.click();
+        });
+
+        let currentFileUrl = null;
+
+        fileInput.addEventListener('change', function () {
+            const file = this.files[0];
+            if (!file) return;
+
+            if (file.type !== 'application/pdf') {
+                alert('Hanya file PDF yang diperbolehkan.');
+                this.value = '';
+                return;
             }
+
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Ukuran file maksimal 5 MB.');
+                this.value = '';
+                return;
+            }
+
+            fileNameEl.textContent = file.name;
+            const sizeMB = file.size / (1024 * 1024);
+            fileSizeEl.textContent = sizeMB.toFixed(1) + ' MB';
+
+            if (currentFileUrl) {
+                URL.revokeObjectURL(currentFileUrl);
+            }
+            currentFileUrl = URL.createObjectURL(file);
+
+            fileViewBtn.onclick = function () {
+                window.open(currentFileUrl, '_blank');
+            };
+
+            filePreview.style.display = 'flex';
         });
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const fileInput    = document.getElementById('fileInput');
-            const uploadBtn    = document.getElementById('uploadTrigger');
-            const filePreview  = document.getElementById('filePreview');
-            const fileNameEl   = document.getElementById('fileName');
-            const fileSizeEl   = document.getElementById('fileSize');
-            const fileViewBtn  = document.getElementById('fileViewBtn');
+        // NOTIF saat klik "Kirim Pesan"
+        kirimBtn.addEventListener('click', function (e) {
+            e.preventDefault(); // supaya nggak reload halaman
 
-            uploadBtn.addEventListener('click', function () {
-                fileInput.click();
-            });
+            alert(
+                'Terima kasih, pesan Anda telah terkirim.\n' +
+                'Kami akan meninjau pesan tersebut dan menghubungi Anda melalui kontak yang tersedia.'
+            );
 
-            let currentFileUrl = null;
-
-            fileInput.addEventListener('change', function () {
-                const file = this.files[0];
-                if (!file) return;
-
-                if (file.type !== 'application/pdf') {
-                    alert('Hanya file PDF yang diperbolehkan.');
-                    this.value = '';
-                    return;
-                }
-
-                if (file.size > 5 * 1024 * 1024) {
-                    alert('Ukuran file maksimal 5 MB.');
-                    this.value = '';
-                    return;
-                }
-
-                fileNameEl.textContent = file.name;
-                const sizeMB = file.size / (1024 * 1024);
-                fileSizeEl.textContent = sizeMB.toFixed(1) + ' MB';
-
-                if (currentFileUrl) {
-                    URL.revokeObjectURL(currentFileUrl);
-                }
-                currentFileUrl = URL.createObjectURL(file);
-
-                fileViewBtn.onclick = function () {
-                    window.open(currentFileUrl, '_blank');
-                };
-
-                filePreview.style.display = 'flex';
-            });
+            // optional: reset form setelah kirim
+            document.getElementById('nama').value = '';
+            document.getElementById('instansi').value = '';
+            document.getElementById('alasan').selectedIndex = 0;
+            document.getElementById('pesan').value = '';
+            fileInput.value = '';
+            filePreview.style.display = 'none';
         });
-    </script>
+    });
+</script>
+
      <footer class="footer">
             <div class="footer-logo">
                 <img src="../Assets/Image/Logo/Logo With Text.png"
