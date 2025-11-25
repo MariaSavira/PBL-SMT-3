@@ -1,75 +1,277 @@
 <!DOCTYPE html>
 <html lang="id">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Business Analytics</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link
-            href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-            rel="stylesheet">
-        <link rel="stylesheet" href="../Assets/Css/Index.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-        <link rel="icon" type="images/x-icon" href="../Assets/Image/Logo/Logo Without Text.png" />
-    </head>
-    <body>
-        <!-- dropdown di navbar belum ada -->
-        <header class="navbar" id="navbar">
-            <div class="navbar-container">
-                <div class="logo">
-                    <img src="../Assets/Image/Logo/Logo With Text.png" title="Politeknik Negeri Malang" style="width: 178px; height: 91px; padding-left: 178px">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Analytics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../Assets/Css/Index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link rel="icon" type="images/x-icon" href="../Assets/Image/Logo/Logo Without Text.png" />
+</head>
+
+<body>
+    <!-- dropdown di navbar belum ada -->
+    <header class="navbar" id="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <img src="../Assets/Image/Logo/Logo With Text.png" title="Politeknik Negeri Malang"
+                    style="width: 178px; height: 91px; padding-left: 178px">
+            </div>
+
+            <nav class="menu">
+                <span> <a href="TentangKami.html">Tentang Kami <i id="tentang-kami-chevron-down"
+                            class="fa-solid fa-chevron-down"></i></a></span>
+                <span> <a href="Anggota.html">Anggota</a></span>
+                <span> <a href="Publikasi.html">Publikasi</a></span>
+                <span> <a href="Riset.html">Riset</a></span>
+                <span> <a href="Karya.html">Karya</a></span>
+                <span> <a href="Berita.html">Berita</a></span>
+                <span> <a href="KontakKami.html">Kontak Kami <i id="kontak-kami-chevron-down"
+                            class="fa-solid fa-chevron-down"></i></a></span>
+                <span> <a href="Login.html">Login</a></span>
+            </nav>
+        </div>
+    </header>
+    <section class="hero" id="hero">
+        <video autoplay muted loop playsinline class="hero-video">
+            <source src="../Assets/Video/Homepage Video Bg.mp4" type="video/mp4">
+        </video>
+
+        <div class="overlay"></div>
+        <div class="hero-content">
+            <h1>Selamat Datang di<br>Laboratorium Analisa Bisnis</h1>
+            <p>Menciptakan Solusi, Bukan Sekedar Analisis</p>
+        </div>
+    </section>
+
+    <section class="profil-lab">
+        <div class="profil-container">
+            <div class="profil-image">
+                <img src="../Assets/Image/Homepage/img/Profile.png" alt="Profil Laboratorium">
+            </div>
+            <div class="profil-text">
+                <h2>Profil Laboratorium</h2>
+                <p>
+                    Jelajahi profil lengkap laboratorium: fokus riset,
+                    keunggulan, dan
+                    informasi penting lainnya.
+                </p>
+                <a href="#" class="btn-profil">Cari Tahu Lebih Lanjut</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="visi-misi-section">
+        <div class="vm-container">
+            <div class="vm-card">
+                <img src="../Assets/Image/Homepage/img/Visi.png" alt="Ikon Visi" class="vm-icon">
+
+                <h2 class="vm-title">Visi</h2>
+
+                <p class="vm-text">
+                    Menjadi laboratorium unggul rujukan nasional sebagai
+                    inkubator solusi cerdas berbasis data,
+                    yang berfungsi sebagai mitra strategis industri untuk
+                    mengakselerasi transformasi bisnis
+                    dan pengambilan keputusan yang berdampak.
+                </p>
+            </div>
+            <div class="vm-card">
+                <img src="../Assets/Image/Homepage/img/Misi.png" alt="Ikon Misi" class="vm-icon">
+                <h2 class="vm-title">Misi</h2>
+                <ul class="vm-list">
+                    <li>Mengembangkan riset terapan</li>
+                    <li>Mengin­tegrasikan berbagai disiplin ilmu</li>
+                    <li>Membangun kemitraan strategis dengan industry</li>
+                    <li>Mengembangkan talenta (dosen dan mahasiswa)</li>
+                    <li>Menjalankan tata kelola laboratorium yang
+                        profesional, etis, dan berkelanjutan</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <div class="fokus-riset-section">
+        <h2 class="judul-fokus">Fokus Riset</h2>
+        <div class="fokus-row">
+            <div class="fokus-card">Anomaly Detection</div>
+            <div class="fokus-card">Identity Theft</div>
+            <div class="fokus-card">Fraud Detection</div>
+            <div class="fokus-card">Brand Image Analysis</div>
+            <div class="fokus-card">New Product Development</div>
+        </div>
+        <div class="fokus-row">
+            <div class="fokus-card row2">Competitive Monitoring</div>
+            <div class="fokus-card row2">Digital Marketing Analysis</div>
+            <div class="fokus-card row2">Supply Chain Analytics</div>
+        </div>
+
+        <div class="cta-container" style="margin-bottom: 100px">
+            <a href="#" class="cta-btn">
+                Lihat lebih banyak
+            </a>
+        </div>
+    </div>
+
+    <section class="news-section py-5">
+        <div class="container-fluid px-5">
+            <h3 class="fw-bold mb-4 section-title">Berita Terbaru</h3>
+            <div class="row g-4">
+                <div class="col-lg-7">
+                    <div class="big-news">
+                        <img src="../Assets/Image/Homepage/img/Berita Utama.png"
+                            class="img-fluid rounded-4 mb-3 big-news-img" alt="big news">
+
+                        <h4 class="fw-bold mb-2">
+                            Apa Itu Saham dan Perbedaannya Dengan
+                            Dividen?
+                        </h4>
+                        <div class="d-flex align-items-center text-secondary small mb-3">
+                            <span>Sabtu, 15 November 2025 | 20:39
+                                WIB</span>
+                            <span class="mx-2">•</span>
+                            <i class="bi bi-person-fill me-1"></i>
+                            Muhammad Yunus
+                        </div>
+                        <p class="text-secondary">
+                            Saham adalah instrumen keuangan yang
+                            mewakili kepemilikan seseorang atau entitas
+                            dalam suatu
+                            perusahaan. Dengan memiliki saham, pemegang
+                            saham memiliki klaim atas sebagian aset dan
+                            pendapatan perusa…
+                        </p>
+                    </div>
                 </div>
-            
-                <nav class="menu">
-                    <span> <a href="TentangKami.html">Tentang Kami <i id="tentang-kami-chevron-down" class="fa-solid fa-chevron-down"></i></a></span>
-                    <span> <a href="Anggota.html">Anggota</a></span>
-                    <span> <a href="Publikasi.html">Publikasi</a></span>
-                    <span> <a href="Riset.html">Riset</a></span>
-                    <span> <a href="Karya.html">Karya</a></span>
-                    <span> <a href="Berita.html">Berita</a></span>
-                    <span> <a href="KontakKami.html">Kontak Kami <i id="kontak-kami-chevron-down" class="fa-solid fa-chevron-down"></i></a></span>
-                    <span> <a href="Login.html">Login</a></span>
-                </nav>
+                <div class="col-lg-5">
+                    <div class="small-news-list d-flex flex-column gap-4">
+                        <div class="d-flex small-news-item">
+                            <img src="../Assets/Image/Homepage/img/Berita Atas.png" class="small-thumb rounded-3 me-3"
+                                alt>
+                            <div>
+                                <div class="small text-secondary mb-1">Minggu,
+                                    16 November 2025 | 16:15 WIB</div>
+                                <h6 class="fw-bold mb-1">
+                                    Kurs Rupiah Masuk Kinerja Terburuk
+                                    di Asia, Modal Asing Keluar Rp184,09
+                                    triliun
+                                </h6>
+                                <div class="text-secondary small">
+                                    <i class="bi bi-person-fill me-1"></i>
+                                    Surya Dua Artha Simanjuntak
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex small-news-item">
+                            <img src="../Assets/Image/Homepage/img/berita kecil tengah.png"
+                                class="small-thumb rounded-3 me-3" alt>
+                            <div>
+                                <div class="small text-secondary mb-1">Sabtu,
+                                    15 November 2025 | 12:00 WIB</div>
+                                <h6 class="fw-bold mb-1">
+                                    Kenaikan Tarif Ojol Mengintai di
+                                    Tengah Wacana Merger Grab–Gojek
+                                </h6>
+                                <div class="text-secondary small">
+                                    <i class="bi bi-person-fill me-1"></i>
+                                    Pernita Hestin Untari
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex small-news-item">
+                            <img src="../Assets/Image/Homepage/img/berita kecil bawah.png"
+                                class="small-thumb rounded-3 me-3" alt>
+                            <div>
+                                <div class="small text-secondary mb-1">Minggu,
+                                    16 November 2025 | 15:13 WIB</div>
+                                <h6 class="fw-bold mb-1">
+                                    GoPay Dukung QRIS Tap Bank
+                                    Indonesia, Catat Puluhan Ribu
+                                    Transaksi Setiap Minggu
+                                </h6>
+                                <div class="text-secondary small">
+                                    <i class="bi bi-person-fill me-1"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </header>
-        <section class="hero" id="hero">
-            <video autoplay muted loop playsinline class="hero-video">
-                <source src="../Assets/Video/Homepage Video Bg.mp4" type="video/mp4">
-            </video>
 
-            <div class="overlay"></div>
+            <div class="cta-container mt-5 text-center">
+                <a href="#" class="cta-btn">
+                    Lihat Lebih Banyak
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
 
-            <div class="hero-content">
-                <h1>Selamat Datang di<br>Laboratorium Analisa Bisnis</h1>
-                <p>Menciptakan Solusi, Bukan Sekedar Analisis</p>
+    <section class="galeri-section py-5">
+        <h3 class="fw-bold text-center mb-4 section-title">Galeri</h3>
+
+        <div class="gallery-wrapper d-flex justify-content-center gap-4">
+            <img src="../Assets/Image/Homepage/img/Galeri kanan.png" class="gallery-img" alt="galeri 1">
+            <img src="../Assets/Image/Homepage/img/Galeri Tengah.png" class="gallery-img" alt="galeri 2">
+            <img src="../Assets/Image/Homepage/img/Galeri Kiri.png" class="gallery-img" alt="galeri 3">
+        </div>
+
+        <div class="cta-container mt-5 text-center">
+            <a href="#" class="cta-btn"> Lihat Lebih Banyak </a>
+        </div>
+    </section>
+
+    <section class="partnership-section">
+        <div class="partnership-container">
+
+            <div class="partnership-text">
+                <h2>Partnership dan Kerjasma</h2>
+                <p>
+                    Business Analysis Laboratory menjalin kerjasama
+                    dengan berbagai mitra
+                    industri untuk meningkatkan kualitas penelitian,
+                    pengembangan,
+                    serta penerapan teknologi analitik.
+                </p>
+                <a href="#" class="cta-btn">Bergabung dengan Kami</a>
             </div>
-        </section>
-        <section>
-            <h1 style="padding: 500px; text-align: center;">Hay watsap</h1>
-        </section>
-        <footer class="footer">
-            <div class="footer-logo">
-                <img src="../Assets/Image/Logo/Logo With Text.png" title="Politeknik Negeri Malang" style="width: 178px; height: 91px" class="logo-img" />
+
+            <div class="partnership-image">
+                <img src="../Assets/Image/Homepage/img/Kerjasama.png" alt="Partnership Image">
             </div>
-            <ul class="footer-menu">
-                <li>Tentang Kami</li>
-                <li>Anggota</li>
-                <li>Publikasi</li>
-                <li>Riset</li>
-                <li>Resource</li>
-                <li>Berita</li>
-                <li>Kontak Kami</li>
-                <li>Login</li>
-            </ul>
-            <div class="footer-social">
-                <i class="fab fa-facebook"></i>
-                <i class="fas fa-envelope"></i>
-                <i class="fab fa-twitter"></i>
-                <i class="fab fa-instagram"></i>
-            </div>
-            <p class="footer-copyright">© 2025 Tim PBL Business Analyst SIB 2C</p>
-        </footer>
-        <script src="../Assets/Javascript/Index.js"></script>
-    </body>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-logo">
+            <img src="../Assets/Image/Logo/Logo With Text.png" title="Politeknik Negeri Malang"
+                style="width: 178px; height: 91px" class="logo-img" />
+        </div>
+        <ul class="footer-menu">
+            <li>Tentang Kami</li>
+            <li>Anggota</li>
+            <li>Publikasi</li>
+            <li>Riset</li>
+            <li>Resource</li>
+            <li>Berita</li>
+            <li>Kontak Kami</li>
+            <li>Login</li>
+        </ul>
+        <div class="footer-social">
+            <i class="fab fa-facebook"></i>
+            <i class="fas fa-envelope"></i>
+            <i class="fab fa-twitter"></i>
+            <i class="fab fa-instagram"></i>
+        </div>
+        <p class="footer-copyright">© 2025 Tim PBL Business Analyst SIB 2C</p>
+    </footer>
+    <script src="../Assets/Javascript/Index.js"></script>
+</body>
+
 </html>
