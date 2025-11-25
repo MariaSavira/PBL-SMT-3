@@ -145,6 +145,7 @@ nav.menu span a:hover::after {
     width: 100%;
     background: #f5f7fa;
     padding: 60px 0; 
+    zoom: 0.8;
 }
 
 .profil-container {
@@ -200,6 +201,7 @@ nav.menu span a:hover::after {
 .visi-misi-section {
     background-color: #e8f0ff;
     padding: 45px 0; 
+    zoom: 0.9;
 }
 
 .vm-container {
@@ -248,6 +250,7 @@ nav.menu span a:hover::after {
 .fokus-riset-section {
     background-color: #e6efff;
     padding: 60px 90px;
+    zoom: 0.9;
 }
 
 .judul-fokus {
@@ -282,28 +285,110 @@ nav.menu span a:hover::after {
     white-space: nowrap;       
 }
 
+/* BERITA */
+/* SECTION */
 .news-section {
-    width: 100%;
-    background: #ffffff !important;
-    padding: 60px 0;
+    background: #fff;
+    padding: 40px 0;
 }
 
 .news-container {
-    width: 78%;
-    margin: 0 auto;
+    width: 1100px;
+    margin: auto;
+}
+
+.section-title {
+    text-align: center;
+    color: #174377;
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 40px;
+    font-family: "Poppins", sans-serif;
+}
+
+.news-flex {
     display: flex;
     gap: 40px;
-    align-items: flex-start;
 }
 
 .berita-utama {
     flex: 1;
 }
 
-.berita-list {
-    width: 38%;
+.big-news-img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 16px;
 }
 
+.judul-utama {
+    font-size: 1.35rem;
+    line-height: 1.35;
+    margin: 15px 0;
+    font-weight: 600;
+}
+
+.meta-utama {
+    display: flex;
+    gap: 10px;
+    color: #777;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+}
+
+.deskripsi-utama {
+    font-size: 0.95rem;
+    color: #777;
+    line-height: 1.55;
+}
+
+.berita-list {
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+
+.berita-item {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+.thumb {
+    width: 120px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.item-date {
+    font-size: 0.78rem;
+    color: #777;
+    margin-bottom: 4px;
+}
+
+.item-title {
+    font-size: 0.95rem;
+    margin: 0 0 4px;
+    line-height: 1.35;
+    font-weight: 600;
+}
+
+.item-author {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #777;
+    margin-top: 8px;
+    flex-wrap: nowrap;
+}
+
+
+/* Galeri */
 .galeri-section {
     width: 100%;
     background: #E9F1FF; 
@@ -320,13 +405,14 @@ nav.menu span a:hover::after {
 .gallery-img:hover {
     transform: scale(1.04);
 }
-
+/* PARTNERSHIP */
 .partnership-section {
     width: 100vw;
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
     background: #ffffff;
     padding: 60px 0;
+    zoom: 0.9;
 }
 
 .partnership-container {
@@ -365,7 +451,7 @@ nav.menu span a:hover::after {
     text-align: center;
     padding: 40px 20px;
     color: white;
-    width: 100vw;
+    max-width: 100vw;
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw); 
 }
