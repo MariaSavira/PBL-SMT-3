@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formulir Peminjaman Laboratorium</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../User/Assets/Css/FormPeminjaman.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link rel="icon" type="images/x-icon" href="../User/Assets/Image/Logo/Logo Without Text.png" />
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <a href="Index.html">
+                    <img src="../User/Assets/Image/Logo/Logo With Text.png" 
+                         style="width: 178px; height: 91px; padding-left: 178px; cursor: pointer;">
+                </a>
+            </div>
+
+            <nav class="menu">
+                <span><a href="TentangKami.html">Tentang Kami <i class="fa-solid fa-chevron-down"></i></a></span>
+                <span><a href="Anggota.html">Anggota</a></span>
+                <span><a href="Publikasi.html">Publikasi</a></span>
+                <span><a href="Riset.html">Riset</a></span>
+                <span><a href="Karya.html">Karya</a></span>
+                <span><a href="Berita.html">Berita</a></span>
+                <span><a href="KontakKami.html" class="active">Kontak Kami <i class="fa-solid fa-chevron-down"></i></a></span>
+                <span><a href="Login.html">Login</a></span>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO SESUAI CSS -->
+    <div class="heading">
+        <h1>Formulir Peminjaman Laboratorium</h1>
+        <p>Silahkan isi formulir peminjaman berikut</p>
+    </div>
+
+    <div class="form-wrapper">
+    <h2 class="text-center mb-4">Formulir Peminjaman</h2>
+
+    <form>
+
+        <!-- FLEX WRAPPER untuk Nama & Keperluan -->
+        <div class="form-flex">
+
+            <!-- KIRI: Nama + Email + Instansi + Tanggal -->
+            <div class="form-left">
+                <label class="form-label">Nama <span style="color:red">*</span></label>
+                <input type="text" class="form-control" placeholder="Nama Lengkap">
+
+                <label class="form-label">Email <span style="color:red">*</span></label>
+                <input type="email" class="form-control" placeholder="Masukkan Alamat Email">
+
+                <label class="form-label">Instansi <span style="color:red">*</span></label>
+                <input type="text" class="form-control" placeholder="Masukkan Asal Instansi">
+
+                <label class="form-label">Tanggal Digunakan <span style="color:red">*</span></label>
+                <input type="date" class="form-control">
+            </div>
+
+            <!-- KANAN: Keperluan + Maskot + Catatan -->
+            <div class="form-right">
+                <label class="form-label">Keperluan <span style="color:red">*</span></label>
+                <textarea class="form-control textarea-kep"></textarea>
+
+                <img src="Assets/Image/Logo/Maskot.png" class="maskot" alt="maskot">
+
+                <p class="note">*Pastikan datanya sudah benar ya!</p>
+            </div>
+
+        </div>
+
+        <div class="submit-section">
+    <a href="#" class="cta-btn">Kirim</a>
+</div>
+
+    </form>
+</div>
+            </div>
+        </form>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-logo">
+            <img src="../Assets/Image/Logo/Logo With Text.png" style="width: 178px; height: 91px" />
+        </div>
+
+        <ul class="footer-menu">
+            <li>Tentang Kami</li>
+            <li>Anggota</li>
+            <li>Publikasi</li>
+            <li>Riset</li>
+            <li>Resource</li>
+            <li>Berita</li>
+            <li>Kontak Kami</li>
+            <li>Login</li>
+        </ul>
+
+        <div class="footer-social">
+            <i class="fab fa-facebook"></i>
+            <i class="fas fa-envelope"></i>
+            <i class="fab fa-twitter"></i>
+            <i class="fab fa-instagram"></i>
+        </div>
+
+        <p class="footer-copyright">© 2025 Tim PBL Business Analyst SIB 2C</p>
+    </footer>
+
+</body>
+</html>
