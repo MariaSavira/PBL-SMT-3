@@ -1,137 +1,96 @@
-   body {
-        margin: 0;
-        font-family: "Poppins", sans-serif;
-        background: #f2f6ff;
+@media (max-width: 1280px) {
+        body {
+            zoom: 80%;
+        }
     }
+   /* RESET */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+}
 
-    header.navbar {
-        position: absolute;
-        top: 0;
-        width: 100%;
-        z-index: 999;
-        background: #0C2A4C;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    }
+body {
+    background: #f2f6ff;
+    overflow-x: hidden;
+}
 
-    .navbar-container {
-        max-width: 1500px;
-        margin: 0 auto;
-        padding: 0 40px;
-        height: 110px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+/* ================== HERO ================== */
 
-    .navbar-container .logo img {
-        height: 90px;
-    }
+.heading {
+    background: url('../Image/Heading/Heading.png') center/cover no-repeat;
+    color: white;
+    margin-top: 110px;
+    padding: 100px 20px;
+    text-align: center;
+}
 
-    nav.menu {
-        display: flex;
-        gap: 30px;
-        padding-right: 165px;
-    }
+.heading h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
 
-    nav.menu span a {
-        color: white;
-        font-size: 16px;
-        font-weight: 600;
-        text-decoration: none;
-        position: relative;
-    }
+.heading p {
+    font-size: 12px;
+    opacity: 0.9;
+}
 
-    nav.menu span a::after {
-        content: "";
-        position: absolute;
-        left: 50%;
-        bottom: -3px;
-        width: 0%;
-        height: 2px;
-        background: #4CA8FF;
-        transition: width 0.3s ease;
-        transform: translateX(-50%);
-    }
 
-    nav.menu span a:hover::after {
-        width: 100%;
-    }
-
-    nav.menu span a.active::after {
-        content: "";
-        position: absolute;
-        left: 50%;
-        bottom: -3px;
-        width: 100%;
-        height: 2px;
-        background: #4CA8FF;
-        transform: translateX(-50%);
-    }
-    /* end */
-
-    .heading {
-        background: url('../Image/Heading/Heading.png') center/cover no-repeat;
-        color: white;
-        margin-top: 110px;
-        padding: 100px 20px;
-        text-align: center;
-    }
-
-    .heading h1 {
-        font-size: 24px;
-        font-weight: 600;
-        margin-bottom: 10px;
-    }
-
-    .heading p {
-        font-weight: 400;
-        font-size: 12px;
-        opacity: 0.9;
-    }
-
+/* ================== FORM WRAPPER ================== */
 
 .form-wrapper {
-    max-width: 50%;
-    margin: -50px auto 50px; 
+    max-width: 60%;
+    margin: -50px auto 50px;
     background: white;
-    padding: 40px 50px;
-    border-radius: 14px;
+    padding: 50px 60px;
+    border-radius: 16px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
-/* JUDUL FORM CENTER */
-.form-wrapper h2 {
-    text-align: center;
-    margin-bottom: 35px;
-}
-
-
-/* ===== FLEXBOX SECTION ===== */
 .form-flex {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 60px;    /* DIBESARKAN → lebih lega */
-    margin-top: 25px;
+    flex-wrap: nowrap;
+    gap: 80px;      /* Sesuai mockup: jarak kanan-kiri besar */
 }
 
-/* Kolom kiri */
+/* Label */
+.form-label {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+/* ================== LEFT COLUMN ================== */
+
 .form-left {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 20px;    /* Tambah jarak antar input */
+    gap: 20px;
 }
 
-/* Kolom kanan */
+.form-left .form-control {
+    height: 45px;
+    border-radius: 8px;
+    background-color: #f7faff;
+    border: 1.5px solid #dcdcdc;
+    padding: 10px 15px;
+    font-size: 14px;
+}
+
+
+/* ================== RIGHT COLUMN ================== */
+
 .form-right {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 18px;    /* Keperluan & maskot ada jaraknya */
+    gap: 18px;
 }
 
-/* Textarea keperluan */
+/* Textarea Keperluan */
 .form-right textarea {
     width: 100%;
     min-height: 160px;
@@ -143,127 +102,152 @@
 }
 
 
-/* Maskot */
+/* ================== MASKOT ================== */
+
+.maskot-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 8px;
+}
+
 .maskot {
     width: 180px;
-    margin: 15px auto 5px auto;
     display: block;
 }
 
-/* Note */
-.note {
+.speech-bubble {
+    margin-top: 10px;
+    background: #ffffff;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #dcdcdc;
     font-size: 14px;
     text-align: center;
-    margin-top: 5px;
-    color: #1c1c1c;
-}
-
-/* Input kiri */
-.form-left .form-control {
-    height: 45px;
-    border-radius: 8px;
-    background-color: #f7faff;
-    border: 1.5px solid #dcdcdc;
-    padding: 10px 15px;
-    font-size: 14px;
 }
 
 
-/*  RESPONSIVE */
+/* ================== BUTTON ================== */
+
+.cta-btn {
+    display: block;
+    margin: 40px auto 0;
+    font-weight: 600;
+    padding: 12px 28px;
+    background: #1E5AA8;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.cta-btn:hover {
+    background: #2c72cf;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+
+/* ================== NOTIFICATION ================== */
+.notification {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 360px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.18);
+    display: none;
+    z-index: 1000;
+    overflow: hidden;
+    border-left: 6px solid #22c55e;   /* HIJAU seperti contoh */
+}
+
+/* ISI KONTEN */
+.notification-content {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    gap: 12px;
+}
+
+/* ICON BULAT */
+.notification-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 16px;
+    border: 2px solid #22c55e;      /* HIJAU */
+    color: #22c55e;                 /* HIJAU */
+    background: #eaffe9;            /* HIJAU MUDA tipis */
+}
+
+/* TEKS */
+.notification-text {
+    flex: 1;
+}
+
+.notification-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 2px;
+}
+
+.notification-message {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* BUTTON X */
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #9ca3af;
+    cursor: pointer;
+    padding-left: 12px;
+    padding-right: 0;
+}
+
+.close-btn:hover {
+    color: #6b7280;
+}
+
+/* STATE SUCCESS */
+.notification.success {
+    border-left-color: #22c55e;
+}
+
+.notification.success .notification-icon {
+    color: #22c55e;
+    border-color: #22c55e;
+    background: #eaffe9;
+}
+
+
+
+/* ================== RESPONSIVE ================== */
+
 @media (max-width: 900px) {
-    .form-flex {
-        flex-direction: column;
+    .form-wrapper {
+        max-width: 90%;
+        padding: 35px 30px;
     }
 
-    .form-right textarea {
-        min-height: 140px;
+    .form-flex {
+        flex-direction: column;
+        gap: 30px;
     }
 
     .maskot {
         width: 150px;
     }
 }
-
-
-/* Button */
-    .cta-btn {
-        display: block;
-        width: fit-content;
-        margin: 50px auto;
-        font-weight: 600;
-        padding: 12px 28px;
-        background: #1E5AA8;
-        color: white;
-        border-radius: 10px;
-        text-decoration: none;
-        transition: 0.3s ease;
-    }
-
-    .cta-btn:hover {
-        background: #2c72cf;
-        transform: translateY(-3px);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-    }
-
-    .footer {
-        background: linear-gradient(to bottom,
-                rgba(3, 37, 76, 1) 40%,
-                rgba(11, 74, 143, 1) 100%);
-        text-align: center;
-        padding: 40px 20px;
-        color: white;
-    }
-
-    .footer-logo img {
-        width: 120px;
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
-
-    .footer-menu {
-        list-style: none;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        gap: 30px;
-        margin-bottom: 25px;
-        flex-wrap: wrap;
-    }
-
-    .footer-menu li {
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        text-decoration: none;
-        position: relative;
-    }
-
-    .footer-menu li::after {
-        content: "";
-        position: absolute;
-        left: 50%;
-        bottom: -3px;
-        width: 0%;
-        height: 2px;
-        background: #4CA8FF;
-        transition: width 0.3s ease;
-        transform: translateX(-50%);
-    }
-
-    .footer-menu li:hover::after {
-        width: 100%;
-    }
-
-    .footer-social {
-        display: flex;
-        justify-content: center;
-        gap: 30px;
-        margin: 30px 0;
-        font-size: 22px;
-    }
-
-    .footer-copyright {
-        padding-top: 40px;
-        font-size: 14px;
-        opacity: 0.8;
-    }
