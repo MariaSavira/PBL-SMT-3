@@ -18,6 +18,11 @@ body {
     overflow-x: hidden;
 }
 
+.navbar {
+    background: #0C2A4C !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
     .heading {
         background: url('../Image/Heading/Heading.png') center/cover no-repeat;
         color: white;
