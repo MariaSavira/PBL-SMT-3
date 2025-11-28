@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Analytics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../../../Assets/Css/Admin/AnggotaLab.css">
+</head>
+
+<body>
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="sidebar collapsed">
+        <div class="sidebar-header" id="sidebar-toggle">
+            <img src="../../../Assets/Image/Logo/Logo Without Text.png" alt="Logo" class="sidebar-logo">
+            <div class="sidebar-title">
+                <h4>Laboratorium</h4>
+                <p>Business Analytics</p>
+            </div>
+        </div>
+
+        <ul class="sidebar-menu">
+            <li class="menu-item">
+                <i class="fa-solid fa-house"></i>
+                <p>Beranda</p>
+            </li>
+
+            <li class="menu-item active">
+                <i class="fa-solid fa-users"></i>
+                <p>Anggota Lab, Profil lab</p>
+            </li>
+
+            <li class="menu-item">
+                <i class="fa-solid fa-book"></i>
+                <p>Publikasi</p>
+            </li>
+
+            <li class="menu-item">
+                <i class="fa-solid fa-flask"></i>
+                <p>Riset</p>
+            </li>
+
+            <li class="menu-item">
+                <i class="fa-solid fa-newspaper"></i>
+                <p>Berita</p>
+            </li>
+
+            <li class="menu-item">
+                <i class="fa-solid fa-book-open-reader"></i>
+                <p>Resource</p>
+            </li>
+
+            <li class="menu-item">
+                <i class="fa-solid fa-hand-holding"></i>
+                <p>Peminjaman</p>
+            </li>
+
+            <li class="menu-item">
+                <i class="fa-solid fa-user"></i>
+                <p>Profil</p>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- <aside class="sidebar">
+        <div class="sidebar-logo">
+            <img src="logo.png" alt="logo">
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li class="active"><i class="fa-solid fa-house"></i></li>
+            <li><i class="fa-solid fa-users"></i></li>
+            <li><i class="fa-solid fa-file-lines"></i></li>
+            <li><i class="fa-solid fa-book"></i></li>
+            <li><i class="fa-solid fa-chalkboard-user"></i></li>
+            <li><i class="fa-solid fa-user"></i></li>
+        </ul>
+    </aside> -->
+    <main class="content">
+
+        <div class="content-header">
+            <h1>Anggota Laboratorium</h1>
+            <div class="profile">
+                <span>Maria Savira</span>
+                <i class="fa-solid fa-circle-user"></i>
+            </div>
+        </div>
+
+
+        <div class="top-controls">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Cari">
+            </div>
+
+            <div class="filter-info">
+                <span><i class="fa-solid fa-sliders"></i> Peneliti</span>
+                <a href="#">Hapus Filter</a>
+            </div>
+
+            <div class="right-actions">
+                <button class="export"><i class="fa-solid fa-arrow-up-from-bracket"></i> Export</button>
+
+                <button class="sort">
+                    <i class="fa-solid fa-arrow-down-wide-short"></i>
+                    Urutkan : <strong>Default</strong>
+                </button>
+
+                <button class="add"><i class="fa-solid fa-plus"></i> Tambah</button>
+            </div>
+        </div>
+
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>id_anggota</th>
+                        <th>nama</th>
+                        <th>keahlian</th>
+                        <th>jabatan</th>
+                        <th>foto</th>
+                        <th>status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td><input type="checkbox" checked></td>
+                        <td>KL01</td>
+                        <td>Dr. Rakhmat Arianto</td>
+                        <td>
+                            <span class="tag orange">Natural Language Processing</span>
+                            <span class="tag orange">Data Science</span>
+                        </td>
+                        <td><span class="tag blue">Kepala Laboratorium</span></td>
+                        <td><i class="fa-solid fa-circle-user user-icon"></i></td>
+                        <td><span class="status aktif">Aktif</span></td>
+                        <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="delete-selection">
+            <i class="fa-solid fa-trash"></i> Hapus data yang dipilih
+        </div>
+
+    </main>
+</body>
+
+</html>
