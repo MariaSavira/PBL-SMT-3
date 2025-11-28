@@ -12,25 +12,25 @@ body {
     overflow-x: hidden;
 }
 
-    .heading {
-        background: url('../Image/Heading/Heading.png') center/cover no-repeat;
-        color: white;
-        margin-top: 110px;
-        padding: 100px 20px;
-        text-align: center;
-    }
+.heading {
+    background: url('../Image/Heading/Heading.png') center/cover no-repeat;
+    color: white;
+    margin-top: 110px;
+    padding: 100px 20px;
+    text-align: center;
+}
 
-    .heading h1 {
-        font-size: 24px;
-        font-weight: 600;
-        margin-bottom: 10px;
-    }
+.heading h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
 
-    .heading p {
-        font-weight: 400;
-        font-size: 12px;
-        opacity: 0.9;
-    }
+.heading p {
+    font-weight: 400;
+    font-size: 12px;
+    opacity: 0.9;
+}
 
 .container {
     display: flex;
@@ -89,6 +89,20 @@ textarea {
         0px 4px 12px rgba(0,0,0,0.08);
     font-family: "Poppins", sans-serif;
     transition: 0.3s ease;
+}
+
+/* ✨ PERBAIKAN: posisi arrow di select biar tidak terlalu nyamping */
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    /* ruang ekstra di kanan supaya teks tidak nabrak arrow */
+    padding-right: 40px;
+    /* arrow custom, kecil dan rapi */
+    background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='12' viewBox='0 0 24 24' width='12' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    /* geser arrow sedikit ke kiri dari pinggir */
+    background-position: right 16px center;
 }
 
 textarea {
@@ -469,6 +483,12 @@ select option[disabled] {
 
 .notification.error .notification-icon {
     color: #ef4444;
+}
+
+@media (max-width: 1280px) {
+    body {
+        zoom: 80%;
+    }
 }
 
 @media (max-width: 900px) {
