@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -27,6 +26,7 @@
 
     <div class="container">
         <div class="card">
+     
             <div class="left">
                 <h2>Hubungi Kami</h2>
                 <p>Silahkan tinggalkan pesan atau pertanyaan Anda melalui
@@ -74,7 +74,7 @@
                     <button type="button" class="file-link" id="fileViewBtn">Lihat</button>
                 </div>
 
-                <button type="submit" class="btn">Kirim Pesan</button>
+                <button type="button" class="btn" id="btnKirim">Kirim Pesan</button>
             </div>
 
             <div class="right">
@@ -128,21 +128,161 @@
                 </div>
 
                 <div class="map">
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.5304465643894!2d112.6145444!3d-7.9440069!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd629dfd58aaf95%3A0xe72a182dfd18e01c!2sGedung%20Teknik%20Sipil%2C%20Teknik%20Informatika%20%26%20Magister%20Terapan%2C%20POLITEKNIK%20NEGERI%20MALANG!5e0!3m2!1sid!2sid!4v1763884713528!5m2!1sid!2sid"
-                        loading="lazy" allowfullscreen>
-                    </iframe>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.5304465643894!2d112.6145444!3d-7.9440069!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd629dfd58aaf95%3A0xe72a182dfd18e01c!2sGedung%20Teknik%20Sipil%2C%20Teknik%20Informatika%20%26%20Magister%20Terapan%2C%20POLITEKNIK%20NEGERI%20MALANG!5e0!3m2!1sid!2sid!4v1763884713528!5m2!1sid!2sid" loading="lazy" allowfullscreen></iframe>
                 </div>
             </div>
-
         </div>
     </div>
 
-    <script src="../Assets/Javascript/KontakKami.js"></script>
+    <div id="notification" class="notification" style="display:none;">
+        <div class="notification-content">
+            <div class="notification-icon" id="notification-icon"></div>
+
+            <div class="notification-text">
+                <div class="notification-title" id="notification-title"></div>
+                <div class="notification-message" id="notification-message"></div>
+            </div>
+
+            <button id="closeNotification" class="close-btn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    </div>
+
+    <div id="overlay" class="overlay" style="display:none;"></div>
+
+    <script>
+    
+        window.addEventListener("scroll", function () {
+            const navbar = document.querySelector("header.navbar");
+            if (!navbar) return;
+
+            if (window.scrollY > 20) {
+                navbar.classList.add("navbar-scrolled");
+            } else {
+                navbar.classList.remove("navbar-scrolled");
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const fileInput   = document.getElementById('fileInput');
+            const uploadBtn   = document.getElementById('uploadTrigger');
+            const filePreview = document.getElementById('filePreview');
+            const fileNameEl  = document.getElementById('fileName');
+            const fileSizeEl  = document.getElementById('fileSize');
+            const fileViewBtn = document.getElementById('fileViewBtn');
+            const kirimBtn    = document.getElementById('btnKirim');
+
+            const namaInput     = document.getElementById('nama');
+            const instansiInput = document.getElementById('instansi');
+            const alasanSelect  = document.getElementById('alasan');
+            const pesanTextarea = document.getElementById('pesan');
+
+            const notification       = document.getElementById('notification');
+            const notifIconContainer = document.getElementById('notification-icon');
+            const notifTitleEl       = document.getElementById('notification-title');
+            const notifMessageEl     = document.getElementById('notification-message');
+            const closeBtn           = document.getElementById('closeNotification');
+            const overlay            = document.getElementById('overlay');
+
+            uploadBtn.addEventListener('click', function () {
+                fileInput.click();
+            });
+
+            let currentFileUrl = null;
+
+            fileInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (!file) return;
+
+                if (file.type !== 'application/pdf') {
+                    alert('Hanya file PDF yang diperbolehkan.');
+                    this.value = '';
+                    return;
+                }
+
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Ukuran file maksimal 5 MB.');
+                    this.value = '';
+                    return;
+                }
+
+                fileNameEl.textContent = file.name;
+                const sizeMB = file.size / (1024 * 1024);
+                fileSizeEl.textContent = sizeMB.toFixed(1) + ' MB';
+
+                if (currentFileUrl) {
+                    URL.revokeObjectURL(currentFileUrl);
+                }
+                currentFileUrl = URL.createObjectURL(file);
+
+                fileViewBtn.onclick = function () {
+                    window.open(currentFileUrl, '_blank');
+                };
+
+                filePreview.style.display = 'flex';
+            });
+
+            function showNotification(isSuccess) {
+                notification.classList.remove('success', 'error');
+
+                if (isSuccess) {
+                    notification.classList.add('success');
+                    notifTitleEl.textContent   = 'Success';
+                    notifMessageEl.textContent = 'Pesan Anda telah berhasil terkirim!';
+                    notifIconContainer.innerHTML = '<i class="fa-regular fa-circle-check"></i>';
+                } else {
+                    notification.classList.add('error');
+                    notifTitleEl.textContent   = 'Error';
+                    notifMessageEl.textContent = 'Terjadi kesalahan. Silakan coba lagi.';
+                    notifIconContainer.innerHTML = '<i class="fa-regular fa-circle-xmark"></i>';
+                }
+
+                notification.style.display = 'block';
+                overlay.style.display = 'block';
+
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                    overlay.style.display = 'none';
+                }, 5000);
+            }
+
+            closeBtn.addEventListener('click', function () {
+                notification.style.display = 'none';
+                overlay.style.display = 'none';
+            });
+
+            kirimBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const nama     = namaInput.value.trim();
+                const instansi = instansiInput.value.trim();
+                const alasan   = alasanSelect.value;
+                const pesan    = pesanTextarea.value.trim();
+                const file     = fileInput.files[0];
+
+                const isFormValid =
+                    nama !== '' &&
+                    instansi !== '' &&
+                    alasan !== '' &&
+                    alasan !== '-- Pilih Alasan --' &&
+                    pesan !== '' &&
+                    !!file;
+
+                if (!isFormValid) {
+                    
+                    showNotification(false);
+                    return;
+                }
+                showNotification(true);
+
+            });
+        });
+    </script>
+
     <footer class="footer">
         <div class="footer-logo">
-            <img src="../Assets/Image/Logo/Logo With Text.png" title="Politeknik Negeri Malang"
-                style="width: 178px; height: 91px" class="logo-img" />
+            <img src="../Assets/Image/Logo/Logo With Text.png" title="Politeknik Negeri Malang" style="width: 178px; height: 91px" class="logo-img" />
         </div>
         <ul class="footer-menu">
             <li>Tentang Kami</li>
@@ -160,10 +300,7 @@
             <i class="fab fa-twitter"></i>
             <i class="fab fa-instagram"></i>
         </div>
-        <p class="footer-copyright">© 2025 Tim PBL Business Analyst SIB
-            2C</p>
+        <p class="footer-copyright">© 2025 Tim PBL Business Analyst SIB 2C</p>
     </footer>
-    <script src="../Assets/Javascript/HeaderFooter.js"></script>
 </body>
-
 </html>

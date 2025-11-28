@@ -6,11 +6,11 @@
 }
 
 body {
-        margin: 0;
-        font-family: "Poppins", sans-serif;
-        background: #f2f6ff;
-        overflow-x: hidden;
-    }
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: #f2f6ff;
+    overflow-x: hidden;
+}
 
     .heading {
         background: url('../Image/Heading/Heading.png') center/cover no-repeat;
@@ -59,7 +59,6 @@ body {
     margin-bottom: 10px;
     line-height: 1.2;  
 }
-
 
 .left {
     flex: 1;
@@ -134,8 +133,6 @@ select option[disabled] {
     color: rgba(0,0,0,0.45);
     font-style: italic;
 }
-
-/* UPLOAD BUTTON + PREVIEW */
 
 .upload-btn {
     width: 208px;
@@ -218,7 +215,6 @@ select option[disabled] {
     text-overflow: ellipsis; 
 }
 
-
 .file-size {
     font-size: 14px;
     font-weight: 400;
@@ -251,8 +247,6 @@ select option[disabled] {
     color: #000000;
     font-size: 40px; 
 }
-
-
 
 .btn {
     width: 522px;
@@ -314,26 +308,168 @@ select option[disabled] {
     display: flex;
     justify-content: flex-start; 
 }
-.map-wrapper {
-    width: 450px;
-    height: 418px;
-}
-
-.map-wrapper iframe {
-    width: 100%;
-    height: 100%;
-    border-radius: 20px;
-}
 
 .map iframe {
-    width: 450px !important;
-    height: 418px !important;
+    width: 450px;
+    height: 418px;
     border-radius: 20px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.18);
     border: none;
-    flex: 0 0 auto !important;     
+    flex: 0 0 auto;
 }
 
+.footer {
+    background: linear-gradient(to bottom,
+            rgba(3, 37, 76, 1) 40%,
+            rgba(11, 74, 143, 1) 100%);
+    text-align: center;
+    padding: 40px 20px;
+    color: white;
+}
+
+.footer-logo img {
+    width: 120px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.footer-menu {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.footer-menu li {
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    position: relative;
+}
+
+.footer-menu li::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -3px;
+    width: 0%;
+    height: 2px;
+    background: #4CA8FF;
+    transition: width 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.footer-menu li:hover::after {
+    width: 100%;
+}
+
+.footer-social {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 30px 0;
+    font-size: 22px;
+}
+
+.footer-copyright {
+    padding-top: 40px;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.65);
+    z-index: 900;
+    display: none;
+}
+
+.notification {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 360px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.18);
+    display: none;
+    z-index: 1000;
+    overflow: hidden;
+    border-left: 6px solid transparent;
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    gap: 12px;
+}
+
+.notification-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid currentColor;
+    font-size: 16px;
+}
+
+.notification-text {
+    flex: 1;
+}
+
+.notification-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 2px;
+}
+
+.notification-message {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #9ca3af;
+    cursor: pointer;
+    padding-left: 12px;
+    padding-right: 0;
+}
+
+.close-btn:hover {
+    color: #6b7280;
+}
+
+.notification.success {
+    border-left-color: #22c55e;
+}
+
+.notification.success .notification-icon {
+    color: #22c55e;
+}
+
+.notification.error {
+    border-left-color: #ef4444;
+}
+
+.notification.error .notification-icon {
+    color: #ef4444;
+}
 
 @media (max-width: 900px) {
     .map iframe {
@@ -350,66 +486,3 @@ select option[disabled] {
         width: 100%;
     }
 }
-
-.footer {
-        background: linear-gradient(to bottom,
-                rgba(3, 37, 76, 1) 40%,
-                rgba(11, 74, 143, 1) 100%);
-        text-align: center;
-        padding: 40px 20px;
-        color: white;
-    }
-
-    .footer-logo img {
-        width: 120px;
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
-
-    .footer-menu {
-        list-style: none;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        gap: 30px;
-        margin-bottom: 25px;
-        flex-wrap: wrap;
-    }
-
-    .footer-menu li {
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        text-decoration: none;
-        position: relative;
-    }
-
-    .footer-menu li::after {
-        content: "";
-        position: absolute;
-        left: 50%;
-        bottom: -3px;
-        width: 0%;
-        height: 2px;
-        background: #4CA8FF;
-        transition: width 0.3s ease;
-        transform: translateX(-50%);
-    }
-
-    .footer-menu li:hover::after {
-        width: 100%;
-    }
-
-    .footer-social {
-        display: flex;
-        justify-content: center;
-        gap: 30px;
-        margin: 30px 0;
-        font-size: 22px;
-    }
-
-    .footer-copyright {
-        padding-top: 40px;
-        font-size: 14px;
-        opacity: 0.8;
-    }
