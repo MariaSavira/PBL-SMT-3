@@ -15,24 +15,7 @@
         <link rel="stylesheet" href="../Assets/Css/Index.css">
     </head>
     <body>
-        <header class="navbar" id="navbar">
-            <div class="navbar-container">
-                <div class="logo">
-                    <img src="../Assets/Image/Logo/Logo With Text.png" title="Politeknik Negeri Malang" style="width: 178px; height: 91px; padding-left: 178px">
-                </div>
-            
-                <nav class="menu">
-                    <span> <a href="TentangKami.html">Tentang Kami <i id="tentang-kami-chevron-down" class="fa-solid fa-chevron-down"></i></a></span>
-                    <span> <a href="Anggota.html">Anggota</a></span>
-                    <span> <a href="Publikasi.html">Publikasi</a></span>
-                    <span> <a href="Riset.html">Riset</a></span>
-                    <span> <a href="Karya.html">Karya</a></span>
-                    <span> <a href="Berita.html">Berita</a></span>
-                    <span> <a href="KontakKami.html">Kontak Kami <i id="kontak-kami-chevron-down" class="fa-solid fa-chevron-down"></i></a></span>
-                    <span> <a href="Login.html">Login</a></span>
-                </nav>
-            </div>
-        </header>
+        <div id="header"></div>
         <section class="hero" id="hero">
             <video autoplay muted loop playsinline class="hero-video">
                 <source src="../Assets/Video/Homepage Video Bg.mp4" type="video/mp4">
@@ -115,7 +98,7 @@
         </div>
         
             <section class="news-section py-5">
-                <div class="container-fluid px-5">
+                <div class="container-l px-5">
                     <h3 class="fw-bold mb-4 section-title">Berita Terbaru</h3>
                     <div class="row g-4">
                         <div class="col-lg-7">
@@ -242,31 +225,7 @@
                     </div>
                 </div>
             </section>
-
-            <footer class="footer">
-                <div class="footer-logo">
-                    <img src="../Assets/Image/Logo/Logo With Text.png" title="Politeknik Negeri Malang"
-                        style="width: 178px; height: 91px" class="logo-img" />
-                </div>
-                <ul class="footer-menu">
-                    <li>Tentang Kami <i id="tentang-kami-chevron-down" class="fa-solid fa-chevron-down"></i></li>
-                    <li>Anggota</li>
-                    <li>Publikasi</li>
-                    <li>Riset</li>
-                    <li>Resource</li>
-                    <li>Berita</li>
-                    <li>Kontak Kami <i id="tentang-kami-chevron-down" class="fa-solid fa-chevron-down"></i></li>
-                    <li>Login</li>
-                </ul>
-                <div class="footer-social">
-                    <i class="fab fa-facebook"></i>
-                    <i class="fas fa-envelope"></i>
-                    <i class="fab fa-twitter"></i>
-                    <i class="fab fa-instagram"></i>
-                </div>
-                <p class="footer-copyright">© 2025 Tim PBL Business Analyst SIB
-                    2C</p>
-            </footer>
-        <script src="../Assets/Javascript/Index.js"></script>
+            <div id="footer"></div>
+        <script src="../Assets/Javascript/HeaderFooter.js"></script>
     </body>
 </html>
