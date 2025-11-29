@@ -10,7 +10,7 @@ header.navbar {
     top: 0;
     width: 100%;
     z-index: 999;
-    background: transparent;
+    background: #0C2A4C;
     transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
