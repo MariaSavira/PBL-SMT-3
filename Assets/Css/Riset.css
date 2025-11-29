@@ -3,7 +3,6 @@
             zoom: 80%;
         }
     }
-    
     body {
         margin: 0;
         font-family: "Poppins", sans-serif;
@@ -40,13 +39,14 @@
 
 .diagram-img {
     width: 100%;
-    max-width: 1209px;
+    max-width: 1000px;
     background: white;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     border-radius: 12px;
     padding: 20px;
     transition: all 0.3s ease;
 }
+
 
 .diagram-img:hover {
     transform: translateY(-3px);
@@ -144,11 +144,6 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
-@media (max-width: 1280px) {
-    body {
-        zoom: 80%;
-    }
-}
 @media (max-width: 900px) {
     .diagram-container {
         margin-top: -40px;
