@@ -1,8 +1,8 @@
-@media (min-width:1200px) {
-    body{
+/* @media (min-width:1200px) {
+    .header {
         zoom: 90%;
     }
-}
+} */
 
 header.navbar {
     padding: 0;
