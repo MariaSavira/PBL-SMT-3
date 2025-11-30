@@ -1,0 +1,386 @@
+@media (min-width:1200px) {
+    body{
+        zoom: 80%;
+    }
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    overflow-x: hidden;
+    background: #f5f7fb;
+    display: flex;
+}
+
+/* SIDEBAR */
+.sidebar.collapsed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 85px;
+    height: 100vh;
+    background: #e7eefc;
+    padding: 30px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    border-right: 1px solid #d5deed;
+}
+
+.sidebar-menu p {
+    padding-left: 14px;
+}
+
+.sidebar-logo img {
+    width: 60px;
+    height: 60px;
+}
+
+.sidebar-menu {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar-menu li {
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.50);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.sidebar-menu li:hover {
+    color: #0C2A4C;
+    background: #cbd7ed;
+}
+
+.sidebar-menu li.active {
+    color: #0C2A4C;
+    background: #cbd7ed;
+    font-weight: 600;
+    width: 215px;
+}
+
+.sidebar-menu li p {
+    text-align: left;
+}
+
+.sidebar-menu .active {
+    color: #0C2A4C;
+    /* background: white; */
+    padding: 12px;
+    width: 50px;
+    border-radius: 12px;
+    text-align: center;
+    /* box-shadow: 0 4px 10px rgba(0,0,0,0.25); */
+}
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 260px;
+    height: 100vh;
+    background: #e8f0ff;
+    padding: 25px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    transition: width 0.3s ease;
+    overflow: hidden;
+    box-shadow: 4px 4px 25px rgba(0,0,0,0.25)
+}
+
+/* ===== HEADER ===== */
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.sidebar-logo {
+    width: 55px;
+    height: 55px;
+}
+
+.sidebar-title h4 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.sidebar-title p {
+    margin: 0;
+    margin-top: -4px;
+    font-size: 13px;
+    color: #4a5b7a;
+}
+
+.sidebar.collapsed .sidebar-title {
+    display: none;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 14px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    border-radius: 12px;
+    font-size: 15px;
+    color: #1f2b40;
+    transition: background 0.2s ease;
+}
+
+.menu-item i {
+    font-size: 20px;
+    width: 24px;
+}
+
+.sidebar.collapsed .menu-item p {
+    display: none;
+}
+
+.content {
+    margin-left: 110px;
+    padding: 40px;
+    width: 100%;
+}
+
+.content.collapsed {
+    width: 93%;
+    padding-left: 200px;
+}
+
+/* ===========================
+   CONTENT HEADER
+=========================== */
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.content-header h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #1d1d1d;
+}
+
+.content-header .profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+}
+
+/* ===========================
+   TOP CONTROLS
+=========================== */
+.top-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+/* --- SEARCH BOX --- */
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f4f4f4;
+    border-radius: 8px;
+    padding: 10px 14px;
+    width: 300px;
+}
+
+.search-box input {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    font-size: 14px;
+}
+
+.result-count {
+    font-size: 13px;
+    color: #666;
+}
+
+/* --- FILTER CHIP --- */
+.filter-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.filter-chip {
+    background: #f4f4f4;
+    padding: 8px 12px;
+    border-radius: 8px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 13px;
+}
+
+.filter-info .clear-filter {
+    color: #007bff;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.filter-info .clear-filter:hover {
+    text-decoration: underline;
+}
+
+/* --- ACTION BUTTONS --- */
+.right-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.right-actions button {
+    padding: 9px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.export {
+    background: #f4f4f4;
+}
+
+.sort {
+    background: #f4f4f4;
+}
+
+.add {
+    background: #006cff;
+    color: #fff;
+}
+
+/* ===========================
+   TABLE
+=========================== */
+.table-container {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 0;
+    overflow-x: auto;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1200px;
+}
+
+thead tr {
+    background: #e8edf5;
+}
+
+thead th {
+    text-align: left;
+    padding: 14px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+tbody tr {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+}
+
+tbody td {
+    padding: 14px 16px;
+    font-size: 14px;
+    vertical-align: top;
+}
+
+tbody tr:hover {
+    background: #f8f9ff;
+}
+
+/* Checkbox alignment */
+td input[type="checkbox"] {
+    transform: scale(1.2);
+}
+
+/* ===========================
+   STATUS BADGES
+=========================== */
+.status {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.status.disetujui {
+    background: #d4f5d8;
+    color: #1b8d36;
+}
+
+.status.menunggu {
+    background: #fff3ce;
+    color: #c08800;
+}
+
+.status.ditolak {
+    background: #ffd6d6;
+    color: #c13a3a;
+}
+
+/* ===========================
+   DELETE SELECTION BUTTON
+=========================== */
+.delete-selection {
+    margin-top: 18px;
+    padding: 11px 14px;
+    border-radius: 8px;
+    width: fit-content;
+    background: #f8f0f0;
+    color: #c0392b;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.delete-selection:hover {
+    background: #f3e0e0;
+}
