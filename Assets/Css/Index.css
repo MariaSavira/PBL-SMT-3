@@ -394,6 +394,7 @@ header.navbar {
     width: 450px;
 }
 
+<<<<<<< HEAD
 /* .footer {
     background: linear-gradient(to bottom,rgba(3, 37, 76, 1) 40%,rgba(11, 74, 143, 1) 100%);
     text-align: center;
@@ -441,6 +442,8 @@ header.navbar {
     opacity: 0.8;
 } */
 
+=======
+>>>>>>> 832396dc741661e5a3dfce9c93bb36bd827f3d1a
 @keyframes fadeUp {
     from {
         transform: translateY(30px);
