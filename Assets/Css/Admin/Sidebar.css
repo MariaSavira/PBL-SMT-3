@@ -20,9 +20,10 @@ body {
     border-right: 1px solid #d5deed;
 }
 
-.sidebar-menu p {
+.sidebar-menu a {
     white-space: nowrap;
     overflow: hidden;
+    text-decoration: none;
 }
 
 .sidebar-logo img {
