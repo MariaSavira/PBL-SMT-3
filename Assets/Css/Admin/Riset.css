@@ -1,0 +1,310 @@
+main.content {
+    margin-left: 260px;             
+    padding: 24px 32px;
+    background: #F5F6FA;
+    min-height: 100vh;
+}
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.content-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.content-header .profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #111827;
+}
+
+.content-header .profile i {
+    font-size: 28px;
+    color: #9CA3AF;
+}
+
+
+.top-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+/* kiri: search + filter */
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #F3F4F6;
+    border-radius: 999px;
+    padding: 8px 14px;
+    min-width: 260px;
+}
+
+.search-box i {
+    font-size: 14px;
+    color: #9CA3AF;
+}
+
+.search-box input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 13px;
+    width: 100%;
+}
+
+/* TAMBAHAN: teks "8 hasil" di sebelah search */
+.search-box .result-count {
+    font-size: 12px;
+    color: #6B7280;
+    margin-left: 4px;
+}
+
+.filter-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-info span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #E5E7EB;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    color: #374151;
+}
+
+.filter-info i {
+    font-size: 13px;
+}
+
+.filter-info a {
+    font-size: 12px;
+    color: #2563EB;
+    text-decoration: none;
+}
+
+.filter-info a:hover {
+    text-decoration: underline;
+}
+
+/* kanan: export / sort / tambah */
+.right-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.right-actions button {
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #E5E7EB;
+    color: #111827;
+    font-weight: 500;
+}
+
+.right-actions button i {
+    font-size: 13px;
+}
+
+/* tombol Export */
+.right-actions .export {
+    background: #EEF2FF;
+    color: #1D4ED8;
+}
+
+/* tombol urutkan */
+.right-actions .sort {
+    background: #F3F4F6;
+}
+
+/* tombol Tambah (primary) */
+.right-actions .add {
+    background: #1E5AA8;
+    color: #ffffff;
+}
+
+/* hover */
+.right-actions button:hover {
+    filter: brightness(0.97);
+}
+
+/* ===============================
+   TABEL DATA RISET
+   =============================== */
+
+.table-container {
+    margin-top: 10px;
+    background: #FFFFFF;
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+    overflow: hidden;
+}
+
+.table-container table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+/* header bar biru */
+.table-container thead tr {
+    background: #E5F0FF;
+}
+
+.table-container thead th {
+    text-align: left;
+    padding: 12px 18px;
+    font-weight: 600;
+    color: #374151;
+    font-size: 13px;
+}
+
+/* kolom pertama (checkbox) dan terakhir (menu) lebih sempit */
+.table-container thead th:first-child,
+.table-container tbody td:first-child {
+    width: 40px;
+}
+
+.table-container thead th:last-child,
+.table-container tbody td:last-child {
+    width: 40px;
+    text-align: right;
+}
+
+/* row biasa */
+.table-container tbody tr {
+    border-top: 1px solid #E5E7EB;
+    background: #FFFFFF;
+}
+
+.table-container tbody tr:hover {
+    background: #F9FAFB;
+}
+
+/* TAMBAHAN: kalau mau row tertentu dikasih class="selected" */
+.table-container tbody tr.selected,
+.table-container tbody tr:first-child {
+    background: #F3F8FF;
+}
+
+/* cell */
+.table-container tbody td {
+    padding: 10px 18px;
+    color: #111827;
+}
+
+.table-container tbody td:nth-child(2) {
+    color: #6B7280;          /* id_riset */
+    font-weight: 500;
+    width: 80px;
+}
+
+.table-container tbody td:nth-child(3) {
+    font-weight: 500;        /* nama riset */
+}
+
+.table-container tbody td i.fa-ellipsis-vertical {
+    color: #9CA3AF;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* checkbox */
+.table-container input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* ===============================
+   FOOTER AKSI DELETE
+   =============================== */
+
+.delete-selection {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    font-size: 13px;
+    color: #B91C1C;
+    background: #FEE2E2;
+    padding: 8px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+.delete-selection i {
+    font-size: 14px;
+}
+
+.delete-selection:hover {
+    background: #FECACA;
+}
+
+/* ===============================
+   PAGINATION (kalau mau pakai)
+   =============================== */
+
+.riset-pagination {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: #4B5563;
+}
+
+.riset-pagination .page-buttons {
+    display: flex;
+    gap: 6px;
+}
+
+.riset-pagination button {
+    background: #FFFFFF;
+    border-radius: 999px;
+    border: 1px solid #D1D5DB;
+    padding: 4px 10px;
+    cursor: pointer;
+}
+
+.riset-pagination button:hover {
+    background: #F3F4F6;
+}
+
+@media (max-width: 900px) {
+    .top-controls {
+        flex-wrap: wrap;
+        align-items: flex-start;
+    }
+
+    .right-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    main.content {
+        margin-left: 110px;      /
+    }
+}
