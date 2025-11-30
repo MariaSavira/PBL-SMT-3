@@ -3,7 +3,7 @@
 
 <?php
 require __DIR__ . '../../../../Admin/CRUD/Koneksi.php';
-require __DIR__ . '../../../../Assets/Css/Admin/PeminjamanLab.css';
+
 $conn = pg_connect("host=localhost port=5432 dbname=lab_ba user=postgres password=29082006");
 
 if (!$conn) {
@@ -54,20 +54,19 @@ if (!$conn) {
 
         <!-- ACTION BUTTONS -->
         <div class="right-actions">
-            <button class="export"><i class="fa-solid fa-arrow-up-from-bracket"></i> Export</button>
+            <a href="export.php" style="text-decoration:none;">
+   <button type="button">Export</button>
+</a>
+
 
             <button class="sort">
                 <i class="fa-solid fa-arrow-down-wide-short"></i>
                 Urutkan : <strong>Default</strong>
             </button>
-
-            <button class="add" onclick="window.location='tambah.php'">
-                <i class="fa-solid fa-plus"></i> Tambah
-            </button>
         </div>
     </div>
 
-
+    
     <!-- TABLE -->
     <div class="table-container">
         <table>
@@ -106,25 +105,23 @@ if (!$conn) {
                     <td><?= $row['tanggal_pengajuan'] ?></td>
                     <td><?= $row['tanggal_pakai'] ?></td>
                     <td><?= $row['keperluan'] ?></td>
-                    <td><?= $row['status'] ?></td>
+                    <td>
+                    <select class="status-dropdown" data-id="<?= $row['id_peminjaman']; ?>">
+    <option value="pending"      <?= $row['status']=="pending" ? "selected" : "" ?>>Pending</option>
+    <option value="disetujui"    <?= $row['status']=="disetujui" ? "selected" : "" ?>>Disetujui</option>
+    <option value="ditolak"      <?= $row['status']=="ditolak" ? "selected" : "" ?>>Ditolak</option>
+</select>
+
+
+</td>
                     <td><?= $row['approved_by'] ?></td>
                     <td><?= $row['catatan_admin'] ?></td>
 
-                    <td>
-                        <span class="status 
-                            <?= strtolower($row['status']) ?>">
-                            <?= $row['status'] ?>
-                        </span>
-                    </td>
+           <!-- AKSI (Ada SIMPAN di sini) -->
+    <td>
+        <button class="btn-save" data-id="<?= $row['id_peminjaman'] ?>">Simpan</button>
+    </td>
 
-                    <td><?= $row['approved_by'] ?></td>
-                    <td><?= $row['catatan_admin'] ?></td>
-
-                    <td>
-                        <a href="edit.php?id_peminjaman=<?= $row['id_peminjaman'] ?>" class="btn-edit">Edit</a>
-                        <a href="hapus.php?id_peminjaman=<?= $row['id_peminjaman'] ?>" class="btn-delete"
-                           onclick="return confirm('Yakin mau hapus?');">Hapus</a>
-                    </td>
                 </tr>
 
                 <?php endwhile; ?>
@@ -140,7 +137,30 @@ if (!$conn) {
     </div>
 
 </main>
+<script>
+document.querySelectorAll('.btn-save').forEach(btn => {
+    btn.addEventListener('click', () => {
+        
+        let id = btn.dataset.id;
+        let status = document.querySelector(`.status-dropdown[data-id="${id}"]`).value;
 
+        fetch("update_status.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: "id=" + id + "&status=" + status
+        })
+        .then(res => res.text())
+        .then(res => {
+            alert("Status berhasil diperbarui!");
+        });
+    });
+});
+
+
+
+</script>
 <script src="../../../Assets/Javascript/Admin/Sidebar.js"></script>
 </body>
 </html>
