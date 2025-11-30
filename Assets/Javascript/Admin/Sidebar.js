@@ -1,4 +1,4 @@
-function loadCSS(url){
+function loadCSS(url) {
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.href = url;
@@ -13,7 +13,7 @@ function loadCSS(url){
 //     }
 // });
 
-async function loadComponent(id, file, url){
+async function loadComponent(id, file, url) { //async function maksundya asinkronus, dia hasilnya terlambat
     loadCSS(url);
     const target = document.getElementById(id);
     const result = await fetch(file); //ambil hasil dari server
@@ -23,5 +23,20 @@ async function loadComponent(id, file, url){
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
-    await loadComponent("sidebar", "Sidebar.html", "../,./");
+    await loadComponent(
+        "sidebar",
+        "../../../Admin/Sidebar.html",
+        "../../../Assets/Css/Admin/Sidebar.css"); //fungsi async bisa pake await
+
+    const sidebar = document.getElementById("ini-sidebar");
+    const content = document.getElementById("content");
+    const logo = document.getElementById("sidebar-toggle");
+
+    console.log(logo);
+
+    logo.addEventListener("click", () => {
+        // sidebar.classList.toggle("sidebar");
+        sidebar.classList.toggle("collapsed");
+        content.classList.toggle("collapsed");
+    });
 });

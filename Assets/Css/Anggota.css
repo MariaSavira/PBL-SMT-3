@@ -3,6 +3,7 @@ body {
     margin: 0;
     font-family: "Poppins", sans-serif;
     background-color: #E8F0FF;
+    overflow-x: hidden;
 }
 
 header {
@@ -44,3 +45,62 @@ header {
         border-radius: 12px;
         padding: 20px;
     }
+
+.kepala-lab {
+    position: relative;
+    display: block;
+    width: 70em;
+    height: 400px;
+    margin: 40px;
+    background-color: #E8F0FF;
+}
+
+.section-kiri {
+    background-color: aqua;
+    height: 369px;
+    margin: 15px 6em;
+    /* width: 30%; */
+}
+
+.kepala-lab label.jabatan {
+    font-weight: 600;
+    color: #1E5AA8;
+    position: absolute;
+    background-color: #E8E8E8;
+    margin-top: 330px;
+    margin-left: -430px;
+    padding: 7px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgb(0, 0, 0, 0.25);
+}
+
+.section-kanan {
+    /* position: absolute; */
+    background-color: rgb(0, 255, 195);
+    height: 369px;
+    margin: -407px 0 0 510px;
+    width: 32em;
+}
+
+.section-kanan h1 {
+    font-size: 24px;
+    color: #353535;
+}
+
+.section-kanan p {
+    font-size: 12px;
+    font-weight: 500;
+    width: 417px;
+    color: #A2A5A7;
+}
+
+.sosmed {
+    display: flex;
+    gap: 24px;
+}
+
+.sosmed img {
+    width: 22px;
+    outline: 1px solid rgb(0, 0, 0, 0.25);
+    /* box-shadow: 6px 6px 4px rgb(0, 0, 0, 0.25); */
+}

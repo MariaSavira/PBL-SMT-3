@@ -11,6 +11,10 @@ body {
     overflow-x: hidden;
 }
 
+header.navbar {
+    background: transparent !important;
+}
+
 .hero {
     position: relative;
     width: 100%;
