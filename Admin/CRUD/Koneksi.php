@@ -1,6 +1,10 @@
 <?php
     function get_pg_connection() {
+<<<<<<< HEAD
         $connStr = "host=localhost port=5432 dbname=lab_ba user=postgres password=123 options='--client_encoding=UTF8'";
+=======
+        $connStr = "host=localhost port=5432 dbname=lab_ba user=postgres password=29082006 options='--client_encoding=UTF8'";
+>>>>>>> 89e2413e1d6ef326f56158d86625528e27a90c23
         $conn = @pg_connect($connStr);
 
         if (!$conn) {
