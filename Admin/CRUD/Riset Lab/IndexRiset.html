@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Analytics - Riset</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../../../Assets/Css/Admin/AnggotaLab.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <!-- HAPUS "collapsed" DI SINI -->
+    <aside id="sidebar" class="sidebar">
+    <div class="sidebar-header" id="sidebar-toggle">
+        <img src="../../../Assets/Image/Logo/Logo Without Text.png" alt="Logo" class="sidebar-logo">
+        <div class="sidebar-title">
+            <h4>Laboratorium</h4>
+            <p>Business Analytics</p>
+        </div>
+    </div>
+
+    <ul class="sidebar-menu">
+        <li class="menu-item">
+            <i class="fa-solid fa-house"></i>
+            <p>Beranda</p>
+        </li>
+
+        <li class="menu-item">
+            <i class="fa-solid fa-users"></i>
+            <p>Anggota Lab, Profil lab</p>
+        </li>
+
+        <li class="menu-item">
+            <i class="fa-solid fa-book"></i>
+            <p>Publikasi</p>
+        </li>
+
+        <!-- DI SINI YANG ACTIVE -->
+        <li class="menu-item active">
+            <i class="fa-solid fa-flask"></i>
+            <p>Riset</p>
+        </li>
+
+        <li class="menu-item">
+            <i class="fa-solid fa-newspaper"></i>
+            <p>Berita</p>
+        </li>
+
+        <li class="menu-item">
+            <i class="fa-solid fa-book-open-reader"></i>
+            <p>Resource</p>
+        </li>
+
+        <li class="menu-item">
+            <i class="fa-solid fa-hand-holding"></i>
+            <p>Peminjaman</p>
+        </li>
+
+        <li class="menu-item">
+            <i class="fa-solid fa-user"></i>
+            <p>Profil</p>
+        </li>
+    </ul>
+</aside>
+
+
+    <!-- KONTEN UTAMA -->
+    <main class="content collapsed">
+        <div class="content-header">
+            <h1>Riset</h1>
+            <div class="profile">
+                <span>Maria Savira</span>
+                <i class="fa-solid fa-circle-user"></i>
+            </div>
+        </div>
+
+        <div class="top-controls">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Cari">
+            </div>
+
+            <div class="filter-info">
+                <span><i class="fa-solid fa-sliders"></i> Riset</span>
+                <a href="#">Hapus Filter</a>
+            </div>
+
+            <div class="right-actions">
+                <button class="export">
+                    <i class="fa-solid fa-arrow-up-from-bracket"></i> Export
+                </button>
+
+                <button class="sort">
+                    <i class="fa-solid fa-arrow-down-wide-short"></i>
+                    Urutkan : <strong>Default</strong>
+                </button>
+
+                <button class="add">
+                    <i class="fa-solid fa-plus"></i> Tambah
+                </button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>id_riset</th>
+                        <th>nama riset</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="checkbox" checked></td>
+                        <td>RS01</td>
+                        <td>Anomaly Detection</td>
+                        <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>RS02</td>
+                        <td>Identity Theft</td>
+                        <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>RS03</td>
+                        <td>Fraud Detection</td>
+                        <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>RS04</td>
+                        <td>Brand Image Analysis</td>
+                        <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>RS05</td>
+                        <td>Customer Analytics</td>
+                        <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>RS06</td>
+                        <td>Competitive Monitoring</td>
+                        <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="delete-selection">
+            <i class="fa-solid fa-trash"></i> Hapus data yang dipilih
+        </div>
+    </main>
+
+</body>
+
+</html>
