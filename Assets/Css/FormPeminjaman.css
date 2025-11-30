@@ -1,0 +1,243 @@
+@media (max-width: 1280px) {
+        body {
+            zoom: 80%;
+        }
+    }
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background: #f2f6ff;
+    overflow-x: hidden;
+}
+
+.navbar {
+    background: #0C2A4C !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+/*  HERO  */
+
+.heading {
+    background: url('../Image/Heading/Heading.png') center/cover no-repeat;
+    color: white;
+    margin-top: 110px;
+    padding: 100px 20px;
+    text-align: center;
+}
+
+.heading h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.heading p {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+
+/*  FORM WRAPPER  */
+
+.form-wrapper {
+    max-width: 60%;
+    margin: -50px auto 50px;
+    background: white;
+    padding: 50px 60px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.form-flex {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 80px;     
+}
+
+/* Label */
+.form-label {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+/* LEFT COLUMN  */
+
+.form-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-left .form-control {
+    height: 45px;
+    border-radius: 8px;
+    background-color: #f7faff;
+    border: 1.5px solid #dcdcdc;
+    padding: 10px 15px;
+    font-size: 14px;
+}
+
+
+/* RIGHT COLUMN  */
+
+.form-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.form-right textarea {
+    width: 100%;
+    min-height: 160px;
+    border-radius: 8px;
+    background-color: #f7faff;
+    border: 1.5px solid #dcdcdc;
+    padding: 12px 15px;
+    resize: none;
+}
+
+/*  MASKOT */
+.maskot-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.maskot {
+    width: 400px;  
+    max-width: 100%;
+}
+
+/* BUTTON  */
+.cta-btn {
+    display: block;
+    margin: 40px auto 0;
+    font-weight: 600;
+    padding: 12px 28px;
+    background: #1E5AA8;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.cta-btn:hover {
+    background: #2c72cf;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+
+/* NOTIFICATION  */
+.notification {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 360px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.18);
+    display: none;
+    z-index: 1000;
+    overflow: hidden;
+    border-left: 6px solid #22c55e;   /* HIJAU seperti contoh */
+}
+
+/* ISI KONTEN */
+.notification-content {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    gap: 12px;
+}
+
+/* ICON BULAT */
+.notification-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 16px;
+    border: 2px solid #22c55e;      
+    color: #22c55e;                
+    background: #eaffe9;           
+}
+
+/* TEKS */
+.notification-text {
+    flex: 1;
+}
+
+.notification-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 2px;
+}
+
+.notification-message {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* BUTTON X */
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #9ca3af;
+    cursor: pointer;
+    padding-left: 12px;
+    padding-right: 0;
+}
+
+.close-btn:hover {
+    color: #6b7280;
+}
+
+/* STATE SUCCESS */
+.notification.success {
+    border-left-color: #22c55e;
+}
+
+.notification.success .notification-icon {
+    color: #22c55e;
+    border-color: #22c55e;
+    background: #eaffe9;
+}
+
+
+
+/*  RESPONSIVE  */
+
+@media (max-width: 900px) {
+    .form-wrapper {
+        max-width: 90%;
+        padding: 35px 30px;
+    }
+
+    .form-flex {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .maskot {
+        width: 150px;
+    }
+}

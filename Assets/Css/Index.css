@@ -1,4 +1,8 @@
-@media (min-width: 1024px) {}
+@media (max-width: 1360px) {
+        body {
+            zoom: 90%;
+        }
+    }
 
 body {
     padding: 0;
@@ -8,60 +12,7 @@ body {
 }
 
 header.navbar {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: 999;
-    transition: background 0.3s ease, box-shadow 0.3s ease;
-}
-
-.navbar-container {
-    max-width: 1500px;
-    margin: 0 auto;
-    padding: 0 40px;
-    height: 110px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.navbar-container .logo img {
-    height: 90px;
-}
-
-nav.menu {
-    display: flex;
-    gap: 30px;
-    padding-right: 165px;
-}
-
-nav.menu span a {
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-    text-decoration: none;
-    position: relative;
-}
-
-nav.menu span a::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    bottom: -3px;
-    width: 0%;
-    height: 2px;
-    background: #4CA8FF;
-    transition: width 0.3s ease;
-    transform: translateX(-50%);
-}
-
-nav.menu span a:hover::after {
-    width: 100%;
-}
-
-.navbar.navbar-scrolled {
-    background: #0C2A4C;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    background: transparent !important;
 }
 
 .hero {
@@ -124,7 +75,7 @@ nav.menu span a:hover::after {
     justify-content: flex-end;
 }
 .cta-btn {
-       display: inline-block;
+    display: inline-block;
     padding: 12px 28px;
     background: #1E5AA8;
     color: white;
@@ -140,11 +91,11 @@ nav.menu span a:hover::after {
     transform: translateY(-3px);
 }
 
-
 .profil-lab {
     width: 100%;
     background: #f5f7fa;
     padding: 60px 0; 
+    zoom: 0.8;
 }
 
 .profil-container {
@@ -200,6 +151,7 @@ nav.menu span a:hover::after {
 .visi-misi-section {
     background-color: #e8f0ff;
     padding: 45px 0; 
+    zoom: 0.9;
 }
 
 .vm-container {
@@ -248,6 +200,7 @@ nav.menu span a:hover::after {
 .fokus-riset-section {
     background-color: #e6efff;
     padding: 60px 90px;
+    zoom: 0.9;
 }
 
 .judul-fokus {
@@ -283,27 +236,107 @@ nav.menu span a:hover::after {
 }
 
 .news-section {
-    width: 100%;
-    background: #ffffff !important;
-    padding: 60px 0;
+    background: #fff;
+    padding: 40px 0;
 }
 
 .news-container {
-    width: 78%;
-    margin: 0 auto;
+    width: 1100px;
+    margin: auto;
+}
+
+.section-title {
+    text-align: center;
+    color: #174377;
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 40px;
+    font-family: "Poppins", sans-serif;
+}
+
+.news-flex {
     display: flex;
     gap: 40px;
-    align-items: flex-start;
 }
 
 .berita-utama {
     flex: 1;
 }
 
-.berita-list {
-    width: 38%;
+.big-news-img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 16px;
 }
 
+.judul-utama {
+    font-size: 1.35rem;
+    line-height: 1.35;
+    margin: 15px 0;
+    font-weight: 600;
+}
+
+.meta-utama {
+    display: flex;
+    gap: 10px;
+    color: #777;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+}
+
+.deskripsi-utama {
+    font-size: 0.95rem;
+    color: #777;
+    line-height: 1.55;
+}
+
+.berita-list {
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+
+.berita-item {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+.thumb {
+    width: 120px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.item-date {
+    font-size: 0.78rem;
+    color: #777;
+    margin-bottom: 4px;
+}
+
+.item-title {
+    font-size: 0.95rem;
+    margin: 0 0 4px;
+    line-height: 1.35;
+    font-weight: 600;
+}
+
+.item-author {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #777;
+    margin-top: 8px;
+    flex-wrap: nowrap;
+}
+
+
+/* Galeri */
 .galeri-section {
     width: 100%;
     background: #E9F1FF; 
@@ -320,13 +353,14 @@ nav.menu span a:hover::after {
 .gallery-img:hover {
     transform: scale(1.04);
 }
-
+/* PARTNERSHIP */
 .partnership-section {
     width: 100vw;
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
     background: #ffffff;
     padding: 60px 0;
+    zoom: 0.9;
 }
 
 .partnership-container {
@@ -358,53 +392,6 @@ nav.menu span a:hover::after {
 
 .partnership-image img {
     width: 450px;
-}
-
-.footer {
-    background: linear-gradient(to bottom,rgba(3, 37, 76, 1) 40%,rgba(11, 74, 143, 1) 100%);
-    text-align: center;
-    padding: 40px 20px;
-    color: white;
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw); 
-}
-
-.footer-logo img {
-    width: 120px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-.footer-menu {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin-bottom: 25px;
-    flex-wrap: wrap;
-}
-
-.footer-menu li {
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.footer-social {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin-top: 10px;
-    margin-bottom: 30px;
-    font-size: 22px;
-}
-
-.footer-copyright {
-    padding-top: 40px;
-    font-size: 14px;
-    opacity: 0.8;
 }
 
 @keyframes fadeUp {
