@@ -1,10 +1,3 @@
-@media (min-width:1200px) {
-    body{
-        zoom: 80%;
-    }
-}
-
-
 * {
     margin: 0;
     padding: 0;
@@ -24,7 +17,7 @@ body {
 .content {
     margin-left: 110px;
     padding: 40px;
-    width: 100%;
+    width: 90%;
     transition: 0.2s ease;
 }
 
@@ -94,7 +87,6 @@ body {
     text-decoration: none;
 }
 
-
 .right-actions {
     margin-left: auto;
     display: flex;
@@ -121,104 +113,109 @@ button {
     background: #1f4fc7;
     color: white;
 }
-/* TABLE */
+
 .table-container {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 0;
-    overflow-x: auto;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    margin-top: 10px;
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 1200px;
 }
 
-thead tr {
-    background: #e8edf5;
+thead {
+    background: #b9c9e8;
 }
 
 thead th {
+    padding: 18px 10px;
     text-align: left;
-    padding: 14px 16px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #333;
-}
-
-tbody tr {
-    background: #fff;
-    border-bottom: 1px solid #eee;
+    font-size: 15px;
 }
 
 tbody td {
-    padding: 14px 16px;
-    font-size: 14px;
-    vertical-align: top;
+    padding: 16px 12px;
+    border-bottom: 1px solid #f0f0f0;
 }
 
-tbody tr:hover {
-    background: #f8f9ff;
-}
-
-/* Checkbox alignment */
-td input[type="checkbox"] {
-    transform: scale(1.2);
-}
-
-/* STATUS BADGES */
-.status {
+.tag {
     padding: 6px 12px;
-    border-radius: 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    margin-right: 5px;
+    display: inline-block;
+}
+
+.tag.orange {
+    background: #fff1e5;
+    color: #e49b41;
+    border: 1px solid #e49b41;
+}
+
+.tag.blue {
+    background: #e7f0ff;
+    color: #1f4fc7;
+    border: 1px solid #1f4fc7;
+}
+
+.status.aktif {
+    background: #e8ffe8;
+    color: #2b9d4d;
+    padding: 6px 14px;
+    border-radius: 10px;
     font-size: 13px;
-    font-weight: 500;
-    text-transform: capitalize;
 }
 
-.status.disetujui {
-    background: #d4f5d8;
-    color: #1b8d36;
+.user-icon {
+    font-size: 40px;
+    color: #c6c6c6;
 }
 
-.status.menunggu {
-    background: #fff3ce;
-    color: #c08800;
-}
-
-.status.ditolak {
-    background: #ffd6d6;
-    color: #c13a3a;
-}
-
-
-
-
-
-
-.status {
-    font-weight: 600;
-}
-
-
-
-
-/* DELETE SELECTION BUTTON */
 .delete-selection {
-    margin-top: 18px;
-    padding: 11px 14px;
-    border-radius: 8px;
-    width: fit-content;
-    background: #f8f0f0;
-    color: #c0392b;
-    font-size: 14px;
+    margin-top: 20px;
     display: flex;
     align-items: center;
     gap: 8px;
-    cursor: pointer;
+    color: #1f4fc7;
+    font-size: 15px;
 }
 
-.delete-selection:hover {
-    background: #f3e0e0;
+.btn-save {
+    background-color: #1f4fc7;   
+    color: white;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.25s ease;
+}
+
+.btn-save:hover {
+    background-color: #074c81; 
+    transform: translateY(-2px); 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.btn-save:active {
+    transform: scale(0.95); /* efek klik */
+}
+.status-dropdown {
+    background-color: #1f4fc7; /* biru tua */
+    color: white;
+    padding: 6px 16px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;
+}
+.status-dropdown:hover {
+    background-color: #1f4fc7;
 }

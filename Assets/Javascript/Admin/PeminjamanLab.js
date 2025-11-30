@@ -1,24 +1,18 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const btn = document.querySelector(".status-trigger");
-    const dropdown = document.querySelector(".status-dropdown");
+document.querySelectorAll(".btn-save").forEach(btn => {
+    btn.addEventListener("click", function () {
+        let id = this.dataset.id;
+        let row = this.closest("tr");
+        let status = row.querySelector(".status-dropdown").value;
 
-    // Klik tombol → show/hide dropdown
-    btn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        dropdown.style.display =
-            dropdown.style.display === "block" ? "none" : "block";
-    });
-
-    // Klik luar → dropdown hilang
-    document.addEventListener("click", () => {
-        dropdown.style.display = "none";
-    });
-
-    // Pilih item
-    dropdown.querySelectorAll("div").forEach(item => {
-        item.addEventListener("click", () => {
-            console.log("Kamu memilih:", item.dataset.value);
-            dropdown.style.display = "none";
-        });
+        fetch("update_status.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: "id_peminjaman=" + id + "&status=" + status
+        })
+        .then(res => res.text())
+        .then(response => {
+            alert(response);
+        })
+        .catch(err => alert("Error: " + err));
     });
 });
