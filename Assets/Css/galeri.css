@@ -1,0 +1,118 @@
+/* Reset & Body */
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  overflow-x: hidden;
+  background: #f2f6ff;
+}
+
+.navbar {
+  background: #0c2a4c !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.nav.menu {
+  padding-left: 110px !important;
+}
+
+/* Hero Heading */
+.heading {
+  background: url("../Image/Galeri-Berita/Heading.png");
+  color: white;
+  margin-top: 95px;
+  padding: 100px 20px;
+  text-align: center;
+}
+
+.heading h1 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.heading p {
+  font-weight: 400;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+/* Gallery Section */
+.gallery-wrapper {
+  background: #ffffff;
+  width: 100%;
+  max-width: 1209px;
+  margin: -60px auto 50px auto;
+  padding: 35px;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transition: 0.25s ease;
+}
+
+.gallery-wrapper:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+.gallery-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 35px;
+  justify-content: center;
+}
+
+/* Default Image Style */
+.gallery-img {
+  height: 200px; /* tinggi sama semua */
+  object-fit: cover;
+  border-radius: 14px;
+  box-shadow: 0 18px 18px rgba(0, 0, 0, 0.18);
+  transition: 0.25s ease;
+}
+
+/* Hover */
+.gallery-img:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.28);
+}
+
+/* --- WIDTH CLASSES --- */
+
+/* Gambar 1, 2, 3 */
+.card-385 {
+  width: 340px;
+}
+
+/* Gambar 4 & 6 */
+.card-338 {
+  width: 270px;
+}
+
+/* Gambar 5 */
+.card-496 {
+  width: 450px;
+}
+
+/* Gambar 7 & 9 */
+.card-438 {
+  width: 393px;
+}
+
+/* Gambar 8 */
+.card-239 {
+  width: 198px;
+}
+
+/* RESPONSIVE (tablet) */
+@media (max-width: 992px) {
+  .gallery-img {
+    width: calc(50% - 30px);
+  }
+}
+
+/* RESPONSIVE (hp) */
+@media (max-width: 600px) {
+  .gallery-img {
+    width: 100%;
+    height: 180px;
+  }
+}
