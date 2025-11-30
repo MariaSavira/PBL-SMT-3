@@ -152,18 +152,6 @@
     <div id="overlay" class="overlay" style="display:none;"></div>
 
     <script>
-    
-        window.addEventListener("scroll", function () {
-            const navbar = document.querySelector("header.navbar");
-            if (!navbar) return;
-
-            if (window.scrollY > 20) {
-                navbar.classList.add("navbar-scrolled");
-            } else {
-                navbar.classList.remove("navbar-scrolled");
-            }
-        });
-
         document.addEventListener('DOMContentLoaded', function () {
             const fileInput   = document.getElementById('fileInput');
             const uploadBtn   = document.getElementById('uploadTrigger');
@@ -280,28 +268,7 @@
         });
     </script>
 
-    <footer class="footer">
-        <div class="footer-logo">
-            <img src="../Assets/Image/Logo/Logo With Text.png" title="Politeknik Negeri Malang" style="width: 178px; height: 91px" class="logo-img" />
-        </div>
-        <ul class="footer-menu">
-            <li>Tentang Kami</li>
-            <li>Anggota</li>
-            <li>Publikasi</li>
-            <li>Riset</li>
-            <li>Resource</li>
-            <li>Berita</li>
-            <li>Kontak Kami</li>
-            <li>Login</li>
-        </ul>
-        <div class="footer-social">
-            <i class="fab fa-facebook"></i>
-            <i class="fas fa-envelope"></i>
-            <i class="fab fa-twitter"></i>
-            <i class="fab fa-instagram"></i>
-        </div>
-        <p class="footer-copyright">© 2025 Tim PBL Business Analyst SIB 2C</p>
-        <script src="../Assets/Javascript/HeaderFooter.js"></script>
-    </footer>
+    <div id="footer"></div>
+    <script src="../Assets/Javascript/HeaderFooter.js"></script>
 </body>
 </html>
