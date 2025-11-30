@@ -16,73 +16,8 @@
 
 <body>
     <!-- SIDEBAR -->
-    <aside id="sidebar" class="sidebar">
-        <div class="sidebar-header" id="sidebar-toggle">
-            <img src="../../../Assets/Image/Logo/Logo Without Text.png" alt="Logo" class="sidebar-logo">
-            <div class="sidebar-title">
-                <h4>Laboratorium</h4>
-                <p>Business Analytics</p>
-            </div>
-        </div>
-
-        <ul class="sidebar-menu">
-            <li class="menu-item">
-                <i class="fa-solid fa-house"></i>
-                <p>Beranda</p>
-            </li>
-
-            <li class="menu-item active">
-                <i class="fa-solid fa-users"></i>
-                <p>Anggota Lab, Profil lab</p>
-            </li>
-
-            <li class="menu-item">
-                <i class="fa-solid fa-book"></i>
-                <p>Publikasi</p>
-            </li>
-
-            <li class="menu-item">
-                <i class="fa-solid fa-flask"></i>
-                <p>Riset</p>
-            </li>
-
-            <li class="menu-item">
-                <i class="fa-solid fa-newspaper"></i>
-                <p>Berita</p>
-            </li>
-
-            <li class="menu-item">
-                <i class="fa-solid fa-book-open-reader"></i>
-                <p>Resource</p>
-            </li>
-
-            <li class="menu-item">
-                <i class="fa-solid fa-hand-holding"></i>
-                <p>Peminjaman</p>
-            </li>
-
-            <li class="menu-item">
-                <i class="fa-solid fa-user"></i>
-                <p>Profil</p>
-            </li>
-        </ul>
-    </aside>
-
-    <!-- <aside class="sidebar">
-        <div class="sidebar-logo">
-            <img src="logo.png" alt="logo">
-        </div>
-        
-        <ul class="sidebar-menu">
-            <li class="active"><i class="fa-solid fa-house"></i></li>
-            <li><i class="fa-solid fa-users"></i></li>
-            <li><i class="fa-solid fa-file-lines"></i></li>
-            <li><i class="fa-solid fa-book"></i></li>
-            <li><i class="fa-solid fa-chalkboard-user"></i></li>
-            <li><i class="fa-solid fa-user"></i></li>
-        </ul>
-    </aside> -->
-<main class="content collapsed">
+    <div id="sidebar"></div>
+<div class="content collapsed" id="content">
 
     <!-- HEADER -->
     <div class="content-header">
@@ -100,7 +35,7 @@
         <div class="search-box">
             <i class="fa-solid fa-magnifying-glass"></i>
             <input type="text" placeholder="Cari">
-            <span class="result-count">20 hasil</span>
+            <span class="result-count">4 hasil</span>
         </div>
 
         <!-- FILTER -->
@@ -143,6 +78,7 @@
                     <th>status</th>
                     <th>approved</th>
                     <th>catatan</th>
+                     <th>aksi</th>
                 </tr>
             </thead>
 
@@ -163,6 +99,9 @@
                     <td>
                         Sudah sesuai SOP. Harap menjaga kebersihan.
                     </td>
+                    
+
+                    
                 </tr>
 
                 <!-- ROW 2 -->
@@ -195,6 +134,8 @@
                     <td><span class="status menunggu">menunggu</span></td>
                     <td>-</td>
                     <td>Mohon isi detail jumlah peserta praktikum</td>
+                    <td class="aksi">
+
                 </tr>
 
                 <!-- ROW 4 -->
@@ -210,6 +151,7 @@
                     <td><span class="status ditolak">ditolak</span></td>
                     <td>-</td>
                     <td>Tanggal bentrok dengan jadwal praktikum internal.</td>
+                    
                 </tr>
 
             </tbody>
@@ -222,9 +164,10 @@
         Hapus data yang dipilih
     </div>
 
-</main>
+</div>
 
-
+<script src="../../../Assets/Javascript/Admin/Sidebar.js"></script>
+<script src="../../../Assets/Javascript/Admin/PeminjamanLab.js"></script>
 </body>
 
 </html>
