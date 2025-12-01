@@ -2,8 +2,7 @@
 <html>
 
 <?php
-require __DIR__ . '../../../../Admin/CRUD/Koneksi.php';
-
+require __DIR__ . '/../Koneksi.php';
 $conn = pg_connect("host=localhost port=5432 dbname=lab_ba user=postgres password=29082006");
 
 if (!$conn) {
@@ -144,7 +143,7 @@ document.querySelectorAll('.btn-save').forEach(btn => {
         let id = btn.dataset.id;
         let status = document.querySelector(`.status-dropdown[data-id="${id}"]`).value;
 
-        fetch("update_status.php", {
+        fetch("../../UpdateStatus.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",

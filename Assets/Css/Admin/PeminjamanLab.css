@@ -219,3 +219,27 @@ tbody td {
 .status-dropdown:hover {
     background-color: #1f4fc7;
 }
+
+.badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    color: white;
+    font-weight: 600;
+    text-transform: capitalize;
+    font-size: 14px;
+    display: inline-block;
+}
+
+/* WARNA STATUS */
+.badge-pending {
+    background-color: #f7b731; /* kuning */
+    color: #000;
+}
+
+.badge-disetujui {
+    background-color: #2ecc71; /* hijau */
+}
+
+.badge-ditolak {
+    background-color: #e74c3c; /* merah */
+}
