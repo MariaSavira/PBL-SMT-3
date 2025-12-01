@@ -1,30 +1,37 @@
 <?php
-    function get_pg_connection() {
-        $connStr = "host=localhost port=5432 dbname=lab_ba user=postgres password=123 options='--client_encoding=UTF8'";
-        $connStr = "host=localhost port=5432 dbname=lab_ba user=postgres password=29082006 options='--client_encoding=UTF8'";
-        $conn = @pg_connect($connStr);
+function get_pg_connection() {
+    $host     = 'localhost';
+    $port     = '5432';
+    $dbname   = 'lab_ba';
+    $user     = 'postgres';
+    $password = '123'; 
 
-        if (!$conn) {
-            throw new RuntimeException("Koneksi PostgreSQL gagal. Periksa host/port/db/user/pass & ekstensi pgsql.");
-        }
-        return $conn;
+    $connStr = "host=$host port=$port dbname=$dbname user=$user password=$password options='--client_encoding=UTF8'";
+
+    $conn = pg_connect($connStr);
+
+    if (!$conn) {
+        throw new RuntimeException("Koneksi PostgreSQL gagal: " . pg_last_error());
     }
 
-    function qparams(string $sql, array $params) {
-        $conn = get_pg_connection();
-        $res = @pg_query_params($conn, $sql, $params);
-        if ($res === false) {
-            throw new RuntimeException("Query gagal: " . pg_last_error($conn));
-        }
-        return $res;
-    }
+    return $conn;
+}
 
-    function q(string $sql) {
-        $conn = get_pg_connection();
-        $res = @pg_query($conn, $sql);
-        if ($res === false) {
-            throw new RuntimeException("Query gagal: " . pg_last_error($conn));
-        }
-        return $res;
+function qparams(string $sql, array $params) {
+    $conn = get_pg_connection();
+    $res  = pg_query_params($conn, $sql, $params);
+    if ($res === false) {
+        throw new RuntimeException("Query gagal: " . pg_last_error($conn));
     }
+    return $res;
+}
+
+function q(string $sql) {
+    $conn = get_pg_connection();
+    $res  = pg_query($conn, $sql);
+    if ($res === false) {
+        throw new RuntimeException("Query gagal: " . pg_last_error($conn));
+    }
+    return $res;
+}
 ?>

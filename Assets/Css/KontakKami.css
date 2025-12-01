@@ -66,7 +66,14 @@ body {
     border-radius: 10px;
     margin-bottom: 50px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    transition: 0.3s ease;   /* tambah ini */
 }
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 35px rgba(0,0,0,0.18);
+}
+
 
 .left h2,
 .right h2 {
@@ -137,6 +144,12 @@ textarea:focus {
     border-color: #1f60d1;
     box-shadow: 0 0 0 2px rgba(31,96,209,0.25);
     outline: none;
+}
+input:hover,
+select:hover,
+textarea:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 8px 18px rgba(0,0,0,0.12);
 }
 
 .left label {
@@ -297,7 +310,7 @@ select option[disabled] {
 }
 
 .btn:hover {
-    transform: translateY(-1px);
+    transform: translateY(-5px);
 }
 
 .right {
@@ -347,8 +360,12 @@ select option[disabled] {
     box-shadow: 0 8px 24px rgba(0,0,0,0.18);
     border: none;
     flex: 0 0 auto;
+    transition: 0.3s ease;
 }
-
+.map iframe:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+}
 .footer {
     background: linear-gradient(to bottom,
             rgba(3, 37, 76, 1) 40%,

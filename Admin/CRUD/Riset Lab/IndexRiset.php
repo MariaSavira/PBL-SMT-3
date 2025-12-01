@@ -1,4 +1,5 @@
 <?php
+
 require __DIR__ . '/../Koneksi.php';
 
 $res  = q('SELECT id_riset, nama_bidang_riset FROM bidangriset ORDER BY id_riset ASC');
@@ -43,7 +44,7 @@ $rows = pg_fetch_all($res) ?: [];
             <li class="menu-item"><i class="fa-solid fa-user"></i><p>Profil</p></li>
         </ul>
     </aside>
-
+    <?php include __DIR__ . '/../../Sidebar.html'; ?>
     <main class="content collapsed">
 
         <div class="content-header">
