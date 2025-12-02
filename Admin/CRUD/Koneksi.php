@@ -1,29 +1,18 @@
 <?php
-    function get_pg_connection() {
-        $connStr = "host=localhost port=5432 dbname=lab_ba user=postgres password=29082006 options='--client_encoding=UTF8'";
-        $conn = @pg_connect($connStr);
+// config.php
+$host = "localhost";
+$port = "5432";
+$dbname = "lab_ba";
+$user = "postgres";   // sesuaikan bila username postgresql lain
+$pass = "29082006";
 
-        if (!$conn) {
-            throw new RuntimeException("Koneksi PostgreSQL gagal. Periksa host/port/db/user/pass & ekstensi pgsql.");
-        }
-        return $conn;
-    }
-
-    function qparams(string $sql, array $params) {
-        $conn = get_pg_connection();
-        $res = @pg_query_params($conn, $sql, $params);
-        if ($res === false) {
-            throw new RuntimeException("Query gagal: " . pg_last_error($conn));
-        }
-        return $res;
-    }
-
-    function q(string $sql) {
-        $conn = get_pg_connection();
-        $res = @pg_query($conn, $sql);
-        if ($res === false) {
-            throw new RuntimeException("Query gagal: " . pg_last_error($conn));
-        }
-        return $res;
-    }
-?>
+try {
+    // buat PDO Postgres
+    $db = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $user, $pass, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    ]);
+} catch (PDOException $e) {
+    // hentikan dengan pesan jelas untuk debug (jangan tampilkan di production)
+    die("Koneksi database gagal: " . $e->getMessage());
+}
