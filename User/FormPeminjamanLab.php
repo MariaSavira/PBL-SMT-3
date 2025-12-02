@@ -7,23 +7,13 @@
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link
-            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-            rel="stylesheet">
-
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="../Assets/Css/FormPeminjaman.css">
-        <link rel="stylesheet" href="../Assets/Css/HeaderFooter.css">
-
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-
-        <link rel="icon" type="images/x-icon"
-            href="../Assets/Image/Logo/Logo Without Text.png" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+        <link rel="icon" type="images/x-icon" href="../Assets/Image/Logo/Logo Without Text.png" />
     </head>
-
     <body>
         <div id="header"></div>
-
         <div class="heading">
             <h1>Formulir Peminjaman Laboratorium</h1>
             <p>Silahkan isi formulir peminjaman berikut</p>
@@ -32,7 +22,7 @@
             <div class="form-wrapper">
                 <h2 class="text-center mb-4">Formulir Peminjaman</h2>
 
-                <form id="loanForm" action="prosespeminjaman.php" method="POST">
+                <form id="loanForm" action="ProsesPeminjaman.php" method="POST">
 
                     <div class="form-flex">
 
@@ -138,40 +128,7 @@
         </footer>
 
         <script src="../Assets/Javascript/HeaderFooter.js"></script>
-
-        <!-- SCRIPT KIRIM DATA KE DATABASE -->
- <script>
-document.getElementById('loanForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const form = this;
-    const formData = new FormData(form);
-
-    fetch('ProsesPeminjaman.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(res => res.json())    // <-- WAJIB: Ubah dari res.ok menjadi JSON
-    .then(data => {
-        if (data.status !== 'success') {
-            alert("Gagal: " + data.message);
-            return; // jangan tampil notif sukses
-        }
-
-        // Kalau sukses
-        document.getElementById('notification').style.display = 'flex';
-        form.reset();
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Terjadi kesalahan saat mengirim data");
-    });
-});
-
-document.getElementById('closeNotification').addEventListener('click', () => {
-    document.getElementById('notification').style.display = 'none';
-});
-</script>
-
+         <script src="../Assets/Javascript/PeminjamanLab.js"></script>
+    
     </body>
 </html>
