@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html>
+<?php
+require __DIR__ . '../../koneksi.php';
+
+$res = q('SELECT * from mv_anggota_keahlian ORDER BY id_anggota ASC');
+$rows = pg_fetch_all($res) ?: [];
+?>
 
 <head>
     <meta charset="UTF-8">
@@ -42,7 +48,6 @@
             </div>
         </div>
 
-
         <div class="top-controls">
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -66,13 +71,12 @@
             </div>
         </div>
 
-
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
                         <th></th>
-                        <th>id_anggota</th>
+                        <th>id</th>
                         <th>nama</th>
                         <th>keahlian</th>
                         <th>jabatan</th>
@@ -83,19 +87,51 @@
                 </thead>
 
                 <tbody>
-                    <tr>
-                        <td><input type="checkbox" checked></td>
-                        <td>KL01</td>
-                        <td>Dr. Rakhmat Arianto</td>
-                        <td>
-                            <span class="tag orange">Natural Language Processing</span>
-                            <span class="tag orange">Data Science</span>
-                        </td>
-                        <td><span class="tag blue">Kepala Laboratorium</span></td>
-                        <td><i class="fa-solid fa-circle-user user-icon"></i></td>
-                        <td><span class="status aktif">Aktif</span></td>
-                        <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
-                    </tr>
+                    <?php if (!$rows): ?>
+                        <tr>
+                            <td colspan="6">Belum ada data.</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php $i = 1;
+                        foreach ($rows as $row): ?>
+                            <tr>
+                                <td><input type="checkbox" style="width: 15px; height: 15px"></td>
+                                <td class="text"><?= htmlspecialchars($row["id_anggota"]) ?></td>
+                                <td class="text"><?= htmlspecialchars($row["nama"]) ?></td>
+                                <td>
+                                    <?php
+                                    $keahlianList = $row["keahlian"]
+                                        ? explode(',', trim($row["keahlian"], '{}'))
+                                        : [];
+
+                                    $keahlianList = array_map(fn($k) => trim($k, '"'), $keahlianList);
+                                    ?>
+
+                                    <?php if (empty($keahlianList)): ?>
+                                        <span class="tag orange">-</span>
+                                    <?php else: ?>
+                                        <?php foreach ($keahlianList as $tag): ?>
+                                            <span class="tag orange"><?= htmlspecialchars($tag) ?></span>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </td>
+                                <td><span class="tag blue"><?= htmlspecialchars($row["jabatan"]) ?></span></td>
+                                <td>
+                                    <?php
+                                        $folder = '../../../Assets/Image/AnggotaLab/';
+                                        $foto = $row['foto'];
+
+                                        $src = (!empty($foto) && file_exists($folder . $foto))
+                                            ? $folder . $foto
+                                            : $folder . 'No-Picture.jpg';
+                                    ?>
+                                    <img src="<?= $src ?>" alt="Foto User" class="user-foto">
+                                </td>
+                                <td><span class="status aktif"><?= ($row["status"] === 't' || $row["status"] === true) ? 'Aktif' : 'Nonaktif'; ?></span></td>
+                                <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>

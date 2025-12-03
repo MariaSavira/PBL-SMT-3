@@ -134,12 +134,17 @@ thead {
 thead th {
     padding: 18px 10px;
     text-align: left;
-    font-size: 15px;
+    font-weight: 500;
+    font-size: 14px;
 }
 
 tbody td {
     padding: 16px 12px;
     border-bottom: 1px solid #f0f0f0;
+}
+
+td.text {
+    font-size: 14px;
 }
 
 .tag {
@@ -148,6 +153,11 @@ tbody td {
     font-size: 12px;
     margin-right: 5px;
     display: inline-block;
+    text-align: center;
+    white-space: nowrap;
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .tag.orange {
@@ -182,4 +192,11 @@ tbody td {
     gap: 8px;
     color: #1f4fc7;
     font-size: 15px;
+}
+
+.user-foto {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    /* object-fit: cover; */
 }
