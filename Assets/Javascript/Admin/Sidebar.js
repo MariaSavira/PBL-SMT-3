@@ -1,10 +1,11 @@
+const currentPage = window.location.pathname;
+
 function loadCSS(url) {
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.href = url;
     document.head.appendChild(link);
 }
-
 // document.querySelectorAll(".menu span").forEach(a => {
 //     if (a.getAttribute("href") === currentPage.split("/").pop()) {
 //         a.classList.add("active");
@@ -38,5 +39,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         // sidebar.classList.toggle("sidebar");
         sidebar.classList.toggle("collapsed");
         content.classList.toggle("collapsed");
+    });
+
+    document.querySelectorAll("li a").forEach(a => {
+        // if (a.getAttribute("href") === currentPage.split("/")) {
+        //     a.classList.add("active");
+        //     console.log(a.getAttribute("href"))
+        // }
+        const link = a.getAttribute("href");
+
+        if (a.getAttribute("href") === currentPage.split("/")) {
+            a.classList.add("active");
+        }
+        console.log(link);
     });
 });
