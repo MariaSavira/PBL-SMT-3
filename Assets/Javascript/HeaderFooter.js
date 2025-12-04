@@ -19,51 +19,48 @@ async function loadComponent(id, file, url) {
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
-    await loadComponent("header", "Header.html", "../Assets/Css/HeaderFooter.css");
-    // loadCSS("../Assets/Css/HeaderFooter.css");
+
+    const header = await loadComponent("header", "Header.html", "../Assets/Css/HeaderFooter.css");
     await loadComponent("footer", "Footer.html", "../Assets/Css/HeaderFooter.css");
 
-    console.log(currentPage.split("/").pop())
+    const navbar = header.querySelector(".navbar");
+    const dropdown = header.querySelector(".dropdown");
+    const toggle = header.querySelector(".dropdown-toggle");
+    const filename = window.location.pathname.split("/").pop();
 
-    const navbar = document.querySelector(".navbar");
-    // const menu = document.querySelector(".menu");
-    const hero = document.querySelector("#hero");
+    window.addEventListener("load", function () {
+        const hero = document.querySelector("#hero");
 
-    window.addEventListener("scroll", function () {
-        if (currentPage === "/User/Index.html") {
+        if (filename === "Index.html" && hero) {
             const scrollTrigger = hero.offsetHeight;
+            console.log(scrollTrigger);
 
-            if (window.scrollY >= scrollTrigger) {
-                // menu.classList.add("menu-scrolled");
-                navbar.classList.add("navbar-scrolled");
-                navbar.style.position = "fixed";
-            } else {
-                // menu.classList.remove("menu-scrolled");
-                navbar.classList.remove("navbar-scrolled");
-                navbar.style.position = "absolute";
+            window.addEventListener("scroll", function () {
+                if (window.scrollY >= scrollTrigger) {
+                    navbar.classList.add("navbar-scrolled");
+                    navbar.style.position = "fixed";
+                } else {
+                    navbar.classList.remove("navbar-scrolled");
+                    navbar.style.position = "absolute";
+                }
+            });
+
+        } else {
+            navbar.classList.add("navbar-scrolled");
+            navbar.style.position = "fixed";
+        }
+    });
+
+    if (toggle && dropdown) {
+        toggle.addEventListener("click", (e) => {
+            e.preventDefault();
+            dropdown.classList.toggle("active");
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!dropdown.contains(e.target)) {
+                dropdown.classList.remove("active");
             }
-        }
-    });
-
-    document.querySelectorAll(".menu span a").forEach(a => {
-        // if (a.getAttribute("href") === currentPage.split("/")) {
-        //     a.classList.add("active");
-        //     console.log(a.getAttribute("href"))
-        // }
-        // const link = a.getAttribute("href");
-
-        if (a.getAttribute("href") === currentPage.split("/").pop()){
-            a.classList.add("active");
-        }
-        // console.log(link);
-    });
-});
-
-const menuLogin = document.getElementById('login');
-
-document.addEventListener("keydown", (e) => {
-    if (e.ctrlKey && e.key === "l") {
-        e.preventDefault();
-        menuLogin.style.display = block;
+        });
     }
 });
