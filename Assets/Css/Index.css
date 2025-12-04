@@ -396,16 +396,17 @@ header.navbar {
 }
 /* PARTNERSHIP */
 .partnership-section {
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
+    width: 100%;
+    /* margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw); */
     background: #ffffff;
-    padding: 60px 0 0 0;
+    padding: 60px;
     zoom: 0.9;
 }
 
 .partnership-container {
-    width: 78%;
+    max-width: 1200px; 
+    width: 88%;
     margin: auto;
     display: flex;
     align-items: center;
