@@ -114,17 +114,23 @@ button {
     color: white;
 }
 
+
 .table-container {
     margin-top: 10px;
     background: white;
     padding: 20px;
     border-radius: 16px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    height: 550px;       
+    overflow-y: auto;   
+    overflow-x: auto;
 }
 
 table {
+    zoom: 0.8;
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed; /* wajib supaya kolom tidak melebar */
 }
 
 thead {
@@ -135,6 +141,8 @@ thead th {
     padding: 18px 10px;
     text-align: left;
     font-size: 15px;
+    word-wrap: break-word;
+    white-space: normal;
 }
 
 tbody td {
@@ -206,7 +214,7 @@ tbody td {
     transform: scale(0.95); /* efek klik */
 }
 .status-dropdown {
-    background-color: #1f4fc7; /* biru tua */
+    background-color: transparent ;
     color: white;
     padding: 6px 16px;
     border-radius: 8px;
@@ -217,7 +225,7 @@ tbody td {
     outline: none;
 }
 .status-dropdown:hover {
-    background-color: #1f4fc7;
+    background-color: #ffff;
 }
 
 .badge {

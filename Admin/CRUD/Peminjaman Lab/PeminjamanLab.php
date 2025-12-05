@@ -96,7 +96,9 @@ if (!$conn) {
                 while ($row = pg_fetch_assoc($result)):
                 ?>
                     <tr>
-                        <td><input type="checkbox"></td>
+                        <td>
+                            <input type="checkbox" class="row-check" value="<?= $row['id_peminjaman'] ?>">
+                        </td>
                         <td><?= $row['id_peminjaman'] ?></td>
                         <td><?= $row['nama_peminjam'] ?></td>
                         <td><?= $row['email'] ?></td>
@@ -157,6 +159,40 @@ if (!$conn) {
                 });
         });
     });
+document.querySelector('.delete-selection').addEventListener('click', () => {
+
+    const checked = document.querySelectorAll('.row-check:checked');
+
+    if (checked.length === 0) {
+        alert("Tidak ada data yang dipilih.");
+        return;
+    }
+
+    if (!confirm("Yakin ingin menghapus data yang dipilih?")) {
+        return;
+    }
+
+    // ambil semua ID
+    let ids = [...checked].map(c => c.value);
+
+    // format body biar POST sesuai: ids[]=1&ids[]=2&ids[]=3
+    let formBody = ids.map(id => `ids[]=${encodeURIComponent(id)}`).join("&");
+
+    fetch("hapuspeminjaman.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: formBody
+    })
+    .then(res => res.text())
+    .then(msg => {
+        alert(msg);
+        location.reload();
+    })
+    .catch(err => alert("Terjadi error: " + err));
+});
+
     </script>
     <script src="../../../Assets/Javascript/Admin/Sidebar.js"></script>
 </body>
