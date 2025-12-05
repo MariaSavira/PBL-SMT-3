@@ -1,3 +1,37 @@
+<?php
+// Dashboard.php (di folder Admin)
+
+// kalau nanti pakai session login admin:
+// session_start();
+
+// panggil koneksi & helper q(), qparams()
+require __DIR__ . '/CRUD/Koneksi.php';
+
+// ambil data dari tabel bidangriset (sama seperti halaman Riset)
+$res  = q('SELECT id_riset, nama_bidang_riset FROM bidangriset ORDER BY id_riset ASC');
+$rows = pg_fetch_all($res) ?: [];
+
+// sementara angka statistik masih statis (boleh nanti disambung ke query)
+$totalArtikel         = 20;
+$totalAnggotaAktif    = 8;
+$totalAjuanPeminjaman = 20;
+
+$totalBidangRiset     = count($rows);
+$risetBerjalan        = 12;
+$risetSelesai         = 8;
+
+// ===============================
+// DATA UNTUK HISTOGRAM (DARI DB)
+// ===============================
+$chartLabels = [];
+$chartData   = [];
+
+// setiap bidang riset jadi satu bar dengan nilai 1
+foreach ($rows as $row) {
+    $chartLabels[] = $row['nama_bidang_riset']; // label di sumbu X
+    $chartData[]   = 1;                         // tinggi bar (sementara 1 per bidang)
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -14,6 +48,9 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="../Assets/Css/Admin/Dashboard.css">
+
+    <!-- CHART.JS UNTUK GRAFIK -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -62,17 +99,17 @@
         <section class="stats-row">
             <article class="stat-card">
                 <h4>Total Artikel</h4>
-                <p class="value">20</p>
+                <p class="value"><?php echo $totalArtikel; ?></p>
             </article>
 
             <article class="stat-card">
                 <h4>Total Anggota Aktif</h4>
-                <p class="value">8</p>
+                <p class="value"><?php echo $totalAnggotaAktif; ?></p>
             </article>
 
             <article class="stat-card">
                 <h4>Total Ajuan Peminjaman Lab</h4>
-                <p class="value">20</p>
+                <p class="value"><?php echo $totalAjuanPeminjaman; ?></p>
             </article>
         </section>
 
@@ -113,20 +150,89 @@
             <!-- AJUAN TERBARU (kolom 3, baris 1–2, tinggi 411) -->
             <div class="ajuan-section">
                 <h3 class="section-title text-center">Ajuan Terbaru</h3>
-                <div class="card card-ajuan"></div>
+                <div class="card card-ajuan">
+                    <!-- nanti isi list ajuan di sini (loop dari DB kalau perlu) -->
+                </div>
             </div>
 
             <!-- PENGUMUMAN TERBARU (kolom 1-2, baris 2) -->
             <div class="pengumuman-section">
                 <h3 class="section-title">Pengumuman Terbaru</h3>
                 <div class="row-1-cols">
-                    <div class="card empty-card"></div>
-                    <div class="card empty-card"></div>
+
+                    <!-- KOTAK KIRI: pengumuman -->
+                    <div class="card pengumuman-card">
+                        <p class="empty-text" style="color:#6b7280; font-size:14px;">
+                            Belum ada pengumuman terbaru.
+                        </p>
+                    </div>
+
+                    <!-- KOTAK KANAN: HISTOGRAM dari tabel bidangriset -->
+                    <div class="card chart-card">
+                        <h4 class="chart-title" style="margin-bottom: 12px; font-size:15px;">
+                            Bidang Riset Terdaftar
+                        </h4>
+                        <div class="chart-wrapper" style="width:100%; height:260px;">
+                            <canvas id="chartBidangRiset"></canvas>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
         </section>
+
+        <!-- contoh kalau mau cek data bidangriset (debug sementara) -->
+        <!--
+        <pre>
+        <?php // print_r($rows); ?>
+        </pre>
+        -->
+
     </main>
 </div>
+
+<!-- SCRIPT GRAFIK HISTOGRAM -->
+<script>
+    // data dari PHP (tabel bidangriset)
+    const labelsBidang = <?php echo json_encode($chartLabels); ?>;
+    const dataBidang   = <?php echo json_encode($chartData); ?>;
+
+    const canvasBidang = document.getElementById('chartBidangRiset');
+    if (canvasBidang) {
+        const ctx = canvasBidang.getContext('2d');
+
+        new Chart(ctx, {
+            type: 'bar',   // bentuk histogram
+            data: {
+                labels: labelsBidang,
+                datasets: [{
+                    label: 'Jumlah',
+                    data: dataBidang,
+                    borderWidth: 1,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    }
+</script>
+
 </body>
 </html>

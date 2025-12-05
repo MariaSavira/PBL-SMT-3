@@ -4,8 +4,7 @@ function get_pg_connection() {
     $port     = '5432';
     $dbname   = 'lab_ba';
     $user     = 'postgres';
-    $password = '123'; // sesuaikan dgn password PostgreSQL kamu
-
+    $password = '123'; 
     $connStr = "host=$host port=$port dbname=$dbname user=$user password=$password options='--client_encoding=UTF8'";
 
     $conn = pg_connect($connStr);
