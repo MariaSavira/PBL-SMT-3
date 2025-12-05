@@ -11,11 +11,6 @@ body {
   background: #f2f6ff!important;
 }
 
-.navbar {
-  background: #0c2a4c !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-}
-
 h1, h2, h3, h4 {
     margin: 0;
     color: #0f172a;
@@ -29,7 +24,7 @@ p {
 }
 
 /* ========== HERO SECTION ========== */
-.hero {
+/* .hero {
     width: 100%;
     height: 360px;
     position: relative;
@@ -67,6 +62,28 @@ p {
     color: #e7e7e7;
     font-size: 12px;
     line-height: 1.55;
+} */
+
+.heading {
+    display: block;
+    background: url('../Image/Heading/Heading.png') center/cover no-repeat;
+    color: white;
+    padding-top: clamp(110px, 13vw, 160px);
+    padding-bottom: clamp(60px, 10vw, 120px);
+    padding-inline: clamp(16px, 4vw, 40px);
+    text-align: center;
+}
+
+.heading h1 {
+    font-size: clamp(22px, 3vw, 24px);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.heading p {
+    font-size: clamp(12px, 1.5vw, 12px);
+    opacity: 0.9;
+    font-weight: 400;
 }
 
 /* ========== HIGHLIGHT BERITA ========== */
@@ -84,7 +101,7 @@ p {
     width: 100%;
     max-width: 1150px;
     background: #ffffff;
-    border-radius: 22px;
+    border-radius: 12px;
     padding: 25px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.12);
 }
@@ -92,7 +109,7 @@ p {
 /* CARD GAMBAR */
 .highlight-card {
     position: relative;
-    border-radius: 18px;
+    border-radius: 12px;
     overflow: hidden;
 }
 
@@ -126,7 +143,7 @@ p {
     background: #0a53c1;
     color: #fff;
     font-size: 14px;
-    border-radius: 8px;
+    border-radius: 12px;
     text-decoration: none;
     font-weight: 600;
 }
@@ -163,7 +180,7 @@ p {
 .pengumuman {
     background: #ffffff;
     padding: 25px;
-    border-radius: 20px;
+    border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.10);
     height: fit-content;
 }
@@ -253,12 +270,11 @@ p {
     box-shadow: 0px 3px 10px rgba(0,0,0,0.12);
 }
 
-
 /* ========== BERITA CARD ========== */
 .berita-card {
     display: flex;
     background: white;
-    border-radius: 20px;
+    border-radius: 12px;
     overflow: hidden;
     margin-bottom: 25px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.08);
