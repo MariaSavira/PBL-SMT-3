@@ -2,14 +2,14 @@
 <html>
 
 <?php
-require __DIR__ . '../../../../Admin/CRUD/Koneksi.php';
-
+require __DIR__ . '/../Koneksi.php';
 $conn = pg_connect("host=localhost port=5432 dbname=lab_ba user=postgres password=29082006");
 
 if (!$conn) {
     die("<h2 style='color:red;'>Koneksi gagal: " . pg_last_error() . "</h2>");
 }
 ?>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,147 +20,145 @@ if (!$conn) {
 
 <body>
 
-<div id="sidebar"></div>
+    <div id="sidebar"></div>
 
-<main class="content collapsed" id="content">
+    <main class="content collapsed" id="content">
 
-    <!-- HEADER -->
-    <div class="content-header">
-        <h1>Peminjaman Laboratorium</h1>
-        <div class="profile">
-            <span>Maria Savira</span>
-            <i class="fa-solid fa-circle-user"></i>
-        </div>
-    </div>
-
-    <!-- TOP CONTROLS -->
-    <div class="top-controls">
-
-        <!-- SEARCH -->
-        <div class="search-box">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" placeholder="Cari">
+        <!-- HEADER -->
+        <div class="content-header">
+            <h1>Peminjaman Laboratorium</h1>
+            <div class="profile">
+                <span>Maria Savira</span>
+                <i class="fa-solid fa-circle-user"></i>
+            </div>
         </div>
 
-        <!-- FILTER -->
-        <div class="filter-info">
-            <span class="filter-chip">
-                <i class="fa-solid fa-sliders"></i>
-                Peminjaman Laboratorium
-                <i class="fa-solid fa-xmark remove-chip"></i>
-            </span>
-            <a href="#" class="clear-filter">Hapus Filter</a>
+        <!-- TOP CONTROLS -->
+        <div class="top-controls">
+
+            <!-- SEARCH -->
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Cari">
+            </div>
+
+            <!-- FILTER -->
+            <div class="filter-info">
+                <span class="filter-chip">
+                    <i class="fa-solid fa-sliders"></i>
+                    Peminjaman Laboratorium
+                    <i class="fa-solid fa-xmark remove-chip"></i>
+                </span>
+                <a href="#" class="clear-filter">Hapus Filter</a>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="right-actions">
+                <a href="export.php" style="text-decoration:none;">
+                    <button type="button">Export</button>
+                </a>
+
+
+                <button class="sort">
+                    <i class="fa-solid fa-arrow-down-wide-short"></i>
+                    Urutkan : <strong>Default</strong>
+                </button>
+            </div>
         </div>
 
-        <!-- ACTION BUTTONS -->
-        <div class="right-actions">
-            <a href="export.php" style="text-decoration:none;">
-   <button type="button">Export</button>
-</a>
 
+        <!-- TABLE -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>id</th>
+                        <th>nama peminjam</th>
+                        <th>email</th>
+                        <th>instansi</th>
+                        <th>tanggal pengajuan</th>
+                        <th>tanggal pakai</th>
+                        <th>keperluan</th>
+                        <th>status</th>
+                        <th>approved</th>
+                        <th>catatan</th>
+                        <th>aksi</th>
+                    </tr>
+                </thead>
 
-            <button class="sort">
-                <i class="fa-solid fa-arrow-down-wide-short"></i>
-                Urutkan : <strong>Default</strong>
-            </button>
-        </div>
-    </div>
+                <tbody>
 
-    
-    <!-- TABLE -->
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>id</th>
-                    <th>nama peminjam</th>
-                    <th>email</th>
-                    <th>instansi</th>
-                    <th>tanggal pengajuan</th>
-                    <th>tanggal pakai</th>
-                    <th>keperluan</th>
-                    <th>status</th>
-                    <th>approved</th>
-                    <th>catatan</th>
-                    <th>aksi</th>
-                </tr>
-            </thead>
-
-            <tbody>
-
-                <?php
+                    <?php
                 $query = "SELECT * FROM peminjaman_lab ORDER BY id_peminjaman DESC";
                 $result = pg_query($conn, $query);
 
                 while ($row = pg_fetch_assoc($result)):
                 ?>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td><?= $row['id_peminjaman'] ?></td>
+                        <td><?= $row['nama_peminjam'] ?></td>
+                        <td><?= $row['email'] ?></td>
+                        <td><?= $row['instansi'] ?></td>
+                        <td><?= $row['tanggal_pengajuan'] ?></td>
+                        <td><?= $row['tanggal_pakai'] ?></td>
+                        <td><?= $row['keperluan'] ?></td>
+                        <td>
+                            <select class="status-dropdown" data-id="<?= $row['id_peminjaman']; ?>">
+                                <option value="pending" <?= $row['status']=="pending" ? "selected" : "" ?>>Pending
+                                </option>
+                                <option value="disetujui" <?= $row['status']=="disetujui" ? "selected" : "" ?>>Disetujui
+                                </option>
+                                <option value="ditolak" <?= $row['status']=="ditolak" ? "selected" : "" ?>>Ditolak
+                                </option>
+                            </select>
+                        </td>
+                        <td><?= $row['approved_by'] ?></td>
+                        <td><?= $row['catatan_admin'] ?></td>
 
-                <tr>
-                    <td><input type="checkbox"></td>
-                    <td><?= $row['id_peminjaman'] ?></td>
-                    <td><?= $row['nama_peminjam'] ?></td>
-                    <td><?= $row['email'] ?></td>
-                    <td><?= $row['instansi'] ?></td>
-                    <td><?= $row['tanggal_pengajuan'] ?></td>
-                    <td><?= $row['tanggal_pakai'] ?></td>
-                    <td><?= $row['keperluan'] ?></td>
-                    <td>
-                    <select class="status-dropdown" data-id="<?= $row['id_peminjaman']; ?>">
-    <option value="pending"      <?= $row['status']=="pending" ? "selected" : "" ?>>Pending</option>
-    <option value="disetujui"    <?= $row['status']=="disetujui" ? "selected" : "" ?>>Disetujui</option>
-    <option value="ditolak"      <?= $row['status']=="ditolak" ? "selected" : "" ?>>Ditolak</option>
-</select>
+                        <!-- AKSI (Ada SIMPAN di sini) -->
+                        <td>
+                            <button class="btn-save" data-id="<?= $row['id_peminjaman'] ?>">Simpan</button>
+                        </td>
 
+                    </tr>
 
-</td>
-                    <td><?= $row['approved_by'] ?></td>
-                    <td><?= $row['catatan_admin'] ?></td>
+                    <?php endwhile; ?>
 
-           <!-- AKSI (Ada SIMPAN di sini) -->
-    <td>
-        <button class="btn-save" data-id="<?= $row['id_peminjaman'] ?>">Simpan</button>
-    </td>
+                </tbody>
+            </table>
+        </div>
 
-                </tr>
+        <!-- DELETE SELECTED -->
+        <div class="delete-selection">
+            <i class="fa-solid fa-trash"></i>
+            Hapus data yang dipilih
+        </div>
 
-                <?php endwhile; ?>
+    </main>
+    <script>
+    document.querySelectorAll('.btn-save').forEach(btn => {
+        btn.addEventListener('click', () => {
 
-            </tbody>
-        </table>
-    </div>
+            let id = btn.dataset.id;
+            let status = document.querySelector(`.status-dropdown[data-id="${id}"]`).value;
 
-    <!-- DELETE SELECTED -->
-    <div class="delete-selection">
-        <i class="fa-solid fa-trash"></i>
-        Hapus data yang dipilih
-    </div>
-
-</main>
-<script>
-document.querySelectorAll('.btn-save').forEach(btn => {
-    btn.addEventListener('click', () => {
-        
-        let id = btn.dataset.id;
-        let status = document.querySelector(`.status-dropdown[data-id="${id}"]`).value;
-
-        fetch("update_status.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: "id=" + id + "&status=" + status
-        })
-        .then(res => res.text())
-        .then(res => {
-            alert("Status berhasil diperbarui!");
+            fetch("../../UpdateStatus.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: "id=" + id + "&status=" + status
+                })
+                .then(res => res.text())
+                .then(res => {
+                    alert("Status berhasil diperbarui!");
+                });
         });
     });
-});
-
-
-
-</script>
-<script src="../../../Assets/Javascript/Admin/Sidebar.js"></script>
+    </script>
+    <script src="../../../Assets/Javascript/Admin/Sidebar.js"></script>
 </body>
+
 </html>
