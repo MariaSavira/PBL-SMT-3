@@ -25,6 +25,7 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-decoration: none;
+    color: rgba(0, 0, 0, 0.50);
 }
 
 .sidebar-logo img {
@@ -45,7 +46,6 @@ body {
 
 .sidebar-menu li {
     font-size: 16px;
-    color: rgba(0, 0, 0, 0.50);
     cursor: pointer;
     transition: 0.3s;
 }
@@ -62,7 +62,7 @@ body {
     width: 215px;
 }
 
-.sidebar-menu li p {
+.sidebar-menu li a {
     text-align: left;
 }
 
@@ -74,6 +74,12 @@ body {
     border-radius: 12px;
     text-align: center;
     /* box-shadow: 0 4px 10px rgba(0,0,0,0.25); */
+}
+
+.sidebar-menu a.active {
+    padding: 0px 0px 0px 5px !important;
+    width: 100%;
+    text-align: left;
 }
 
 .sidebar {
@@ -92,7 +98,6 @@ body {
     box-shadow: 4px 4px 25px rgba(0,0,0,0.25)
 }
 
-/* ===== HEADER ===== */
 .sidebar-header {
     white-space: nowrap;
     overflow: hidden;
@@ -155,6 +160,6 @@ body {
     width: 24px;
 }
 
-.sidebar.collapsed .menu-item p {
+.sidebar.collapsed .menu-item a {
     display: none;
 }

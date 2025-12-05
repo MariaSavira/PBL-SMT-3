@@ -1,47 +1,40 @@
-    @media (max-width: 1280px) {
-        body {
-            zoom: 80%;
-        }
-    }
-    body {
-        margin: 0;
-        font-family: "Poppins", sans-serif;
-        background: #f2f6ff;
-        overflow-x: hidden;
-    }
-.navbar {
-        background: #0C2A4C !important;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: #f2f6ff;
 }
 
 .heading {
+    display: block;
     background: url('../Image/Heading/Heading.png') center/cover no-repeat;
     color: white;
-    margin-top: 110px;
-    padding: 100px 20px;
+    padding-top: clamp(110px, 13vw, 160px);
+    padding-bottom: clamp(60px, 10vw, 120px);
+    padding-inline: clamp(16px, 4vw, 40px);
     text-align: center;
 }
 
 .heading h1 {
-    font-size: 24px;
+    font-size: clamp(22px, 3vw, 32px);
     font-weight: 600;
     margin-bottom: 10px;
 }
 
 .heading p {
-    font-weight: 400;
-    font-size: 12px;
+    font-size: clamp(12px, 1.5vw, 16px);
     opacity: 0.9;
+    font-weight: 400;
 }
 
 /* Diagram */
 .diagram-container {
     display: flex;
     justify-content: center;
-    margin-top: -60px;
+    margin-top: clamp(-60px, -6vw, -60px);
+    padding-inline: clamp(16px, 4vw, 24px);
 }
 
-.diagram-img {
+/* .diagram-img {
     width: 100%;
     max-width: 1000px;
     background: white;
@@ -49,8 +42,17 @@
     border-radius: 12px;
     padding: 20px;
     transition: all 0.3s ease;
-}
+} */
 
+.diagram-img {
+    width: 100%;
+    max-width: 1200px;
+    background: white;
+    border-radius: 12px;
+    padding: clamp(12px, 2vw, 20px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
 
 .diagram-img:hover {
     transform: translateY(-3px);
@@ -67,13 +69,23 @@
 }
 
 /* Tag list */
-.tag-list {
+/* .tag-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 34px;
     margin: 25px auto;
     max-width: 1208px;
+} */
+
+.tag-list {
+    max-width: 1208px;
+    margin: 25px auto;
+    padding-inline: clamp(12px, 2vw, 20px);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: clamp(16px, 2.5vw, 34px);
 }
 
 .tag {
@@ -93,12 +105,21 @@
 }
 
 /* Stats */
-.stats {
+/* .stats {
     display: flex;
     justify-content: center;
     gap: 40px;
     margin-top: 40px;
     text-align: center;
+} */
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: clamp(20px, 4vw, 40px);
+    margin-top: clamp(30px, 5vw, 40px);
+    text-align: center;
+    flex-wrap: wrap;
 }
 
 .stat-box {
@@ -171,3 +192,6 @@
     }
 }
 
+div.footer-logo {
+    height: 123px;
+}
