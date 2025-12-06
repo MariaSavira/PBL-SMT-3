@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
 
-    <div id="sidebar-container"></div>
+    <div id="sidebar"></div>
 
     <main class="content">
 
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     </main>
 
-    <script src="../../../Assets/Javascript/Admin/Riset.js"></script>
+    <script src="../../../Assets/Javascript/Admin/Sidebar.js"></script>
 </body>
 
 </html>

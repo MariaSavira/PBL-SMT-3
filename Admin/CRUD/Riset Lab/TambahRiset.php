@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
     <!-- sidebar akan di-inject lewat JS -->
-    <div id="sidebar-container"></div>
+     <div id="sidebar"></div>
 
     <main class="content">
 
@@ -101,7 +101,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </section>
 
     </main>
-
     <script src="../../../Assets/Javascript/Admin/Sidebar.js"></script>
 </body>
 </html>

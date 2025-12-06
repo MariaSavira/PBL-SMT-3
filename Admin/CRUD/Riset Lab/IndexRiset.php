@@ -22,29 +22,8 @@ $rows = pg_fetch_all($res) ?: [];
 </head>
 
 <body>
-
-    <!-- SIDEBAR -->
-    <aside id="sidebar" class="sidebar">
-        <div class="sidebar-header" id="sidebar-toggle">
-            <img src="../../../Assets/Image/Logo/Logo Without Text.png" alt="Logo" class="sidebar-logo">
-            <div class="sidebar-title">
-                <h4>Laboratorium</h4>
-                <p>Business Analytics</p>
-            </div>
-        </div>
-
-        <ul class="sidebar-menu">
-            <li class="menu-item"><i class="fa-solid fa-house"></i><p>Beranda</p></li>
-            <li class="menu-item"><i class="fa-solid fa-users"></i><p>Anggota Lab, Profil lab</p></li>
-            <li class="menu-item"><i class="fa-solid fa-book"></i><p>Publikasi</p></li>
-            <li class="menu-item active"><i class="fa-solid fa-flask"></i><p>Riset</p></li>
-            <li class="menu-item"><i class="fa-solid fa-newspaper"></i><p>Berita</p></li>
-            <li class="menu-item"><i class="fa-solid fa-book-open-reader"></i><p>Resource</p></li>
-            <li class="menu-item"><i class="fa-solid fa-hand-holding"></i><p>Peminjaman</p></li>
-            <li class="menu-item"><i class="fa-solid fa-user"></i><p>Profil</p></li>
-        </ul>
-    </aside>
-    <?php include __DIR__ . '/../../Sidebar.html'; ?>
+    
+    <div id="sidebar"></div>
     <main class="content collapsed">
 
         <div class="content-header">
@@ -111,7 +90,6 @@ $rows = pg_fetch_all($res) ?: [];
                         <?php else: ?>
                             <?php foreach ($rows as $row): ?>
                             <tr>
-                
                                 <td>
                                     <input
                                         type="checkbox"
@@ -130,14 +108,14 @@ $rows = pg_fetch_all($res) ?: [];
             </form>
         </div>
 
-        <button class="delete-selection"
-        form="formRiset"
-        type="submit"
-        onclick="return confirm('Yakin ingin menghapus data yang dipilih?');">
-    <i class="fa-solid fa-trash"></i> Hapus data yang dipilih
-</button>
+        <!-- TOMBOL HAPUS (SEBAGAI DIV, JS DI FILE Riset.js) -->
+        <div class="delete-selection" id="btnDelete">
+            <i class="fa-solid fa-trash"></i>
+            Hapus data yang dipilih
+        </div>
 
     </main>
+    <script src="../../../Assets/Javascript/Admin/Sidebar.js"></script>
     <script src="../../../Assets/Javascript/Admin/Riset.js"></script>
 
 </body>

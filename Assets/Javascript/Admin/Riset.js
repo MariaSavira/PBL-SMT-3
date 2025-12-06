@@ -81,6 +81,37 @@ document.addEventListener("DOMContentLoaded", function () {
         renderPage();
     }
 
+    /* CHECK ALL DI HEADER TABEL */
+    const checkAll = document.getElementById("check-all");
+    if (checkAll) {
+        checkAll.addEventListener("change", function () {
+            const rowChecks = document.querySelectorAll(".row-check");
+            rowChecks.forEach(cb => {
+                cb.checked = checkAll.checked;
+            });
+        });
+    }
+
+    /* TOMBOL HAPUS DATA TERPILIH (DIV .delete-selection) */
+    const btnDelete = document.getElementById("btnDelete");
+    if (btnDelete) {
+        btnDelete.addEventListener("click", function () {
+            const form = document.getElementById("formRiset");
+            if (!form) return;
+
+            // cek apakah ada checkbox yang dicentang
+            const checked = form.querySelectorAll(".row-check:checked");
+            if (checked.length === 0) {
+                alert("Pilih dulu minimal satu data yang ingin dihapus.");
+                return;
+            }
+
+            if (confirm("Yakin ingin menghapus data yang dipilih?")) {
+                form.submit();
+            }
+        });
+    }
+
     /* BAGIAN AUTO-FILL EDIT DIHAPUS
        karena sekarang EditRiset.php sudah ambil data langsung dari database */
 });

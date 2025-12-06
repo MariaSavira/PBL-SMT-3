@@ -1,5 +1,5 @@
 @media (min-width:1200px) {
-    body{
+    body {
         zoom: 80%;
     }
 }
@@ -20,24 +20,40 @@ body {
     display: flex;
 }
 
-/* SIDEBAR */
-.sidebar.collapsed {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 85px;
-    height: 100vh;
-    background: #e7eefc;
-    padding: 30px 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 40px;
-    border-right: 1px solid #d5deed;
+/* ================== LAYOUT SIDEBAR ================== */
+
+:root {
+    --sidebar-width: 260px;          /* lebar sidebar normal */
+    --sidebar-collapsed-width: 85px; /* lebar sidebar collapsed (ikon saja) */
 }
 
-.sidebar-menu p {
-    padding-left: 14px;
+/* SIDEBAR NORMAL */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: #e8f0ff;
+    padding: 25px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    transition: width 0.3s ease;
+    overflow: hidden;
+    box-shadow: 4px 4px 25px rgba(0,0,0,0.25);
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.sidebar-logo {
+    width: 55px;
+    height: 55px;
 }
 
 .sidebar-logo img {
@@ -45,8 +61,24 @@ body {
     height: 60px;
 }
 
+.sidebar-title h4 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.sidebar-title p {
+    margin: 0;
+    margin-top: -4px;
+    font-size: 13px;
+    color: #4a5b7a;
+}
+
 .sidebar-menu {
     list-style: none;
+    padding: 0;
+    margin: 0;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -73,6 +105,7 @@ body {
 
 .sidebar-menu li p {
     text-align: left;
+    padding-left: 14px;
 }
 
 .sidebar-menu .active {
@@ -81,58 +114,6 @@ body {
     width: 50px;
     border-radius: 12px;
     text-align: center;
-}
-
-.sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 260px;
-    height: 100vh;
-    background: #e8f0ff;
-    padding: 25px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-    transition: width 0.3s ease;
-    overflow: hidden;
-    box-shadow: 4px 4px 25px rgba(0,0,0,0.25)
-}
-
-.sidebar-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-}
-
-.sidebar-logo {
-    width: 55px;
-    height: 55px;
-}
-
-.sidebar-title h4 {
-    margin: 0;
-    font-size: 15px;
-    font-weight: 700;
-    color: #0f172a;
-}
-
-.sidebar-title p {
-    margin: 0;
-    margin-top: -4px;
-    font-size: 13px;
-    color: #4a5b7a;
-}
-
-.sidebar.collapsed .sidebar-title {
-    display: none;
-}
-
-.sidebar-menu {
-    list-style: none;
-    padding: 0;
-    margin: 0;
 }
 
 .menu-item {
@@ -153,20 +134,41 @@ body {
     width: 24px;
 }
 
+/* SIDEBAR COLLAPSED */
+.sidebar.collapsed {
+    width: var(--sidebar-collapsed-width);
+    padding: 25px 0;
+    align-items: center;
+}
+
+.sidebar.collapsed .sidebar-title {
+    display: none;
+}
+
 .sidebar.collapsed .menu-item p {
     display: none;
 }
 
+/* ================== LAYOUT KONTEN ================== */
+
+/* saat sidebar NORMAL (lebar) */
 .content {
-    margin-left: 110px;
-    padding: 40px;
-    width: 100%;
+    margin-left: var(--sidebar-width);
+    padding: 24px 28px 32px 20px; /* atas kanan bawah kiri */
+    width: calc(100% - var(--sidebar-width));
+    transition:
+        margin-left 0.3s ease,
+        width 0.3s ease,
+        padding 0.3s ease;
 }
 
-.content.collapsed {
-    width: 93%;
-    padding-left: 200px;
+/* saat sidebar COLLAPSED (kecil / ikon saja) */
+.sidebar.collapsed ~ .content {
+    margin-left: var(--sidebar-collapsed-width);
+    width: calc(100% - var(--sidebar-collapsed-width));
 }
+
+/* ================== HEADER & TOOLS ================== */
 
 .content-header {
     display: flex;
@@ -277,6 +279,8 @@ body {
     color: #fff;
 }
 
+/* ================== TABEL ================== */
+
 .table-container {
     background: #ffffff;
     border-radius: 12px;
@@ -306,13 +310,13 @@ thead th {
 tbody tr {
     background: #fff;
     border-bottom: 1px solid #eee;
-    height: 65px;         
+    height: 65px;
 }
 
 tbody td {
-    padding: 20px 18px;      
+    padding: 20px 18px;
     font-size: 15px;
-    vertical-align: middle;  
+    vertical-align: middle;
 }
 
 tbody tr:hover {
@@ -373,24 +377,32 @@ table input[type="checkbox"]:checked::after {
     color: #c13a3a;
 }
 
-/*DELETE SELECTION BUTTON*/
+
 .delete-selection {
-    margin-top: 18px;
-    padding: 11px 14px;
-    border-radius: 8px;
-    width: fit-content;
-    background: #f8f0f0;
-    color: #c0392b;
-    font-size: 14px;
+    margin-top: 20px;
     display: flex;
     align-items: center;
     gap: 8px;
+    color: #1f4fc7;
+    font-size: 15px;
     cursor: pointer;
+    padding: 10px 14px;
+    border-radius: 8px;
+    width: fit-content;
+    transition: 0.2s ease;
+}
+
+.delete-selection i {
+    font-size: 16px;
 }
 
 .delete-selection:hover {
-    background: #f3e0e0;
+    background: #e8efff;
+    transform: translateY(-1px);
 }
+
+/* ================== PAGINATION ================== */
+
 .page-nav {
     display: flex;
     justify-content: flex-end;
