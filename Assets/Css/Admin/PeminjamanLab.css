@@ -131,6 +131,7 @@ table {
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed; /* wajib supaya kolom tidak melebar */
+    
 }
 
 thead {
@@ -148,7 +149,33 @@ thead th {
 tbody td {
     padding: 16px 12px;
     border-bottom: 1px solid #f0f0f0;
+    word-break: break-word;
 }
+/* Kolom email agar tidak bentrok dan turun ke bawah */
+td.email-column {
+    white-space: normal;      
+    word-break: break-word;   
+    max-width: 220px;          
+    line-height: 1.4;         
+}
+
+.edit-catatan-btn {
+    margin-left: 10px;
+    color: #4a67d6;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.edit-catatan-btn:hover {
+    color: #2f4bbf;
+}
+
+    td.approved-by {
+        max-width: 130px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
 .tag {
     padding: 6px 12px;
@@ -214,8 +241,8 @@ tbody td {
     transform: scale(0.95); /* efek klik */
 }
 .status-dropdown {
-    background-color: transparent ;
-    color: white;
+    background-color: #ffff ;
+    color: Black;
     padding: 6px 16px;
     border-radius: 8px;
     border: none;
@@ -223,6 +250,7 @@ tbody td {
     font-size: 14px;
     cursor: pointer;
     outline: none;
+    margin-left: -19px;
 }
 .status-dropdown:hover {
     background-color: #ffff;
