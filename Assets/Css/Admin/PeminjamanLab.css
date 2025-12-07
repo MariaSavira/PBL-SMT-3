@@ -105,9 +105,37 @@ button {
     background: #e7f0ff;
 }
 
-.sort {
-    background: #f2f2f2;
+.sort-wrapper {
+    position: relative;
+    display: inline-block;
 }
+
+.sort-menu {
+    position: absolute;
+    top: 48px;
+    right: 0;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    padding: 8px 0;
+    width: 170px;
+    z-index: 200;
+}
+
+.sort-menu.hidden {
+    display: none;
+}
+
+.sort-menu div {
+    padding: 10px 14px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.sort-menu div:hover {
+    background: #f3f3f3;
+}
+
 
 .add {
     background: #1f4fc7;
@@ -170,12 +198,110 @@ td.email-column {
     color: #2f4bbf;
 }
 
-    td.approved-by {
-        max-width: 130px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+td.approved-by {
+    max-width: 130px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+/* ===== Modal Overlay ===== */
+.modal-overlay {
+  display: none; /* awalnya disembunyikan */
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  font-family: Arial, sans-serif;
+}
+
+.modal-overlay.open {
+  display: flex; /* tampil saat class .open ditambahin */
+}
+
+/* ===== Kotak Modal ===== */
+.modal-box {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  width: 360px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.3s ease;
+}
+
+/* animasi masuk biar smooth */
+@keyframes fadeIn {
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ===== Judul ===== */
+.modal-title {
+  margin: 0 0 14px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* ===== Textarea ===== */
+.modal-textarea {
+  width: 100%;
+  height: 110px;
+  resize: none;
+  padding: 12px;
+  margin-bottom: 18px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  box-sizing: border-box;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.modal-textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+/* ===== Tombol Aksi ===== */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Tombol Batal */
+.btn-cancel {
+  background: #f3f4f6;
+  color: #111827;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.btn-cancel:hover {
+  background: #e5e7eb;
+}
+
+/* Tombol Simpan */
+.btn-save {
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.btn-save:hover {
+  background: #1d4ed8;
+}
 
 .tag {
     padding: 6px 12px;
@@ -279,3 +405,12 @@ td.email-column {
 .badge-ditolak {
     background-color: #e74c3c; /* merah */
 }
+
+
+.pagination-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 6px;         
+    margin-bottom: 4px;        
+}
+
