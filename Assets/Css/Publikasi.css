@@ -8,6 +8,7 @@ body {
     font-family: 'Poppins', sans-serif;
     background-color: #e8eef5;
     color: #1f2937;
+    overflow-x: hidden;
     /* zoom: 0.8; */
 }
 

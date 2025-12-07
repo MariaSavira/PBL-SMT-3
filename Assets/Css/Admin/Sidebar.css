@@ -10,7 +10,7 @@ body {
     top: 0;
     left: 0;
     width: 85px;
-    height: 100vh;
+    height: 100%;
     background: #e7eefc;
     padding: 30px 0;
     display: flex;
@@ -18,12 +18,14 @@ body {
     align-items: center;
     gap: 40px;
     border-right: 1px solid #d5deed;
+    transition: 0.3s ease;
 }
 
 .sidebar-menu a {
     white-space: nowrap;
     overflow: hidden;
     text-decoration: none;
+    color: rgba(0, 0, 0, 0.50);
 }
 
 .sidebar-logo img {
@@ -44,7 +46,6 @@ body {
 
 .sidebar-menu li {
     font-size: 16px;
-    color: rgba(0, 0, 0, 0.50);
     cursor: pointer;
     transition: 0.3s;
 }
@@ -61,7 +62,7 @@ body {
     width: 215px;
 }
 
-.sidebar-menu li p {
+.sidebar-menu li a {
     text-align: left;
 }
 
@@ -75,23 +76,28 @@ body {
     /* box-shadow: 0 4px 10px rgba(0,0,0,0.25); */
 }
 
+.sidebar-menu a.active {
+    padding: 0px 0px 0px 5px !important;
+    width: 100%;
+    text-align: left;
+}
+
 .sidebar {
     position: fixed;
     left: 0;
     top: 0;
     width: 260px;
-    height: 100vh;
+    height: 100%;
     background: #e8f0ff;
     padding: 25px 20px;
     display: flex;
     flex-direction: column;
     gap: 25px;
-    transition: width 0.3s ease;
+    transition: 0.3s ease;
     overflow: hidden;
     box-shadow: 4px 4px 25px rgba(0,0,0,0.25)
 }
 
-/* ===== HEADER ===== */
 .sidebar-header {
     white-space: nowrap;
     overflow: hidden;
@@ -154,6 +160,6 @@ body {
     width: 24px;
 }
 
-.sidebar.collapsed .menu-item p {
+.sidebar.collapsed .menu-item a {
     display: none;
 }

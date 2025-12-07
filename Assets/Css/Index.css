@@ -1,6 +1,6 @@
 @media (max-width: 1360px) {
         body {
-            zoom: 90%;
+            zoom: 100%;
         }
     }
 
@@ -9,6 +9,7 @@ body {
     margin: 0;
     font-family: "Poppins", sans-serif;
     overflow-x: hidden;
+    background-color:  #e8f0ff;
 }
 
 header.navbar {
@@ -43,7 +44,9 @@ header.navbar {
     color: white;
     animation: fadeUp 1s ease forwards;
     opacity: 0;
+    z-index: 10;
 }
+
 
 .hero-content h1 {
     font-size: 60px;
@@ -70,13 +73,13 @@ header.navbar {
 .cta-container{
     width: 100%;
     max-width: 1200px;
-    margin: 30px auto 0 auto;
+    margin: 0 auto 0 auto;
     display: flex;
     justify-content: flex-end;
 }
 .cta-btn {
     display: inline-block;
-    padding: 12px 28px;
+    padding: 15px 28px;
     background: #1E5AA8;
     color: white;
     border-radius: 10px;
@@ -89,6 +92,7 @@ header.navbar {
 .cta-btn:hover {
     background: #2c72cf;
     transform: translateY(-3px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
 
 .profil-lab {
@@ -146,11 +150,12 @@ header.navbar {
 .btn-profil:hover {
     background: #2c72cf;
     transform: translateY(-3px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
 
 .visi-misi-section {
     background-color: #e8f0ff;
-    padding: 45px 0; 
+    padding: 60px 0 0 0; 
     zoom: 0.9;
 }
 
@@ -169,6 +174,12 @@ header.navbar {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     width: 48%;
     text-align: center;
+    transition: 0.3s ease;
+}
+
+.vm-card:hover {
+    transform: translateY(-3px);
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); */
 }
 
 .vm-icon {
@@ -198,7 +209,7 @@ header.navbar {
 }
 
 .fokus-riset-section {
-    background-color: #e6efff;
+    background-color:  #e8f0ff;
     padding: 60px 90px;
     zoom: 0.9;
 }
@@ -233,11 +244,17 @@ header.navbar {
     align-items: center;
     justify-content: center;
     white-space: nowrap;       
+    transition: 0.3s ease;
+}
+
+.fokus-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
 .news-section {
     background: #fff;
-    padding: 40px 0;
+    /* padding: 40px 0; */
 }
 
 .news-container {
@@ -259,15 +276,12 @@ header.navbar {
     gap: 40px;
 }
 
-.berita-utama {
-    flex: 1;
-}
 
 .big-news-img {
     width: 100%;
     height: 320px;
     object-fit: cover;
-    border-radius: 16px;
+    border-radius: 12px;
 }
 
 .judul-utama {
@@ -298,18 +312,43 @@ header.navbar {
     gap: 22px;
 }
 
-
 .berita-item {
     display: flex;
     gap: 15px;
     align-items: flex-start;
+    background: white;
+    border-radius: 12px;
+    padding: 10px;
+    transition: 0.3s ease; 
+    /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
+}
+
+.berita-item:hover {
+    transform: translateY(-3px);
+    /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);    
+}
+
+.berita-utama {
+    flex: 1;
+    background: white;
+    border-radius: 12px;
+    padding: 10px;
+    /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
+    transition: 0.3s ease;
+}
+
+.berita-utama:hover {
+    transform: translateY(-3px);
+    /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
 .thumb {
     width: 120px;
     height: 90px;
     object-fit: cover;
-    border-radius: 10px;
+    border-radius: 12px;
 }
 
 .item-date {
@@ -333,13 +372,15 @@ header.navbar {
     color: #777;
     margin-top: 8px;
     flex-wrap: nowrap;
+    
 }
 
 
 /* Galeri */
 .galeri-section {
     width: 100%;
-    background: #E9F1FF; 
+    background:  #e8f0ff; 
+    padding: 40px 0 -60px;
 }
 
 .gallery-img {
@@ -355,16 +396,17 @@ header.navbar {
 }
 /* PARTNERSHIP */
 .partnership-section {
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
+    width: 100%;
+    /* margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw); */
     background: #ffffff;
-    padding: 60px 0;
+    padding: 60px;
     zoom: 0.9;
 }
 
 .partnership-container {
-    width: 78%;
+    max-width: 1200px; 
+    width: 88%;
     margin: auto;
     display: flex;
     align-items: center;
