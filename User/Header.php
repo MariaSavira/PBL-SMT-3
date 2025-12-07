@@ -1,7 +1,11 @@
+<?php
+    require_once __DIR__ . '../../Admin/Cek_Autentikasi.php'
+?>
+
 <header class="navbar" id="navbar">
     <div class="navbar-container">
         <div class="logo">
-            <a href="Index.html" style="cursor: pointer;">
+            <a href="Index.php" style="cursor: pointer;">
                 <img src="../Assets/Image/Logo/Logo With Text.png" title="Politeknik Negeri Malang"
                 style="width: 178px; height: 91px; display: flex;">
             </a>
@@ -13,11 +17,11 @@
                     <!-- <i id="tentang-kami-chevron-down" class="fa-solid fa-chevron-down"></i> -->
                 </a>
             </span>
-            <span> <a href="Anggota.html">Anggota</a></span>
-            <span> <a href="Publikasi.html">Publikasi</a></span>
-            <span> <a href="Riset.html">Riset</a></span>
-            <span> <a href="Karya.html">Karya</a></span>
-            <span> <a href="Berita.html">Berita</a></span>
+            <span> <a href="Anggota.php">Anggota</a></span>
+            <span> <a href="Publikasi.php">Publikasi</a></span>
+            <span> <a href="Riset.php">Riset</a></span>
+            <span> <a href="Karya.php">Karya</a></span>
+            <span> <a href="Berita.php">Berita</a></span>
             <span class="dropdown">
                 <a href="#" class="dropdown-toggle">
                     Kontak Kami 
@@ -25,7 +29,7 @@
                 </a>
 
                 <div class="dropdown-content">
-                    <a href="KontakKami.html">Hubungi Kami via Form</a>
+                    <a href="KontakKami.php">Hubungi Kami via Form</a>
                     <a href="FormPeminjamanLab.php">Ajukan Peminjaman Lab</a>
                 </div>
             </span>
@@ -39,7 +43,7 @@
                     <a href="Ajukan Peminjaman Lab"></a>
                 </div>
             </span> -->
-            <span> <a href="Login.html" id="menuLogin" style="display: none;">Login</a></span>
+            <span> <a href="Login.php" id="menuLogin" style="display: none;">Login</a></span>
         </nav>
     </div>
 </header>

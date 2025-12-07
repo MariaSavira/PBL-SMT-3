@@ -4,7 +4,7 @@ $host = "localhost";
 $port = "5432";
 $dbname = "lab_ba";
 $user = "postgres";   // sesuaikan bila username postgresql lain
-$pass = "29082006";
+$pass = "12345";
 
 try {
     // buat PDO Postgres

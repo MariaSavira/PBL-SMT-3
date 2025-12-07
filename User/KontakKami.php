@@ -1,26 +1,21 @@
+<?php
+    require_once __DIR__ . '../../Admin/Cek_Autentikasi.php'
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kontak Kami</title>
-
-    <!-- Font & Icon -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-
     <link rel="icon" type="image/png" href="../Assets/Image/Logo/Logo Without Text.png" />
-
-    <!-- CSS GLOBAL HEADER/FOOTER -->
-    <link rel="stylesheet" href="../Assets/Css/HeaderFooter.css">
-
-    <!-- CSS KHUSUS HALAMAN KONTAK -->
     <link rel="stylesheet" href="../Assets/Css/KontakKami.css">
 </head>
 
