@@ -7,12 +7,20 @@ document.addEventListener("DOMContentLoaded", function () {
     // ==========================
     if (typeof Chart !== "undefined") {
         const canvasPeminjaman = document.getElementById("chartPeminjaman");
+
         if (canvasPeminjaman) {
             const ctx = canvasPeminjaman.getContext("2d");
 
-            // sementara pakai data dummy; nanti bisa diisi dari PHP
-            const labelsPeminjaman = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"];
-            const dataPeminjaman   = [3, 5, 2, 6, 4, 7];
+            const labelsPeminjaman = window.peminjamanLabels || [];
+            const dataPeminjaman   = window.peminjamanData   || [];
+
+            console.log("Labels dari PHP:", labelsPeminjaman);
+            console.log("Data   dari PHP:", dataPeminjaman);
+
+            if (!labelsPeminjaman.length || !dataPeminjaman.length) {
+                // kalau kosong, jangan gambar apa-apa
+                return;
+            }
 
             new Chart(ctx, {
                 type: "bar",
@@ -45,64 +53,46 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ==========================
-    // 2. FILTER DROPDOWN ("Minggu Ini / Bulan Ini / Tahun Ini")
+    // 2. FILTER DROPDOWN
     // ==========================
     const filterToggle = document.getElementById("filterToggle");
     const filterMenu   = document.getElementById("filterMenu");
     const filterLabel  = document.getElementById("filterLabel");
 
     if (filterToggle && filterMenu && filterLabel) {
-        // buka/tutup dropdown
         filterToggle.addEventListener("click", function (e) {
             e.stopPropagation();
             filterMenu.classList.toggle("show");
         });
 
-        // pilih salah satu opsi
         filterMenu.querySelectorAll("button").forEach(btn => {
             btn.addEventListener("click", function () {
-                // ubah teks tombol utama
                 filterLabel.textContent = this.textContent;
-
-                // state active di menu
                 filterMenu.querySelectorAll("button").forEach(b => b.classList.remove("active"));
                 this.classList.add("active");
-
-                // tutup menu
                 filterMenu.classList.remove("show");
-
-                // kalau mau dipakai untuk filter data:
-                // const range = this.dataset.range;   // "week" | "month" | "year"
-                // console.log("Filter dipilih:", range);
             });
         });
 
-        // klik di luar dropdown → tutup
         document.addEventListener("click", () => {
             filterMenu.classList.remove("show");
         });
     }
 
     // ==========================
-    // 3. KALENDER POPUP (TOMBOL ICON)
+    // 3. KALENDER POPUP
     // ==========================
     const calendarBtn   = document.getElementById("calendarButton");
     const calendarInput = document.getElementById("calendarInput");
 
-    // showPicker cuma ada di browser tertentu (Chrome, Edge, dll)
     if (calendarBtn && calendarInput && typeof calendarInput.showPicker === "function") {
-        // klik icon → buka datepicker bawaan browser
         calendarBtn.addEventListener("click", (e) => {
             e.preventDefault();
             calendarInput.showPicker();
         });
 
-        // saat tanggal dipilih
         calendarInput.addEventListener("change", () => {
             console.log("Tanggal terpilih:", calendarInput.value);
-
-            // nanti bisa dipakai filter dashboard, contoh:
-            // loadDataByDate(calendarInput.value);
         });
     }
 

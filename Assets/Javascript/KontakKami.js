@@ -1,6 +1,9 @@
+// Assets/Javascript/KontakKami.js
+
+// Navbar scroll
 window.addEventListener("scroll", function () {
     const navbar = document.getElementById("navbar");
-    if (!navbar) return; 
+    if (!navbar) return;
 
     if (window.scrollY > 20) {
         navbar.classList.add("navbar-scrolled");
@@ -16,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const fileNameEl  = document.getElementById('fileName');
     const fileSizeEl  = document.getElementById('fileSize');
     const fileViewBtn = document.getElementById('fileViewBtn');
-    const kirimBtn    = document.getElementById('btnKirim');
+    const kirimBtn    = document.getElementById('btnKirim') || document.getElementById('btn-kirim');
 
     const namaInput     = document.getElementById('nama');
     const instansiInput = document.getElementById('instansi');
@@ -30,109 +33,131 @@ document.addEventListener('DOMContentLoaded', function () {
     const closeBtn           = document.getElementById('closeNotification');
     const overlay            = document.getElementById('overlay');
 
-    uploadBtn.addEventListener('click', function () {
-        fileInput.click();
-    });
-
     let currentFileUrl = null;
 
-    fileInput.addEventListener('change', function () {
-        const file = this.files[0];
-        if (!file) return;
+    /* ========= FUNGSI NOTIFIKASI ========= */
+    function showNotification(isSuccess, customMessage) {
+        if (!notification) return;
 
-        if (file.type !== 'application/pdf') {
-            alert('Hanya file PDF yang diperbolehkan.');
-            this.value = '';
-            return;
-        }
-
-        if (file.size > 5 * 1024 * 1024) {
-            alert('Ukuran file maksimal 5 MB.');
-            this.value = '';
-            return;
-        }
-
-        fileNameEl.textContent = file.name;
-        const sizeMB = file.size / (1024 * 1024);
-        fileSizeEl.textContent = sizeMB.toFixed(1) + ' MB';
-
-
-        if (currentFileUrl) {
-            URL.revokeObjectURL(currentFileUrl);
-        }
-        currentFileUrl = URL.createObjectURL(file);
-
-        fileViewBtn.onclick = function () {
-            window.open(currentFileUrl, '_blank');
-        };
-
-
-        filePreview.style.display = 'flex';
-    });
-
-    function showNotification(isSuccess) {
         notification.classList.remove('success', 'error');
 
         if (isSuccess) {
             notification.classList.add('success');
             notifTitleEl.textContent   = 'Success';
-            notifMessageEl.textContent = 'Pesan Anda telah berhasil terkirim!';
+            notifMessageEl.textContent = customMessage || 'Pesan Anda telah berhasil terkirim!';
             notifIconContainer.innerHTML = '<i class="fa-regular fa-circle-check"></i>';
         } else {
             notification.classList.add('error');
             notifTitleEl.textContent   = 'Error';
-            notifMessageEl.textContent = 'Terjadi kesalahan. Silakan periksa kembali form Anda.';
+            notifMessageEl.textContent = customMessage || 'Terjadi kesalahan. Silakan periksa kembali form Anda.';
             notifIconContainer.innerHTML = '<i class="fa-regular fa-circle-xmark"></i>';
         }
 
         notification.style.display = 'block';
-        overlay.style.display = 'block';
+        overlay.style.display      = 'block';
 
         setTimeout(() => {
             notification.style.display = 'none';
-            overlay.style.display = 'none';
+            overlay.style.display      = 'none';
         }, 5000);
     }
 
-    closeBtn.addEventListener('click', function () {
-        notification.style.display = 'none';
-        overlay.style.display = 'none';
-    });
+    /* ========= CLOSE NOTIF ========= */
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function () {
+            notification.style.display = 'none';
+            overlay.style.display      = 'none';
+        });
+    }
 
-    kirimBtn.addEventListener('click', function (e) {
-        e.preventDefault();
+    /* ========= TRIGGER INPUT FILE ========= */
+    if (uploadBtn && fileInput) {
+        uploadBtn.addEventListener('click', function () {
+            fileInput.click();
+        });
+    }
 
-        const nama     = namaInput.value.trim();
-        const instansi = instansiInput.value.trim();
-        const alasan   = alasanSelect.value;
-        const pesan    = pesanTextarea.value.trim();
-        const file     = fileInput.files[0];
+    /* ========= PREVIEW & VALIDASI FILE ========= */
+    if (fileInput) {
+        fileInput.addEventListener('change', function () {
+            const file = this.files[0];
+            if (!file) return;
 
-        const isFormValid =
-            nama !== '' &&
-            instansi !== '' &&
-            alasan !== '' &&
-            alasan !== '-- Pilih Alasan --' &&
-            pesan !== '' &&
-            !!file; 
+            // tipe harus PDF
+            if (file.type !== 'application/pdf') {
+                showNotification(false, 'Hanya file PDF yang diperbolehkan.');
+                this.value = '';
+                filePreview.style.display = 'none';
+                return;
+            }
 
-        if (!isFormValid) {
-            showNotification(false);
-            return;
-        }
+            // maksimal 5 MB
+            if (file.size > 5 * 1024 * 1024) {
+                showNotification(false, 'Ukuran file maksimal 5 MB.');
+                this.value = '';
+                filePreview.style.display = 'none';
+                return;
+            }
 
-        showNotification(true);
+            // tampilkan preview
+            fileNameEl.textContent = file.name;
+            const sizeMB = file.size / (1024 * 1024);
+            fileSizeEl.textContent = sizeMB.toFixed(1) + ' MB';
 
-        namaInput.value = '';
-        instansiInput.value = '';
-        alasanSelect.value = '-- Pilih Alasan --';
-        pesanTextarea.value = '';
-        fileInput.value = '';
-        filePreview.style.display = 'none';
+            if (currentFileUrl) {
+                URL.revokeObjectURL(currentFileUrl);
+            }
+            currentFileUrl = URL.createObjectURL(file);
 
-        if (currentFileUrl) {
-            URL.revokeObjectURL(currentFileUrl);
-            currentFileUrl = null;
-        }
-    });
+            if (fileViewBtn) {
+                fileViewBtn.onclick = function () {
+                    window.open(currentFileUrl, '_blank');
+                };
+            }
+
+            filePreview.style.display = 'flex';
+        });
+    }
+
+    /* ========= VALIDASI KETIKA KIRIM (FRONTEND) ========= */
+    if (kirimBtn) {
+        kirimBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const nama     = namaInput ? namaInput.value.trim() : '';
+            const instansi = instansiInput ? instansiInput.value.trim() : '';
+            const alasan   = alasanSelect ? alasanSelect.value : '';
+            const pesan    = pesanTextarea ? pesanTextarea.value.trim() : '';
+
+            const isFormValid =
+                nama !== '' &&
+                instansi !== '' &&
+                alasan !== '' &&
+                alasan !== '-- Pilih Alasan --' &&
+                pesan !== '';
+
+            if (!isFormValid) {
+                showNotification(false, 'Terjadi kesalahan. Silakan periksa kembali form Anda.');
+                return;
+            }
+
+            showNotification(true);
+
+            if (namaInput)     namaInput.value = '';
+            if (instansiInput) instansiInput.value = '';
+            if (alasanSelect)  alasanSelect.value = '-- Pilih Alasan --';
+            if (pesanTextarea) pesanTextarea.value = '';
+            if (fileInput)     fileInput.value = '';
+            if (filePreview)   filePreview.style.display = 'none';
+
+            if (currentFileUrl) {
+                URL.revokeObjectURL(currentFileUrl);
+                currentFileUrl = null;
+            }
+
+            // kalau nanti mau submit beneran:
+            // const form = kirimBtn.closest('form');
+            // if (form) form.submit();
+        });
+    }
 });

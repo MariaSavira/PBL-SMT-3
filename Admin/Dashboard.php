@@ -1,10 +1,60 @@
 <?php
-require __DIR__ . '/CRUD/Koneksi.php';
+// panggil koneksi (file koneksi.php yang berisi fungsi q() dan qparams())
+require __DIR__ . '/CRUD/koneksi.php';
 
-// contoh data statis
-$totalArtikel         = 20;
-$totalAnggotaAktif    = 8;
-$totalAjuanPeminjaman = 20;
+// ----------------------------
+// INISIALISASI NILAI STATISTIK
+// ----------------------------
+$totalArtikel         = 20; // sementara masih dummy
+$totalAnggotaAktif    = 8;  // sementara masih dummy
+$totalAjuanPeminjaman = 0;  // ini dari database
+
+// inisialisasi array grafik
+$labelsBulan = [];
+$dataBulan   = [];
+
+// ----------------------------
+// TOTAL AJUAN PEMINJAMAN LAB
+// ----------------------------
+try {
+    $resultAjuan = q("SELECT COUNT(*) AS total FROM peminjaman_lab");
+    $rowAjuan    = pg_fetch_assoc($resultAjuan);
+    $totalAjuanPeminjaman = (int)($rowAjuan['total'] ?? 0);
+} catch (Throwable $e) {
+    $totalAjuanPeminjaman = 0;
+}
+
+// ----------------------------
+// DATA GRAFIK PEMINJAMAN PER BULAN
+// ----------------------------
+try {
+    $sqlPerBulan = "
+        SELECT 
+            EXTRACT(MONTH FROM tanggal_pengajuan)::int AS bulan,
+            COUNT(*) AS total
+        FROM peminjaman_lab
+        WHERE tanggal_pengajuan IS NOT NULL
+        GROUP BY bulan
+        ORDER BY bulan;
+    ";
+
+    $resultPerBulan = q($sqlPerBulan);
+
+    while ($row = pg_fetch_assoc($resultPerBulan)) {
+        $bulanInt = (int)$row['bulan'];   // 1–12
+
+        if ($bulanInt < 1 || $bulanInt > 12) {
+            continue;
+        }
+
+        // label bulan: Jan, Feb, Mar, ...
+        $labelsBulan[] = date("M", mktime(0, 0, 0, $bulanInt, 1));
+        $dataBulan[]   = (int)$row['total'];
+    }
+} catch (Throwable $e) {
+    $labelsBulan = [];
+    $dataBulan   = [];
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -22,6 +72,14 @@ $totalAjuanPeminjaman = 20;
     <link rel="stylesheet" href="../Assets/Css/Admin/Dashboard.css">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- kirim data PHP ke JavaScript -->
+    <script>
+        window.peminjamanLabels = <?= json_encode($labelsBulan) ?>;
+        window.peminjamanData   = <?= json_encode($dataBulan) ?>;
+
+        console.log("Data dari PHP:", window.peminjamanLabels, window.peminjamanData);
+    </script>
 </head>
 <body>
 
@@ -65,7 +123,7 @@ $totalAjuanPeminjaman = 20;
                     </button>
 
                     <input type="date" id="calendarInput"
-                        style="opacity:0;pointer-events:none;position:absolute;top:100%;right:0;width:0;height:0;">
+                           style="opacity:0;pointer-events:none;position:absolute;top:100%;right:0;width:0;height:0;">
                 </div>
             </div>
         </header>
@@ -123,6 +181,80 @@ $totalAjuanPeminjaman = 20;
             <div class="ajuan-section">
                 <div class="card card-ajuan">
                     <h3 class="card-title-center">Ajuan Terbaru</h3>
+
+                    <?php
+                    // Ambil SEMUA ajuan berstatus pending (tanpa LIMIT)
+                    $ajuanPending = [];
+
+                    try {
+                        $sqlPending = "
+                            SELECT 
+                                id_peminjaman,
+                                nama_peminjam,
+                                keperluan AS nama_kegiatan,
+                                tanggal_pengajuan,
+                                status
+                            FROM peminjaman_lab
+                            WHERE status = 'pending'
+                            ORDER BY tanggal_pengajuan DESC, id_peminjaman DESC;
+                        ";
+
+                        $resultPending = q($sqlPending);
+                        while ($row = pg_fetch_assoc($resultPending)) {
+                            $ajuanPending[] = $row;
+                        }
+                    } catch (Throwable $e) {
+                        $ajuanPending = [];
+                    }
+                    ?>
+
+                    <?php if (empty($ajuanPending)): ?>
+                        <p class="empty-text" style="font-size:14px;color:#6b7280;margin-top:8px;">
+                            Belum ada ajuan peminjaman berstatus pending.
+                        </p>
+                    <?php else: ?>
+
+                        <p style="font-size:13px;color:#6b7280;margin:8px 0 6px 0;">
+                            Ajuan peminjaman terbaru yang perlu ditinjau:
+                        </p>
+
+                        <!-- AREA SCROLL
+                             Tinggi kira-kira cukup untuk ±5 item,
+                             sisanya bisa di-scroll -->
+                        <div style="overflow-y:auto; padding-right:6px; max-height:340px;">
+
+                            <?php foreach ($ajuanPending as $ajuan): ?>
+                                <div class="ajuan-latest"
+                                     style="margin-top:8px; padding-top:6px; border-top:1px solid #eef2ff;">
+
+                                    <p style="font-size:15px;font-weight:600;margin-bottom:2px;">
+                                        <?= htmlspecialchars($ajuan['nama_peminjam']) ?>
+                                    </p>
+
+                                    <p style="font-size:13px;color:#4b5563;margin-bottom:6px;">
+                                        <?= htmlspecialchars($ajuan['nama_kegiatan'] ?? '-') ?>
+                                    </p>
+
+                                    <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#6b7280;">
+                                        <span><?= date('d M Y', strtotime($ajuan['tanggal_pengajuan'])) ?></span>
+
+                                        <span style="
+                                            padding:2px 8px;
+                                            border-radius:999px;
+                                            background:#fef3c7;
+                                            color:#92400e;
+                                            font-weight:500;
+                                        ">
+                                            <?= htmlspecialchars($ajuan['status']) ?>
+                                        </span>
+                                    </div>
+
+                                </div>
+                            <?php endforeach; ?>
+
+                        </div>
+                    <?php endif; ?>
+
                 </div>
             </div>
 
@@ -135,7 +267,9 @@ $totalAjuanPeminjaman = 20;
                         <h3 class="section-title">Pengumuman Terbaru</h3>
 
                         <div class="card pengumuman-card">
-                            <p class="empty-text" style="font-size:14px;color:#6b7280;">Belum ada pengumuman terbaru.</p>
+                            <p class="empty-text" style="font-size:14px;color:#6b7280;">
+                                Belum ada pengumuman terbaru.
+                            </p>
                         </div>
                     </div>
 
@@ -157,7 +291,8 @@ $totalAjuanPeminjaman = 20;
     </main>
 </div>
 
-<script src="../Assets/Javascript/Admin/Dashboard.js"></script>
+<!-- tambahkan ?v=3 supaya browser ambil file JS terbaru (anti cache) -->
+<script src="../Assets/Javascript/Admin/Dashboard.js?v=3"></script>
 
 </body>
 </html>
