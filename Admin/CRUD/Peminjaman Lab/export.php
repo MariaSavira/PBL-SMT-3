@@ -1,11 +1,7 @@
 <?php
-// Koneksi PostgreSQL (sesuaikan)
-$conn = pg_connect("host=localhost dbname=lab_ba user=postgres password=29082006");
-if (!$conn) {
-    die("Koneksi gagal: " . pg_last_error());
-}
+    require_once __DIR__ . '../../../Cek_Autentikasi.php';
+    require __DIR__ . '../../../Koneksi/KoneksiSasa.php';
 
-// Query (sama seperti yang kamu punya)
 $result = pg_query($conn, "
     SELECT 
         id_peminjaman, 
