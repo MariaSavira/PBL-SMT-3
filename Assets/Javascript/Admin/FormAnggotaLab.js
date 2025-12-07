@@ -35,4 +35,40 @@ document.addEventListener('DOMContentLoaded', function () {
             toggleBtn.setAttribute('aria-expanded', 'false');
         }
     });
+
+    const btnTambah = document.getElementById('btnTambahLink');
+    const wrapper   = document.getElementById('links-wrapper');
+
+    if (!btnTambah || !wrapper) return;
+
+    btnTambah.addEventListener('click', function () {
+        const row = document.createElement('div');
+        row.className = 'link-row';
+        row.innerHTML = `
+            <input
+                type="text"
+                name="link_label[]"
+                class="field-input link-label"
+                placeholder="Nama platform (mis. Sinta, Scholar)"
+            >
+            <input
+                type="url"
+                name="link_url[]"
+                class="field-input link-url"
+                placeholder="https://contoh.com/profil-anda"
+            >
+
+            <button type="button" class="btn-remove-link">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        `;
+        wrapper.appendChild(row);
+    });
+
+    wrapper.addEventListener("click", (e) => {
+        if (e.target.closest(".btn-remove-link")) {
+            const row = e.target.closest(".link-row");
+            if (row) row.remove();
+        }
+    });
 });

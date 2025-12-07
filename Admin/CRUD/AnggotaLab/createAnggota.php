@@ -30,6 +30,25 @@
         $deskripsi = trim($_POST['deskripsi'] ?? '');
         $keahlianDipilih = $_POST['keahlian'] ?? [];
 
+            $linkLabel = $_POST['link_label'] ?? [];
+    $linkUrl   = $_POST['link_url']   ?? [];
+
+    $links = [];
+    
+    foreach ($linkUrl as $idx => $urlRaw) {
+        $url   = trim($urlRaw);
+        $label = trim($linkLabel[$idx] ?? '');
+
+        if ($url === '') {
+            continue;
+        }
+
+        $links[] = [
+            'label' => $label !== '' ? $label : 'Link',
+            'url'   => $url,
+        ];
+    }
+
         if ($nama === '') {
             $err = 'Nama wajib diisi.';
         } elseif ($username === '') {
@@ -83,12 +102,13 @@
             }
 
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+            $jsonLinks = json_encode($links, JSON_UNESCAPED_SLASHES);
 
             try {
                 $resInsert = qparams(
                     'INSERT INTO public.anggotalab
-                        (nama, username, jabatan, password_hash, deskripsi, foto, status)
-                    VALUES ($1, $2, $3, $4, $5, $6, $7)
+                        (nama, username, jabatan, password_hash, deskripsi, foto, "status", link)
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8::jsonb)
                     RETURNING id_anggota',
                     [
                         $nama,
@@ -97,7 +117,8 @@
                         $passwordHash,
                         $deskripsi,
                         $namaFileFinal,
-                        true
+                        true,
+                        $jsonLinks
                     ]
                 );
 
@@ -108,7 +129,7 @@
                     foreach ($keahlianDipilih as $idK) {
                         if ($idK === '') continue;
                         qparams(
-                            'INSERT INTO public.anggota_bidangkeahlian (id_anggota, id_keahlian)
+                            'INSERT INTO public.anggota_keahlian (id_anggota, id_keahlian)
                             VALUES ($1, $2)',
                             [$idBaru, (int)$idK]
                         );
@@ -294,6 +315,38 @@
                                 rows="4"
                                 class="field-input"
                                 placeholder="Tuliskan deskripsi singkat tentang anggota"><?= htmlspecialchars($deskripsi) ?></textarea>
+                        </div>
+
+                        <div class="field-group">
+                            <label>Link Profil (opsional)</label>
+                            <small class="field-hint">
+                                Tambahkan tautan profil seperti Sinta, Google Scholar, Scopus, dsb.
+                            </small>
+
+                            <div id="links-wrapper" class="links-wrapper">
+                                <div class="link-row">
+                                    <input
+                                        type="text"
+                                        name="link_label[]"
+                                        class="field-input link-label"
+                                        placeholder="Nama platform (mis. Sinta, Scholar)"
+                                    >
+                                    <input
+                                        type="url"
+                                        name="link_url[]"
+                                        class="field-input link-url"
+                                        placeholder="https://contoh.com/profil-anda"
+                                    >
+
+                                    <button type="button" class="btn-remove-link">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn-add-link" id="btnTambahLink">
+                                + Tambah link
+                            </button>
                         </div>
                     </div>
 
