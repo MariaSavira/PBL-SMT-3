@@ -1,67 +1,335 @@
 <?php
-    require __DIR__ . '../../koneksi.php';
+    require_once __DIR__ . '../../../Cek_Autentikasi.php';
+    require __DIR__ . '../../../Koneksi/KoneksiSasa.php';
 
-    $err = '';
+    $status  = '';
+    $message = '';
+
+    $nama       = '';
+    $username   = '';
+    $jabatan    = '';
+    $deskripsi  = '';
+    $keahlianDipilih = [];
+
+    try {
+        $resKeahlian = q('SELECT id_keahlian, nama_bidang_keahlian 
+                        FROM public.bidang_keahlian 
+                        ORDER BY nama_bidang_keahlian ASC');
+        $daftarKeahlian = pg_fetch_all($resKeahlian) ?: [];
+    } catch (Throwable $e) {
+        $daftarKeahlian = [];
+    }
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $nama = trim($_POST['nama'] ?? '');
-        $jabatan = trim($_POST['jabatan'] ?? '');
-        $password = trim($_POST['password'] ?? '');
-        $password_verify = trim($_POST['password_verify'] ?? '');
+        $err       = '';
+        $nama      = trim($_POST['nama'] ?? '');
+        $username  = trim($_POST['username'] ?? '');
+        $jabatan   = trim($_POST['jabatan'] ?? '');
+        $password  = $_POST['password'] ?? '';
+        $konfirmasi= $_POST['konfirmasi_password'] ?? '';
         $deskripsi = trim($_POST['deskripsi'] ?? '');
-        $foto = trim($_POST['foto'] ?? '');
-        $username = trim($_POST['username'] ?? '');
-        $bidang_keahlian = $_POST['bidang_keahlian'] ?? []; 
-        
-        $link = $_POST['link'] ?? [];
-        $link = array_filter($link);
-        $json_link = json_encode($link);
+        $keahlianDipilih = $_POST['keahlian'] ?? [];
 
         if ($nama === '') {
-            $err = "Nama wajib diisi!";
-        } else if ($password === '') {
-            $err = "Password wajib diisi!";
-        } else if ($password !== $password_verify) {
-            $err = "Password harus sama!";
-        } else if ($username === '') {
-            $err = "Username wajib diisi!";
-        } else if (empty($bidang_keahlian)) {
-            $err = "Minimal pilih 1 bidang keahlian!";
-        } else {
+            $err = 'Nama wajib diisi.';
+        } elseif ($username === '') {
+            $err = 'Username wajib diisi.';
+        } elseif ($jabatan === '') {
+            $err = 'Jabatan wajib dipilih.';
+        } elseif ($password === '') {
+            $err = 'Password wajib diisi.';
+        } elseif ($password !== $konfirmasi) {
+            $err = 'Konfirmasi password harus sama.';
+        } elseif ($deskripsi === '') {
+            $err = 'Deskripsi wajib diisi.';
+        } elseif (empty($keahlianDipilih)) {
+            $err = 'Minimal pilih satu keahlian.';
+        }
 
-            $password_hash = hash('sha256', $password);
+        $folderUrl = '/PBL-SMT-3/Assets/Image/AnggotaLab/';
+        $folderFs  = $_SERVER['DOCUMENT_ROOT'] . $folderUrl;
+        $namaFileFinal = null;
 
-            try {   
-                $result = qparams(
-                    "INSERT INTO anggota_lab
-                    (nama, jabatan, password_hash, deskripsi, foto, link, username)
-                    VALUES ($1, $2, $3, $4, $5, $6::jsonb, $7)
-                    RETURNING id",
+        if ($err === '' && !empty($_FILES['foto']['name'])) {
+            if ($_FILES['foto']['error'] !== UPLOAD_ERR_OK) {
+                $err = 'Upload foto gagal (error code: ' . $_FILES['foto']['error'] . ')';
+            } else {
+                $ext     = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+                $allowed = ['jpg', 'jpeg', 'png'];
+
+                if (!in_array($ext, $allowed)) {
+                    $err = 'Format foto harus JPG, JPEG atau PNG.';
+                } else {
+                    if (!is_dir($folderFs)) {
+                        @mkdir($folderFs, 0777, true);
+                    }
+
+                    $timestamp   = time();
+                    $namaFile    = 'anggota_' . $timestamp . '.' . $ext;
+                    $tujuan      = $folderFs . $namaFile;
+
+                    if (!move_uploaded_file($_FILES['foto']['tmp_name'], $tujuan)) {
+                        $err = 'Gagal menyimpan file foto di server.';
+                    } else {
+                        $namaFileFinal = $namaFile;
+                    }
+                }
+            }
+        }
+
+        if ($err === '') {
+            if ($namaFileFinal === null) {
+                $namaFileFinal = 'No-Profile.png';
+            }
+
+            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+            try {
+                $resInsert = qparams(
+                    'INSERT INTO public.anggotalab
+                        (nama, username, jabatan, password_hash, deskripsi, foto, status)
+                    VALUES ($1, $2, $3, $4, $5, $6, $7)
+                    RETURNING id_anggota',
                     [
                         $nama,
+                        $username,
                         $jabatan,
-                        $password_hash,
+                        $passwordHash,
                         $deskripsi,
-                        $foto,
-                        $json_link,
-                        $username
+                        $namaFileFinal,
+                        true
                     ]
                 );
 
-                $anggota = pg_fetch_assoc($result);
-                $anggota_id = $anggota['id'];
+                $rowBaru   = pg_fetch_assoc($resInsert);
+                $idBaru    = $rowBaru['id_anggota'] ?? null;
 
-                foreach ($bidang_keahlian as $keahlian_id) {
-                    qparams(
-                        "INSERT INTO anggota_bidang_keahlian (anggota_id, bidang_keahlian_id)
-                        VALUES ($1, $2)",
-                        [$anggota_id, $keahlian_id]
-                    );
+                if ($idBaru !== null) {
+                    foreach ($keahlianDipilih as $idK) {
+                        if ($idK === '') continue;
+                        qparams(
+                            'INSERT INTO public.anggota_bidangkeahlian (id_anggota, id_keahlian)
+                            VALUES ($1, $2)',
+                            [$idBaru, (int)$idK]
+                        );
+                    }
+                    q('REFRESH MATERIALIZED VIEW mv_anggota_keahlian;');
                 }
-                echo "Data berhasil disimpan!";
+
+                $status  = 'success';
+                $message = 'Anggota baru berhasil ditambahkan.';
                 
-            } catch (Exception $e) {
-                $err = "Gagal menyimpan: " . $e->getMessage();
+                $nama = $username = $jabatan = $deskripsi = '';
+                $keahlianDipilih = [];
+
+            } catch (Throwable $e) {
+                $status  = 'error';
+                $message = 'Gagal menyimpan: ' . $e->getMessage();
             }
+        } else {
+            $status  = 'error';
+            $message = $err;
         }
     }
 ?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Anggota</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../../../Assets/Css/Admin/FormAnggotaLab.css">
+</head>
+
+<body>
+    <div id="sidebar"></div>
+
+    <main class="content" id="content">
+        <div id="header"></div>
+
+        <div class="content-header page-header">
+            <a href="IndexAnggota.php">
+                <button type="button" class="btn-back">
+                    <i class="fa-solid fa-chevron-left"></i>
+                    Kembali
+                </button>
+            </a>
+
+            <h1 class="page-title">Tambah Anggota</h1>
+            <div></div>
+        </div>
+
+        <section class="profile-layout">
+            <form class="profile-form" method="post" action="" enctype="multipart/form-data">
+                <div class="profile-card">
+                    <div class="avatar-wrapper">
+                        <div class="avatar-circle">
+                            <img
+                                src="../../../Assets/Image/AnggotaLab/No-Profile.png"
+                                alt="Foto Anggota"
+                                id="avatarPreview">
+                        </div>
+
+                        <label class="avatar-upload" title="Upload foto anggota">
+                            <i class="fa-solid fa-camera"></i>
+                            <input type="file" name="foto" id="avatarInput" accept="image/*">
+                        </label>
+                    </div>
+
+                    <div class="content-profile-info">
+                        <div class="content-profile-name">
+                            <?= htmlspecialchars($nama ?: 'Nama Anggota') ?>
+                        </div>
+                        <div class="content-profile-role">
+                            <?= htmlspecialchars($jabatan ?: 'Jabatan') ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-card">
+                    <h2 class="form-title">Data Anggota</h2>
+                    <p class="form-subtitle">
+                        Lengkapi informasi anggota laboratorium dengan data yang valid.
+                    </p>
+
+                    <div class="form-grid">
+                        <div class="field-group">
+                            <label for="nama">Nama Lengkap</label>
+                            <input
+                                id="nama"
+                                name="nama"
+                                type="text"
+                                class="field-input"
+                                placeholder="Masukkan nama lengkap"
+                                value="<?= htmlspecialchars($nama) ?>">
+                        </div>
+
+                        <div class="field-group">
+                            <label for="username">Username</label>
+                            <input
+                                id="username"
+                                name="username"
+                                type="text"
+                                class="field-input"
+                                placeholder="Masukkan username"
+                                value="<?= htmlspecialchars($username) ?>">
+                        </div>
+
+                        <div class="field-group">
+                            <label for="jabatan_hidden">Jabatan</label>
+
+                            <div class="field-select dropdown-jabatan" data-dropdown="jabatan">
+                                <button type="button" class="dropdown-toggle" aria-haspopup="listbox" aria-expanded="false">
+                                    <span class="dropdown-label">Pilih jabatan</span>
+                                    <i class="fa-solid fa-chevron-down caret"></i>
+                                </button>
+
+                            <div class="dropdown-menu" role="listbox">
+                                    <button type="button" class="dropdown-item" data-value="Kepala Lab">Kepala Lab</button>
+                                    <button type="button" class="dropdown-item" data-value="Peneliti">Peneliti</button>
+                                    <button type="button" class="dropdown-item" data-value="Staff">Staff</button>
+                                </div>
+
+                                <!-- nilai yang beneran dikirim ke PHP -->
+                                <input type="hidden" name="jabatan" id="jabatan_hidden" value="">
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="password">Password</label>
+                            <input
+                                id="password"
+                                name="password"
+                                type="password"
+                                class="field-input"
+                                placeholder="••••••••">
+                        </div>
+
+                        <div class="field-group">
+                            <label for="konfirmasi-password">Konfirmasi Password</label>
+                            <input
+                                id="konfirmasi-password"
+                                name="konfirmasi_password"
+                                type="password"
+                                class="field-input"
+                                placeholder="••••••••">
+                        </div>
+
+                        <div class="field-group">
+                            <label>Keahlian (minimal 1)</label>
+                            <div class="chips-wrapper">
+                                <?php if (!$daftarKeahlian): ?>
+                                    <small style="color:#ef4444;">Data bidang_keahlian kosong.</small>
+                                <?php else: ?>
+                                    <?php foreach ($daftarKeahlian as $k): ?>
+                                        <?php
+                                            $idK   = (int)$k['id_keahlian'];
+                                            $namaK = $k['nama_bidang_keahlian'];
+                                        ?>
+                                        <label class="chip-option">
+                                            <input
+                                                type="checkbox"
+                                                name="keahlian[]"
+                                                value="<?= $idK ?>"
+                                                <?= in_array($idK, array_map('intval', $keahlianDipilih)) ? 'checked' : '' ?>>
+                                            <span><?= htmlspecialchars($namaK) ?></span>
+                                        </label>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </div>
+                            <small>Pilih satu atau lebih bidang keahlian yang dimiliki anggota.</small>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="deskripsi">Deskripsi</label>
+                            <textarea
+                                id="deskripsi"
+                                name="deskripsi"
+                                rows="4"
+                                class="field-input"
+                                placeholder="Tuliskan deskripsi singkat tentang anggota"><?= htmlspecialchars($deskripsi) ?></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">
+                            Simpan Anggota
+                            <i class="fa-solid fa-check"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <div id="notification" class="notification" style="display:none;">
+        <div class="notification-content">
+            <div class="notification-icon" id="notification-icon"></div>
+            <div class="notification-text">
+                <div class="notification-title" id="notification-title"></div>
+                <div class="notification-message" id="notification-message"></div>
+            </div>
+            <button id="closeNotification" class="close-btn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    </div>
+    <div id="overlay" class="overlay" style="display:none;"></div>
+
+    <script src="../../../Assets/Javascript/Admin/Sidebar.js"></script>
+    <script src="../../../Assets/Javascript/Admin/Header.js"></script>
+
+    <script>
+        window.profileStatus  = <?= json_encode($status  ?? '') ?>;
+        window.profileMessage = <?= json_encode($message ?? '') ?>;
+    </script>
+    <script src="../../../Assets/Javascript/Admin/Profile.js"></script>
+    <script src="../../../Assets/Javascript/Admin/FormAnggotaLab.js"></script>
+</body>
+</html>

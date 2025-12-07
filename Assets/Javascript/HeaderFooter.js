@@ -17,7 +17,7 @@ async function loadComponent(id, file, url) {
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
-    const header = await loadComponent("header", "Header.html", "../Assets/Css/HeaderFooter.css");
+    const header = await loadComponent("header", "Header.php", "../Assets/Css/HeaderFooter.css");
     await loadComponent("footer", "Footer.html", "../Assets/Css/HeaderFooter.css");
     const navbar = header.querySelector(".navbar");
     const dropdown = header.querySelector(".dropdown");
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const hero = document.querySelector("#hero");
     const scrollTrigger = hero ? hero.offsetHeight : 0;
 
-    if (filename === "Index.html" && hero) {
+    if (filename === "Index.php" && hero) {
         window.addEventListener("scroll", function () {
             if (window.scrollY >= scrollTrigger) {
                 navbar.classList.add("navbar-scrolled");
