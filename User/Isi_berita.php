@@ -10,179 +10,323 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Berita Laboratorium</title>
   <link rel="stylesheet" href="../Assets/Css/isi_berita.css" />
-        <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />  
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-      rel="stylesheet"
-    />
-            <link rel="icon" type="image/x-icon" href="../Assets/Image/Logo/Logo Without Text.png" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-    />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/x-icon" href="../Assets/Image/Logo/Logo Without Text.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+  <style>
+    /* Loading Skeleton */
+    .skeleton {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+
+    @keyframes loading {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+    }
+
+    .skeleton-title {
+        height: 40px;
+        width: 80%;
+        margin-bottom: 20px;
+    }
+
+    .skeleton-subtitle {
+        height: 25px;
+        width: 60%;
+        margin-bottom: 15px;
+    }
+
+    .skeleton-meta {
+        height: 20px;
+        width: 40%;
+        margin-bottom: 20px;
+    }
+
+    .skeleton-img {
+        height: 400px;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .skeleton-text {
+        height: 18px;
+        margin-bottom: 12px;
+    }
+
+    .skeleton-text.short {
+        width: 70%;
+    }
+
+    .sidebar-skeleton {
+        height: 80px;
+        margin-bottom: 15px;
+    }
+
+    /* Error State */
+    .error-state {
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 40px;
+        border-radius: 12px;
+        text-align: center;
+        margin: 40px auto;
+    }
+
+    .error-state i {
+        font-size: 64px;
+        margin-bottom: 20px;
+    }
+
+    .btn-back {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 28px;
+        background: #3b82f6;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s;
+    }
+
+    .btn-back:hover {
+        background: #2563eb;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .konten-berita {
+        line-height: 1.8;
+        font-size: 16px;
+        color: #2c3e50;
+    }
+
+    .konten-berita p {
+        margin-bottom: 20px;
+    }
+
+    .konten-berita ul, 
+    .konten-berita ol {
+        margin-bottom: 20px;
+        padding-left: 30px;
+    }
+
+    .konten-berita li {
+        margin-bottom: 10px;
+    }
+  </style>
 </head>
 <body>
-  <!-- HEADER SUDAH ADA (TIDAK DIBUAT) -->
- <div id="header"></div>
+  <div id="header"></div>
  
-<!-- ================= HERO SECTION ================= -->
-     <!-- HERO -->
-    <section class="hero">
-        <img src="../Assets/Image/Galeri-Berita/Heading.png" alt="Hero">
-        <div class="hero-overlay"></div>
-    <h1>Berita Laboratorium</h1>
-    <p>
-        Ikuti perkembangan terbaru seputar kegiatan laboratorium, pengumuman penting, 
-        dan agenda riset yang sedang berjalan. Halaman ini menjadi pusat informasi bagi 
-        anggota, mitra, dan publik yang ingin mengetahui tren dan dinamika analisis 
-        bisnis berbasis data.
-    </p>
-    </section>
+  <!-- HERO SECTION -->
+  <section class="hero">
+      <img src="../Assets/Image/Galeri-Berita/Heading.png" alt="Hero">
+      <div class="hero-overlay"></div>
+      <h1>Berita Laboratorium</h1>
+      <p>
+          Ikuti perkembangan terbaru seputar kegiatan laboratorium, pengumuman penting, 
+          dan agenda riset yang sedang berjalan.
+      </p>
+  </section>
 
-<!-- ================= MAIN CONTENT ================= -->
-<div class="container">
+  <!-- MAIN CONTENT -->
+  <div class="container">
+      <!-- KONTEN BERITA -->
+      <div class="content" id="berita-content">
+          <!-- Skeleton Loading -->
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-subtitle"></div>
+          <div class="skeleton skeleton-meta"></div>
+          <div class="skeleton skeleton-img"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text short"></div>
+          <div class="skeleton skeleton-text"></div>
+      </div>
 
-    <!-- ===== KONTEN BERITA ===== -->
-    <div class="content">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+          <h3>Berita Terbaru</h3>
+          <div id="berita-sidebar">
+              <!-- Skeleton Loading -->
+              <div class="skeleton sidebar-skeleton"></div>
+              <div class="skeleton sidebar-skeleton"></div>
+              <div class="skeleton sidebar-skeleton"></div>
+          </div>
+      </aside>
+  </div>
 
-        <h2 class="judul-berita">
-            Jurusan Teknologi Informasi Politeknik Negeri Malang berhasil meraih juara 2 umum
-            pada Kompetensi Mahasiswa Informatika Politeknik Nasional (KMIPN) 2025 dengan 
-            perolehan 1 emas, 1 perak dan 1 perunggu
-        </h2>
+  <div id="footer"></div>
+  <script src="../Assets/Javascript/HeaderFooter.js"></script>
+  
+  <script>
+      // Fungsi format tanggal lengkap
+      function formatTanggalLengkap(dateString) {
+          const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+          const date = new Date(dateString);
+          const day = date.getDate();
+          const month = bulan[date.getMonth()];
+          const year = date.getFullYear();
+          const hours = String(date.getHours()).padStart(2, '0');
+          const minutes = String(date.getMinutes()).padStart(2, '0');
+          
+          return `${day} ${month} ${year} | ${hours}:${minutes} WIB`;
+      }
 
-        <div class="subjudul">Torehan Prestasi Nasional: Bukti Nyata Dedikasi, Inovasi, dan Kolaborasi Mahasiswa Teknologi Informasi</div>
+      // Get ID dari URL
+      function getBeritaId() {
+          const urlParams = new URLSearchParams(window.location.search);
+          return urlParams.get('id');
+      }
 
-        <div class="meta">
-            <span>14 November 2025 | 16.51 WIB</span>
-            <span>Surya Dua Artha Simanjuntak</span>
-        </div>
+      // Format isi berita
+      function formatIsiBerita(isi) {
+          if (!isi) return '';
+          
+          // Jika sudah ada HTML tags, kembalikan apa adanya
+          if (isi.includes('<p>') || isi.includes('<ul>') || isi.includes('<ol>')) {
+              return isi;
+          }
+          
+          // Jika plain text, convert newlines to <br>
+          return isi.split('\n\n').map(p => {
+              if (p.trim()) {
+                  return `<p>${p.replace(/\n/g, '<br>')}</p>`;
+              }
+              return '';
+          }).join('');
+      }
 
-        <img src="../Assets/Image/Galeri-Berita/highlightberita1.jpeg" class="banner" alt="Banner Berita">
+      // Load berita detail
+      async function loadBeritaDetail() {
+          const id = getBeritaId();
+          const contentDiv = document.getElementById('berita-content');
+          
+          if (!id) {
+              contentDiv.innerHTML = `
+                  <div class="error-state">
+                      <i class="fas fa-exclamation-triangle"></i>
+                      <h4>ID Berita Tidak Ditemukan</h4>
+                      <p>Silakan kembali ke halaman berita.</p>
+                      <a href="Berita.html" class="btn-back">
+                          <i class="fas fa-arrow-left me-2"></i>Kembali ke Berita
+                      </a>
+                  </div>
+              `;
+              return;
+          }
 
-        <p>
-            Malang, 17 Oktober 2025 – Jurusan Teknologi Informasi Politeknik Negeri Malang 
-            (TI Polinema) kembali mengukir prestasi gemilang di tingkat nasional. Dalam ajang bergengsi 
-            Kompetensi Mahasiswa Informatika Politeknik Nasional (KMIPN) 2025, yang diselenggarakan 
-            pada 13–16 Oktober 2025 di Politeknik Negeri Padang, TI Polinema berhasil meraih 
-            Juara 2 Umum Nasional, mengungguli puluhan jurusan teknologi informasi dari 
-            berbagai politeknik negeri di Indonesia.
-        </p>
+          try {
+              const response = await fetch(`../Admin/CRUD/Berita_Lab/api_berita.php?id=${id}`);
+              const result = await response.json();
 
-        <p>
-            Ajang KMIPN merupakan kompetisi tahunan yang mempertemukan mahasiswa-mahasiswa terbaik 
-            dari seluruh politeknik negeri untuk beradu kemampuan di berbagai bidang informatika, 
-            mulai dari cipta inovasi, keamanan siber, e-government, hingga implementasi sistem IoT. 
-            Tahun ini, TI Polinema tampil luar biasa dengan memboyong tujuh penghargaan bergengsi, 
-            termasuk medali emas, perak, dan perunggu.
-        </p>
-        <ul>
-            <li>
-                Juara 1 Cipta Inovasi<br>
-                Tim: 19Million — Abdullah Shamil Basayev, Dwi Ahmad Khairy, Yefta Octavianus Santo<br>
-                Pembimbing: Muhammad Afif Hendrawan, S.Kom., MT
-            </li>
+              if (!result.success || !result.data) {
+                  contentDiv.innerHTML = `
+                      <div class="error-state">
+                          <i class="fas fa-exclamation-circle"></i>
+                          <h4>Berita Tidak Ditemukan</h4>
+                          <p>${result.message || 'Berita yang Anda cari tidak tersedia.'}</p>
+                          <a href="Berita.html" class="btn-back">
+                              <i class="fas fa-arrow-left me-2"></i>Kembali ke Berita
+                          </a>
+                      </div>
+                  `;
+                  return;
+              }
 
-            <li>
-                Juara 2 Bidang E-Government<br>
-                Tim: Gatranova — Alyfa Zahra Qurrota Aini, Rafi Abiyyu Airlangga, Savero Athallah Hardiana Putra<br>
-                Pembimbing: Dika Rizky Yunianto, S.Kom., M.Kom
-            </li>
+              const berita = result.data;
 
-            <li>
-                Juara 3 Bidang Keamanan Siber<br>
-                Tim: Sembarang Wes<br>
-                Pembimbing: Dika Rizky Yunianto, S.Kom., M.Kom
-            </li>
+              // Update title halaman
+              document.title = berita.judul + ' - Berita Laboratorium';
 
-            <li>
-                Juara 1 Collaboration Team Keamanan Siber<br>
-                Tim: Team Othy Ronal<br>
-                Pembimbing: Vipkas Al Hadid Firdaus, ST., MT
-            </li>
+              // Tampilkan konten berita
+              const gambarUrl = berita.gambar 
+                  ? `../Assets/Image/Galeri-Berita/${berita.gambar}` 
+                  : '../Assets/Image/Galeri-Berita/default.jpg';
 
-            <li>
-                Juara 1 Presentasi Hackathon<br>
-                Tim: Masukkan Nama Tim<br>
-                Pembimbing: Yoppy Yunhasnawa, S.ST., M.Sc.
-            </li>
+              contentDiv.innerHTML = `
+                  <h2 class="judul-berita">${berita.judul}</h2>
+                  ${berita.subjudul ? `<div class="subjudul">${berita.subjudul}</div>` : ''}
+                  <div class="meta">
+                      <span><i class="far fa-calendar"></i> ${formatTanggalLengkap(berita.tanggal)}</span>
+                      <span><i class="far fa-user"></i> ${berita.uploaded_by}</span>
+                  </div>
+                  <img src="${gambarUrl}" 
+                       class="banner" 
+                       alt="${berita.judul}"
+                       onerror="this.src='../Assets/Image/Galeri-Berita/default.jpg'">
+                  <div class="konten-berita">${formatIsiBerita(berita.isi)}</div>
+              `;
 
-            <li>
-                Juara 1 Implementasi Sistem IoT<br>
-                Tim: Pigora<br>
-                Pembimbing: Dr. Ulla Delfana Rosiani, ST., MT
-            </li>
-        </ul>
+          } catch (error) {
+              console.error('Error:', error);
+              contentDiv.innerHTML = `
+                  <div class="error-state">
+                      <i class="fas fa-exclamation-triangle"></i>
+                      <h4>Terjadi Kesalahan</h4>
+                      <p>Gagal memuat berita. Silakan coba lagi nanti.</p>
+                      <a href="Berita.html" class="btn-back">
+                          <i class="fas fa-arrow-left me-2"></i>Kembali ke Berita
+                      </a>
+                  </div>
+              `;
+          }
+      }
 
-        <p>
-            Prestasi ini bukan hanya sekadar angka atau medali, tetapi merupakan cerminan dari semangat, 
-            kreativitas, dan kerja keras mahasiswa TI Polinema dalam mengembangkan solusi nyata berbasis 
-            teknologi. Setiap tim menunjukkan kemampuan luar biasa dalam merancang, membangun, dan 
-            mempresentasikan karya mereka di hadapan juri nasional yang terdiri dari akademisi dan 
-            praktisi industri.
-        </p>
+      // Load berita terbaru untuk sidebar
+      async function loadBeritaTerbaru() {
+          const sidebar = document.getElementById('berita-sidebar');
+          
+          try {
+              const response = await fetch('../Admin/CRUD/Berita_Lab/api_berita.php?limit=6');
+              const result = await response.json();
+              
+              sidebar.innerHTML = '';
+              
+              if (!result.success || result.data.length === 0) {
+                  sidebar.innerHTML = '<p class="text-muted small">Belum ada berita lainnya.</p>';
+                  return;
+              }
 
-        <p>
-            Keberhasilan ini juga tidak lepas dari peran para dosen pembimbing yang dengan penuh dedikasi 
-            mendampingi mahasiswa dalam proses riset, pengembangan, dan penyempurnaan karya. Kolaborasi 
-            erat antara mahasiswa dan dosen menjadi kunci utama dalam menghasilkan inovasi yang berdampak 
-            dan kompetitif.
-        </p>
+              const currentId = getBeritaId();
+              const beritaList = result.data;
+              
+              // Filter berita (exclude current)
+              const otherBerita = beritaList.filter(b => b.id_berita != currentId).slice(0, 5);
 
-        <p>
-            Kepala Jurusan Teknologi Informasi Polinema menyampaikan apresiasi setinggi-tingginya kepada 
-            seluruh tim dan pembimbing atas pencapaian ini. “Kami bangga atas semangat dan kerja keras 
-            yang ditunjukkan oleh mahasiswa. Prestasi ini adalah hasil dari proses panjang yang penuh tantangan, 
-            dan kami berharap ini menjadi motivasi untuk terus berkarya dan berinovasi,” ujarnya.
-        </p>
+              if (otherBerita.length === 0) {
+                  sidebar.innerHTML = '<p class="text-muted small">Belum ada berita lainnya.</p>';
+                  return;
+              }
 
-        <p>
-            Dengan semangat pantang menyerah dan budaya inovasi yang terus ditanamkan, TI Polinema siap melangkah 
-            lebih jauh. Prestasi di KMIPN 2025 bukanlah akhir, melainkan awal dari perjalanan panjang menuju 
-            pencapaian-pencapaian yang lebih besar di masa depan.
-        </p>
+              otherBerita.forEach(berita => {
+                  const card = document.createElement('a');
+                  card.href = `isi_berita.html?id=${berita.id_berita}`;
+                  card.className = 'card';
+                  card.innerHTML = `
+                      <span>${berita.judul.length > 100 ? berita.judul.substring(0, 100) + '...' : berita.judul}</span>
+                      <i class="fa-solid fa-chevron-right arrow-icon"></i>
+                  `;
+                  sidebar.appendChild(card);
+              });
 
-    </div>
+          } catch (error) {
+              console.error('Error loading sidebar:', error);
+              sidebar.innerHTML = '<p class="text-muted small">Gagal memuat berita terbaru.</p>';
+          }
+      }
 
-    <!-- ===== SIDEBAR ===== -->
-    <aside class="sidebar">
-        <h3>Berita Terbaru</h3>
-
-        <a href="#" class="card">
-            <span>Jurusan Teknologi Informasi melaksanakan kegiatan dengan tema “AI Ready ASEAN untuk Siswa”</span>
-            <i class="fa-solid fa-chevron-right arrow-icon"></i>
-        </a>
-
-        <a href="#" class="card">
-            <span>Jurusan Teknologi Informatika Politeknik Negeri Malang menerima kunjungan dari SMA Negeri 3 Kota Malang</span>
-            <i class="fa-solid fa-chevron-right arrow-icon"></i>
-        </a>
-
-        <a href="#" class="card">
-            <span>Politeknik Negeri Malang Tampilkan Inovasi Digital di Indonesia Creative Cities Network (ICCN) 2025</span>
-            <i class="fa-solid fa-chevron-right arrow-icon"></i>
-        </a>
-
-        <a href="#" class="card">
-            <span>Kolaborasi MGMP Informatika dalam Pengembangan Kompetensi Guru</span>
-            <i class="fa-solid fa-chevron-right arrow-icon"></i>
-        </a>
-
-        <a href="#" class="card">
-            <span>Jurusan Teknologi Informasi melaksanakan kegiatan Yudisium Mid Semester Ganjil</span>
-            <i class="fa-solid fa-chevron-right arrow-icon"></i>
-        </a>
-
-    </aside>
-
-</div>
-
-<div id="footer"></div>
-
-<script src="../Assets/Javascript/HeaderFooter.js"></script>
-
+      // Load saat halaman dimuat
+      document.addEventListener('DOMContentLoaded', function() {
+          loadBeritaDetail();
+          loadBeritaTerbaru();
+      });
+  </script>
 </body>
 </html>
