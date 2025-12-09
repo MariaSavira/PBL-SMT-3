@@ -33,8 +33,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     const content = document.getElementById("content");
     const logo = document.getElementById("sidebar-toggle");
 
-    console.log(logo);
-
     logo.addEventListener("click", () => {
         // sidebar.classList.toggle("sidebar");
         sidebar.classList.toggle("collapsed");
@@ -51,6 +49,5 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (a.getAttribute("href") === currentPage.split("/")) {
             a.classList.add("active");
         }
-        console.log(link);
     });
 });
