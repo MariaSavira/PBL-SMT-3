@@ -52,7 +52,7 @@
                     keunggulan, dan
                     informasi penting lainnya.
                 </p>
-                <a href="Anggota.html" class="btn-profil">Cari Tahu Lebih
+                <a href="Anggota.php" class="btn-profil">Cari Tahu Lebih
                     Lanjut</a>
             </div>
         </div>
@@ -106,7 +106,7 @@
         </div>
 
         <div class="cta-container" style="margin-bottom: 0px">
-            <a href="Riset.html" class="cta-btn">Lihat lebih banyak</a>
+            <a href="Riset.php" class="cta-btn">Lihat lebih banyak</a>
         </div>
     </div>
 
@@ -212,7 +212,7 @@
                 </div>
 
                 <div class="cta-container" style="margin-bottom: 100px">
-                    <a href="Berita.html" class="cta-btn">Lihat lebih
+                    <a href="Berita.php" class="cta-btn">Lihat lebih
                         banyak</a>
                 </div>
                 <!-- </div> -->
@@ -243,9 +243,9 @@
                     alt="galeri 3">
             </div>
 
-            <div class="cta-container" style="margin-bottom: 50px">
-                <a href class="cta-btn">Lihat lebih banyak</a>
-            </div>
+            <div class="cta-container" style="margin-bottom: 100px">
+                    <a href="Galeri.php" class="cta-btn">Lihat lebih banyak</a>
+                </div>
         </div>
     </section>
 
@@ -262,7 +262,7 @@
                     serta penerapan teknologi analitik.
                 </p>
                 <div class="cta-container" style="margin-bottom: 50px">
-                    <a href="KontakKami.html" class="cta-btn">Bergabung
+                    <a href="KontakKami.php" class="cta-btn">Bergabung
                         Dengan Kami</a>
                 </div>
             </div>

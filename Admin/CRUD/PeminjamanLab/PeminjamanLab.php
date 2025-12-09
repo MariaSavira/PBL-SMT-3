@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '/../koneksi.php';
+require __DIR__ . '../../../Koneksi/KoneksiValia.php';
 
 $limit = 6;
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
