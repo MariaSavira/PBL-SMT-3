@@ -251,7 +251,7 @@
                          onerror="this.src='../Assets/Image/Galeri-Berita/default.jpg'" />
                     <div class="highlight-text">
                         <h2>${berita.judul}</h2>
-                        <a href="isi_berita.html?id=${berita.id_berita}" class="btn-primary">Baca Selengkapnya</a>
+                        <a href="isi_berita.php?id=${berita.id_berita}" class="btn-primary">Baca Selengkapnya</a>
                     </div>
                 `;
                 
@@ -310,7 +310,7 @@
                     const card = document.createElement('div');
                     card.className = 'berita-card';
                     card.style.cursor = 'pointer';
-                    card.onclick = () => window.location.href = `isi_berita.html?id=${berita.id_berita}`;
+                    card.onclick = () => window.location.href = `isi_berita.php?id=${berita.id_berita}`;
                     
                     card.innerHTML = `
                         <div class="img" style="background-image: url('${gambarUrl}');"></div>

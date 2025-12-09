@@ -214,7 +214,7 @@
                       <i class="fas fa-exclamation-triangle"></i>
                       <h4>ID Berita Tidak Ditemukan</h4>
                       <p>Silakan kembali ke halaman berita.</p>
-                      <a href="Berita.html" class="btn-back">
+                      <a href="Berita.php" class="btn-back">
                           <i class="fas fa-arrow-left me-2"></i>Kembali ke Berita
                       </a>
                   </div>
@@ -232,7 +232,7 @@
                           <i class="fas fa-exclamation-circle"></i>
                           <h4>Berita Tidak Ditemukan</h4>
                           <p>${result.message || 'Berita yang Anda cari tidak tersedia.'}</p>
-                          <a href="Berita.html" class="btn-back">
+                          <a href="Berita.php" class="btn-back">
                               <i class="fas fa-arrow-left me-2"></i>Kembali ke Berita
                           </a>
                       </div>
@@ -271,7 +271,7 @@
                       <i class="fas fa-exclamation-triangle"></i>
                       <h4>Terjadi Kesalahan</h4>
                       <p>Gagal memuat berita. Silakan coba lagi nanti.</p>
-                      <a href="Berita.html" class="btn-back">
+                      <a href="Berita.php" class="btn-back">
                           <i class="fas fa-arrow-left me-2"></i>Kembali ke Berita
                       </a>
                   </div>
@@ -307,7 +307,7 @@
 
               otherBerita.forEach(berita => {
                   const card = document.createElement('a');
-                  card.href = `isi_berita.html?id=${berita.id_berita}`;
+                  card.href = `isi_berita.php?id=${berita.id_berita}`;
                   card.className = 'card';
                   card.innerHTML = `
                       <span>${berita.judul.length > 100 ? berita.judul.substring(0, 100) + '...' : berita.judul}</span>
