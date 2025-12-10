@@ -1,5 +1,5 @@
 <?php
-require '../admin/CRUD/koneksi.php';
+require __DIR__ . '/../Admin/Koneksi/KoneksiValia.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -35,24 +35,22 @@ try {
         ':keperluan'     => $keperluan
     ]);
 
-    // ============================================
-    //  KIRIM EMAIL KE ADMIN
-    // ============================================
+    //      KIRIM EMAIL KE ADMIN 
     $mail = new PHPMailer(true);
 
     try {
-        // Setting SMTP
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'nabilaputrivaliandra29@gmail.com';
-        $mail->Password   = 'ylyn qkic lyvu fzla'; // APP PASSWORD
+        $mail->Username   = 'rakhmatariyantodummymail@gmail.com';
+        $mail->Password   = 'sezb qgne mzzn rzus'; // APP PASSWORD TANPA SPASI
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
 
         // Pengirim & penerima
-        $mail->setFrom('nabilaputrivaliandra29@gmail.com', 'Notifikasi Peminjaman Lab');
-        $mail->addAddress('nabilaputrivaliandra29@gmail.com'); // admin email
+        $mail->Username = 'rakhmatariyantodummymail@gmail.com';
+        $mail->setFrom('rakhmatariyantodummymail@gmail.com', 'Notifikasi Peminjaman Lab');
+        $mail->addAddress('rakhmatariyantodummymail@gmail.com'); 
 
         // Isi email
         $mail->isHTML(true);
@@ -69,9 +67,12 @@ try {
         $mail->send();
 
     } catch (Exception $e) {
-        // Kalau email gagal, tetap lanjut (tidak batalkan peminjaman)
-        // Tapi kalau mau lihat error: uncomment baris ini
-        // echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+        // INI WAJIB → tampilin error biar keliatan kenapa gagal
+        echo json_encode([
+            'status' => 'error_email',
+            'message' => $mail->ErrorInfo
+        ]);
+        exit;
     }
 
     echo json_encode(['status' => 'success']);
