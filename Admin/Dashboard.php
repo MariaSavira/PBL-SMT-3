@@ -5,13 +5,25 @@ require __DIR__ . '/CRUD/koneksi.php';
 // ----------------------------
 // INISIALISASI NILAI STATISTIK
 // ----------------------------
-$totalArtikel         = 20; // sementara masih dummy
-$totalAnggotaAktif    = 8;  // sementara masih dummy
-$totalAjuanPeminjaman = 0;  // ini dari database
+$totalArtikel         = 0;  // akan diisi dari tabel berita
+$totalAnggotaAktif    = 0;  // akan diisi dari tabel anggotalab
+$totalAjuanPeminjaman = 0;  // akan diisi dari tabel peminjaman_lab
 
 // inisialisasi array grafik
 $labelsBulan = [];
 $dataBulan   = [];
+
+// ----------------------------
+// TOTAL ARTIKEL DARI TABEL berita
+// ----------------------------
+// kalau mau hanya yang published, bisa ubah jadi: WHERE status = 'published'
+try {
+    $resultArtikel = q("SELECT COUNT(*) AS total FROM berita");
+    $rowArtikel    = pg_fetch_assoc($resultArtikel);
+    $totalArtikel  = (int)($rowArtikel['total'] ?? 0);
+} catch (Throwable $e) {
+    $totalArtikel = 0;
+}
 
 // ----------------------------
 // TOTAL AJUAN PEMINJAMAN LAB
@@ -22,6 +34,21 @@ try {
     $totalAjuanPeminjaman = (int)($rowAjuan['total'] ?? 0);
 } catch (Throwable $e) {
     $totalAjuanPeminjaman = 0;
+}
+
+// ----------------------------
+// TOTAL ANGGOTA AKTIF DARI TABEL anggotalab
+// ----------------------------
+try {
+    $resultAnggota = q("
+        SELECT COUNT(*) AS total
+        FROM anggotalab
+        WHERE status = TRUE
+    ");
+    $rowAnggota        = pg_fetch_assoc($resultAnggota);
+    $totalAnggotaAktif = (int)($rowAnggota['total'] ?? 0);
+} catch (Throwable $e) {
+    $totalAnggotaAktif = 0;
 }
 
 // ----------------------------
@@ -55,6 +82,100 @@ try {
     $labelsBulan = [];
     $dataBulan   = [];
 }
+
+// ----------------------------
+// ANGGOTA TERBARU DARI TABEL anggotalab
+// ----------------------------
+$anggotaTerbaru = null;
+
+try {
+    // kita ambil 1 anggota dengan status = TRUE, urut dari created_at paling baru
+    $sqlAnggota = "
+        SELECT 
+            id_anggota,
+            nama,
+            jabatan,
+            foto,
+            deskripsi,
+            status,
+            created_at
+        FROM anggotalab
+        WHERE status = TRUE
+        ORDER BY created_at DESC, id_anggota DESC
+        LIMIT 1;
+    ";
+
+    $resultAnggota  = q($sqlAnggota);
+    $anggotaTerbaru = pg_fetch_assoc($resultAnggota) ?: null;
+} catch (Throwable $e) {
+    $anggotaTerbaru = null;
+}
+
+// ----------------------------
+// NOTIF AJUAN TERBARU (PENDING SAJA, TANPA dibaca_admin)
+// ----------------------------
+$notifAjuan      = [];
+$jumlahNotifBaru = 0;
+
+try {
+    // hitung jumlah ajuan pending (untuk badge merah)
+    $qNotifCount = q("
+        SELECT COUNT(*) AS total 
+        FROM peminjaman_lab 
+        WHERE status = 'pending'
+    ");
+    $rowNotif        = pg_fetch_assoc($qNotifCount);
+    $jumlahNotifBaru = (int)($rowNotif['total'] ?? 0);
+
+    // ambil maksimal 5 ajuan pending terbaru (untuk dropdown)
+    $qNotifList = q("
+        SELECT 
+            id_peminjaman,
+            nama_peminjam,
+            keperluan,
+            tanggal_pengajuan,
+            status
+        FROM peminjaman_lab
+        WHERE status = 'pending'
+        ORDER BY tanggal_pengajuan DESC, id_peminjaman DESC
+        LIMIT 5;
+    ");
+
+    while ($row = pg_fetch_assoc($qNotifList)) {
+        $notifAjuan[] = $row;
+    }
+} catch (Throwable $e) {
+    $jumlahNotifBaru = 0;
+    $notifAjuan      = [];
+}
+
+// ----------------------------
+// PENGUMUMAN TERBARU DARI TABEL pengumuman
+// ----------------------------
+$pengumumanTerbaru = [];
+
+try {
+    // ambil maks 3 pengumuman aktif, terbaru dari tanggal_terbit
+    $sqlPengumuman = "
+        SELECT 
+            id_pengumuman,
+            isi,
+            tanggal_terbit,
+            uploader,
+            status
+        FROM pengumuman
+        WHERE status = 'Aktif'
+        ORDER BY tanggal_terbit DESC, created_at DESC, id_pengumuman DESC
+        LIMIT 3;
+    ";
+
+    $resultPengumuman = q($sqlPengumuman);
+    while ($row = pg_fetch_assoc($resultPengumuman)) {
+        $pengumumanTerbaru[] = $row;
+    }
+} catch (Throwable $e) {
+    $pengumumanTerbaru = [];
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -77,8 +198,6 @@ try {
     <script>
         window.peminjamanLabels = <?= json_encode($labelsBulan) ?>;
         window.peminjamanData   = <?= json_encode($dataBulan) ?>;
-
-        console.log("Data dari PHP:", window.peminjamanLabels, window.peminjamanData);
     </script>
 </head>
 <body>
@@ -97,34 +216,66 @@ try {
             </div>
 
             <div class="topbar-right">
+                <!-- SATU BARIS: NOTIF + KALENDER + AVATAR -->
                 <div class="topbar-icons">
-                    <button class="icon-circle"><i class="fa-regular fa-bell"></i></button>
-                    <div class="user-avatar"></div>
-                </div>
+                    <!-- NOTIF WRAPPER -->
+                    <div class="notif-wrapper">
+                        <button class="icon-circle" id="notifToggle">
+                            <i class="fa-regular fa-bell"></i>
 
-                <div class="topbar-filter">
-                    <!-- FILTER -->
-                    <div class="filter-wrapper">
-                        <button class="btn-filter" id="filterToggle">
-                            <span id="filterLabel">Bulan Ini</span>
-                            <i class="fa-solid fa-chevron-down"></i>
+                            <?php if ($jumlahNotifBaru > 0): ?>
+                                <span class="notif-badge">
+                                    <?= $jumlahNotifBaru ?>
+                                </span>
+                            <?php endif; ?>
                         </button>
 
-                        <div class="filter-menu" id="filterMenu">
-                            <button type="button" data-range="week">Minggu Ini</button>
-                            <button type="button" data-range="month" class="active">Bulan Ini</button>
-                            <button type="button" data-range="year">Tahun Ini</button>
+                        <!-- DROPDOWN NOTIFIKASI -->
+                        <div class="notif-dropdown" id="notifMenu">
+                            <div class="notif-header">
+                                <span>Notifications</span>
+                                <span class="notif-total">
+                                    <?= count($notifAjuan) ?>
+                                </span>
+                            </div>
+
+                            <div class="notif-list">
+                                <?php if (empty($notifAjuan)): ?>
+                                    <p style="padding:10px 18px;font-size:12px;color:#6b7280;">
+                                        Belum ada ajuan pending.
+                                    </p>
+                                <?php else: ?>
+                                    <?php foreach ($notifAjuan as $n): ?>
+                                        <!-- TANPA kolom dibaca_admin, default kita kasih class unread -->
+                                        <div class="notif-item unread">
+                                            <div class="notif-icon">
+                                                <i class="fa-regular fa-envelope"></i>
+                                            </div>
+                                            <div class="notif-content">
+                                                <p class="notif-title">
+                                                    <?= htmlspecialchars($n['nama_peminjam']) ?>
+                                                    <span class="notif-link">
+                                                        <?= htmlspecialchars($n['keperluan']) ?>
+                                                    </span>
+                                                </p>
+                                                <p class="notif-time">
+                                                    <?= date('d M Y', strtotime($n['tanggal_pengajuan'])) ?>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- KALENDER -->
-                    <button class="icon-circle small-icon" id="calendarButton">
-                        <i class="fa-regular fa-calendar-days"></i>
-                    </button>
-
-                    <input type="date" id="calendarInput"
-                           style="opacity:0;pointer-events:none;position:absolute;top:100%;right:0;width:0;height:0;">
-                </div>
+                    <!-- KALENDER DI SAMPING LONCENG -->
+                    <div class="calendar-wrapper">
+                        <button class="icon-circle small-icon" id="calendarButton">
+                            <i class="fa-regular fa-calendar-days"></i>
+                        </button>
+                        <input type="date" id="calendarInput" class="calendar-input-hidden">
+                    </div>
             </div>
         </header>
 
@@ -154,36 +305,79 @@ try {
                 <h3 class="section-title">Anggota Terbaru</h3>
 
                 <div class="card">
-                    <div class="member-card">
-                        <div class="member-info">
-                            <div class="member-avatar"></div>
+                    <?php if (!$anggotaTerbaru): ?>
 
-                            <div class="member-text">
-                                <h5>Maria Savira</h5>
-                                <p>Asisten Lab</p>
+                        <p class="empty-text" style="font-size:14px;color:#6b7280;">
+                            Belum ada data anggota terbaru.
+                        </p>
 
-                                <div class="member-tags">
-                                    <span class="tag-pill">IT Governance</span>
-                                    <span class="tag-pill">Data Analytics</span>
+                    <?php else: ?>
+                        <?php
+                        // kita pakai kolom deskripsi sebagai list keahlian, dipisah koma
+                        $tags = [];
+                        if (!empty($anggotaTerbaru['deskripsi'])) {
+                            $tags = array_filter(array_map('trim', explode(',', $anggotaTerbaru['deskripsi'])));
+                        }
+
+                        // path foto, kalau di DB cuma nama file, bisa tambahkan folder di depan
+                        $fotoUrl = '';
+                        if (!empty($anggotaTerbaru['foto'])) {
+                            $fotoUrl = '../Assets/Image/Anggota/' . $anggotaTerbaru['foto'];
+                        }
+                        ?>
+                        <div class="member-card" data-id="<?= htmlspecialchars($anggotaTerbaru['id_anggota']) ?>">
+                            <div class="member-info">
+                                <div class="member-avatar">
+                                    <?php if ($fotoUrl): ?>
+                                        <img src="<?= htmlspecialchars($fotoUrl) ?>"
+                                             alt="Foto <?= htmlspecialchars($anggotaTerbaru['nama']) ?>">
+                                    <?php endif; ?>
+                                </div>
+
+                                <div class="member-text">
+                                    <h5><?= htmlspecialchars($anggotaTerbaru['nama']) ?></h5>
+                                    <p><?= htmlspecialchars($anggotaTerbaru['jabatan']) ?></p>
+
+                                    <div class="member-tags">
+                                        <?php if (!empty($tags)): ?>
+                                            <?php foreach ($tags as $tag): ?>
+                                                <span class="tag-pill"><?= htmlspecialchars($tag) ?></span>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <span class="tag-pill">Belum ada bidang</span>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="member-actions">
-                            <button class="btn-icon btn-delete"><i class="fa-solid fa-trash"></i></button>
-                            <button class="btn-icon btn-edit"><i class="fa-solid fa-pen"></i></button>
+                            <div class="member-actions">
+                                <!-- HAPUS -->
+                                <a class="btn-icon btn-delete"
+                                   href="HapusAnggota.php?id=<?= urlencode($anggotaTerbaru['id_anggota']) ?>"
+                                   onclick="return confirm('Yakin ingin menghapus anggota ini?');"
+                                   title="Hapus anggota">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+
+                                <!-- EDIT -->
+                                <a class="btn-icon btn-edit"
+                                   href="EditAnggota.php?id=<?= urlencode($anggotaTerbaru['id_anggota']) ?>"
+                                   title="Edit anggota">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    <?php endif; ?>
                 </div>
             </div>
 
-            <!-- AJUAN TERBARU -->
+            <!-- AJUAN TERBARU (CARD BESAR DI KANAN) -->
             <div class="ajuan-section">
                 <div class="card card-ajuan">
                     <h3 class="card-title-center">Ajuan Terbaru</h3>
 
                     <?php
-                    // Ambil SEMUA ajuan berstatus pending (tanpa LIMIT)
+                    // Ambil SEMUA ajuan berstatus pending (tanpa LIMIT) untuk card kanan
                     $ajuanPending = [];
 
                     try {
@@ -218,9 +412,7 @@ try {
                             Ajuan peminjaman terbaru yang perlu ditinjau:
                         </p>
 
-                        <!-- AREA SCROLL
-                             Tinggi kira-kira cukup untuk ±5 item,
-                             sisanya bisa di-scroll -->
+                        <!-- AREA SCROLL -->
                         <div style="overflow-y:auto; padding-right:6px; max-height:340px;">
 
                             <?php foreach ($ajuanPending as $ajuan): ?>
@@ -267,9 +459,27 @@ try {
                         <h3 class="section-title">Pengumuman Terbaru</h3>
 
                         <div class="card pengumuman-card">
-                            <p class="empty-text" style="font-size:14px;color:#6b7280;">
-                                Belum ada pengumuman terbaru.
-                            </p>
+                            <?php if (empty($pengumumanTerbaru)): ?>
+                                <p class="empty-text" style="font-size:14px;color:#6b7280;">
+                                    Belum ada pengumuman terbaru.
+                                </p>
+                            <?php else: ?>
+                                <?php foreach ($pengumumanTerbaru as $p): ?>
+                                    <div style="margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid #eef2ff;">
+                                        <p style="font-size:13px;color:#111827;margin-bottom:4px;">
+                                            <?= nl2br(htmlspecialchars($p['isi'])) ?>
+                                        </p>
+                                        <div style="font-size:11px;color:#6b7280;display:flex;gap:8px;flex-wrap:wrap;">
+                                            <span>
+                                                <?= date('d M Y', strtotime($p['tanggal_terbit'])) ?>
+                                            </span>
+                                            <?php if (!empty($p['uploader'])): ?>
+                                                <span>• Oleh <?= htmlspecialchars($p['uploader']) ?></span>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </div>
                     </div>
 
@@ -291,8 +501,8 @@ try {
     </main>
 </div>
 
-<!-- tambahkan ?v=3 supaya browser ambil file JS terbaru (anti cache) -->
-<script src="../Assets/Javascript/Admin/Dashboard.js?v=3"></script>
+<!-- ?v=4 supaya browser ambil file JS terbaru (anti cache) -->
+<script src="../Assets/Javascript/Admin/Dashboard.js?v=4"></script>
 
 </body>
 </html>
