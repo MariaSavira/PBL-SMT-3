@@ -10,172 +10,138 @@
     $id_publikasi = "";
     $judul = "";
     $jenis = "Buku";
+    $abstrak = "";
+    $link = "";
+    $tanggal_terbit = "";
     $author = "";
     $id_riset = "";
     $status = "Aktif";
     $error_message = "";
-
-    // ================== AMBIL BIDANG RISET ==================
+    
     $riset_options = [];
-    $query = "
-        SELECT id_riset, nama_bidang_riset 
-        FROM bidangriset 
-        ORDER BY nama_bidang_riset
-    ";
-
-    $res_riset = pg_query($conn, $query);
+    $res_riset = pg_query($conn, "SELECT id_riset, nama_bidang_riset FROM bidangriset ORDER BY nama_bidang_riset");
 
     if ($res_riset) {
         while ($row = pg_fetch_assoc($res_riset)) {
             $riset_options[$row['id_riset']] = $row['nama_bidang_riset'];
         }
-    } else {
-        $error_message = "Gagal mengambil data Bidang Riset: " . pg_last_error($conn);
     }
 
-    // ================== MODE EDIT ==================
     if ($editMode) {
-        $res = pg_query_params(
-            $conn,
-            "SELECT judul, jenis, author, id_riset, status FROM publikasi WHERE id_publikasi = $1",
-            [$id]
-        );
+
+        $sql = "SELECT judul, jenis, abstrak, link, tanggal_terbit, author, id_riset, status 
+                FROM publikasi WHERE id_publikasi=$1";
+        $res = pg_query_params($conn, $sql, [$id]);
 
         if ($res && pg_num_rows($res) > 0) {
-            $row = pg_fetch_assoc($res);
-            $id_publikasi = $id;
-            $judul        = $row['judul'];
-            $jenis        = $row['jenis'];
 
-            // author JSONB -> string "a, b, c"
+            $row = pg_fetch_assoc($res);
+
+            $id_publikasi    = $id;
+            $judul           = $row['judul'];
+            $jenis           = $row['jenis'];
+            $abstrak         = $row['abstrak'];
+            $link            = $row['link'];
+            $tanggal_terbit  = $row['tanggal_terbit'];
+
+            
             $author_raw = $row['author'];
-            if (!empty($author_raw)) {
-                $author_decoded = json_decode($author_raw, true);
-                $author = is_array($author_decoded) ? implode(", ", $author_decoded) : $author_raw;
+            if ($author_raw) {
+                $decoded = json_decode($author_raw, true);
+                $author = is_array($decoded) ? implode(', ', $decoded) : $author_raw;
             }
 
             $id_riset = $row['id_riset'];
+            $status   = ($row['status'] === 't' ? "Aktif" : "Draft");
 
-            // status boolean t/f -> Aktif/Draft
-            $status = ($row['status'] === 't' || $row['status'] === 'true' || $row['status'] === true)
-                ? 'Aktif'
-                : 'Draft';
         } else {
-            if (!$res) {
-                $error_message = "Error query publikasi: " . pg_last_error($conn);
-            } else {
-                $error_message = "Data Publikasi tidak ditemukan.";
-            }
+            $error_message = "Data publikasi tidak ditemukan.";
         }
     }
-
-    // ================== PROSES SUBMIT ==================
+    
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $judul_input    = trim($_POST['judul'] ?? '');
-        $jenis_input    = trim($_POST['jenis'] ?? '');
-        $author_input   = trim($_POST['author'] ?? '');
+   
+        $judul_input   = trim($_POST['judul'] ?? '');
+        $jenis_input   = trim($_POST['jenis'] ?? '');
+        $abstrak_input = trim($_POST['abstrak'] ?? '');
+        $link_input    = trim($_POST['link'] ?? '');
+        $tanggal_input = $_POST['tanggal_terbit'] ?? null;
+        $author_input  = trim($_POST['author'] ?? '');
         $id_riset_input = (int)($_POST['id_riset'] ?? 0);
-        $status_input   = trim($_POST['status'] ?? '');
-
-        // set ulang ke variabel tampilan
-        $judul    = $judul_input;
-        $jenis    = $jenis_input;
-        $author   = $author_input;
+        $status_input   = trim($_POST['status'] ?? 'Aktif');
+        
+        $judul  = $judul_input;
+        $jenis  = $jenis_input;
+        $abstrak = $abstrak_input;
+        $link   = $link_input;
+        $tanggal_terbit = $tanggal_input;
+        $author = $author_input;
         $id_riset = $id_riset_input;
-        $status   = $status_input;
+        $status = $status_input;
 
-        // VALIDASI
-        $required_fields = [
-            'judul'    => $judul_input,
-            'jenis'    => $jenis_input,
-            'author'   => $author_input,
-            'id_riset' => $id_riset_input,
-            'status'   => $status_input,
-        ];
+        $missing = [];
 
-        $missing_fields = [];
-        foreach ($required_fields as $field_name => $field_value) {
-            if ($field_name === 'id_riset') {
-                if ($field_value <= 0 || !array_key_exists($field_value, $riset_options)) {
-                    $missing_fields[] = 'Bidang Riset';
-                }
-                continue;
-            }
+        if ($judul_input === "") $missing[] = "Judul";
+        if ($jenis_input === "") $missing[] = "Jenis Publikasi";
+        if ($author_input === "") $missing[] = "Penulis";
+        if ($id_riset_input <= 0) $missing[] = "Bidang Riset";
 
-            if (empty($field_value)) {
-                $display_name = match ($field_name) {
-                    'judul'  => 'Judul',
-                    'jenis'  => 'Jenis Publikasi',
-                    'author' => 'Penulis',
-                    'status' => 'Status',
-                    default  => $field_name,
-                };
-                $missing_fields[] = $display_name;
-            }
-        }
-
-        $final_error_message = '';
-        if (!empty($missing_fields)) {
-            $final_error_message .= "Kolom berikut wajib diisi: " . implode(', ', $missing_fields) . ".";
-        }
-
-        if (!empty($final_error_message)) {
-            $error_message = $final_error_message;
+        if (!empty($missing)) {
+            $error_message = "Kolom wajib diisi: " . implode(', ', $missing);
         } else {
-            // KONVERSI AUTHOR KE JSON ARRAY
-            $authors_array = array_filter(
-                array_map('trim', explode(',', $author_input)),
-                fn($v) => $v !== ''
-            );
-            $author_json   = json_encode($authors_array);
+            
+            $author_json = json_encode(array_map("trim", explode(",", $author_input)));
 
-            $status_db = ($status_input === 'Aktif') ? 't' : 'f';
+            $status_db = ($status_input === "Aktif" ? 't' : 'f');
 
             if ($editMode) {
-                $id_hidden = (int)($_POST['id_publikasi_hidden'] ?? 0);
-
+                
                 $sql = "
                     UPDATE publikasi SET
-                        judul    = $1,
-                        jenis    = $2,
-                        author   = $3,
-                        id_riset = $4,
-                        status   = $5
-                    WHERE id_publikasi = $6
+                        judul=$1, jenis=$2, abstrak=$3, link=$4,
+                        tanggal_terbit=$5, author=$6, id_riset=$7, status=$8
+                    WHERE id_publikasi=$9
                 ";
 
                 $params = [
                     $judul_input,
                     $jenis_input,
+                    $abstrak_input,
+                    $link_input,
+                    $tanggal_input,
                     $author_json,
                     $id_riset_input,
                     $status_db,
-                    $id_hidden
+                    $id_publikasi
                 ];
 
-                $run = pg_query_params($conn, $sql, $params);
             } else {
+                
                 $sql = "
-                    INSERT INTO publikasi (judul, jenis, author, id_riset, status)
-                    VALUES ($1, $2, $3, $4, $5)
+                    INSERT INTO publikasi 
+                        (judul, jenis, abstrak, link, tanggal_terbit, author, id_riset, status)
+                    VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
                 ";
 
                 $params = [
                     $judul_input,
                     $jenis_input,
+                    $abstrak_input,
+                    $link_input,
+                    $tanggal_input,
                     $author_json,
                     $id_riset_input,
                     $status_db
                 ];
-
-                $run = pg_query_params($conn, $sql, $params);
             }
 
-            if (!$run) {
-                $error_message = 'QUERY ERROR: ' . pg_last_error($conn);
-            } else {
+            $run = pg_query_params($conn, $sql, $params);
+
+            if ($run) {
                 header("Location: IndexPublikasi.php");
                 exit;
+            } else {
+                $error_message = "QUERY ERROR: " . pg_last_error($conn);
             }
         }
     }
@@ -186,16 +152,18 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $editMode ? "Edit Publikasi" : "Tambah Publikasi"; ?></title>
     <link rel="stylesheet" href="/PBL-SMT-3/Assets/Css/Admin/FormPublikasi.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
+        rel="stylesheet"
+    >
     <link rel="icon" type="images/x-icon"
           href="../../../Assets/Image/Logo/Logo Without Text.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
@@ -285,6 +253,32 @@
                             <small class="helper-text">Pisahkan dengan koma jika lebih dari satu penulis</small>
                         </div>
 
+                        <!-- ABSTRAK -->
+                        <div class="field-group">
+                            <label for="abstrak">Abstrak</label>
+                            <textarea name="abstrak" class="field-input" rows="4"
+                                placeholder="Masukkan abstrak publikasi"><?= htmlspecialchars($abstrak) ?></textarea>
+                        </div>
+
+                        <!-- LINK PUBLIKASI -->
+                        <div class="field-group">
+                            <label for="link">Link Publikasi</label>
+                            <input type="url"
+                                name="link"
+                                class="field-input"
+                                placeholder="https://contoh.com/publikasi"
+                                value="<?= htmlspecialchars($link) ?>">
+                        </div>
+
+                        <!-- TANGGAL TERBIT -->
+                        <div class="field-group">
+                            <label for="tanggal_terbit">Tanggal Terbit</label>
+                            <input type="date"
+                                name="tanggal_terbit"
+                                class="field-input"
+                                value="<?= htmlspecialchars($tanggal_terbit) ?>">
+                        </div>
+                        
                         <!-- BIDANG RISET (DROPDOWN CUSTOM) -->
                         <div class="field-group">
                             <label for="id_riset">Bidang Riset</label>

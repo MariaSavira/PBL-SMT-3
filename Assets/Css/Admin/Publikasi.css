@@ -428,3 +428,99 @@ tbody tr:hover {
     border: 1px solid #facc15;
     color: #92400e;
 }
+
+.action-cell {
+    position: relative;
+    text-align: right;
+    width: 1%;
+    white-space: nowrap;
+}
+
+.action-toggle {
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    border: none;
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: 0.15s ease;
+}
+
+.action-toggle i {
+    font-size: 16px;
+}
+
+.action-toggle:hover {
+    background: #eef2ff;
+    color: #1f4fc7;
+}
+
+.action-menu {
+    position: absolute;
+    top: 50%;
+    right: -10px;
+    transform: translateY(20px);
+    min-width: 150px;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
+    padding: 6px 0;
+    display: none;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+.action-menu button {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #374151;
+}
+
+.action-menu.open {
+    display: block;
+}
+
+.action-item {
+    width: 100%;
+    padding: 8px 14px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-align: left;
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    color: #111827;
+    text-decoration: none;
+}
+
+.action-item i {
+    font-size: 13px;
+}
+
+.action-item:hover {
+    background: #eef2ff;
+    color: #1f4fc7;
+}
+
+.action-item.action-delete {
+    color: #dc2626;
+}
+
+.action-item.action-delete:hover {
+    background: #fee2e2;
+    color: #b91c1c;
+}

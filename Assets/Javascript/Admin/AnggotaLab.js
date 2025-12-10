@@ -85,7 +85,7 @@ document.querySelector('.delete-selection').addEventListener('click', () => {
     let ids = [...checked].map(c => c.value);
     let formBody = ids.map(id => `ids[]=${encodeURIComponent(id)}`).join("&");
 
-    fetch("hapuspeminjaman.php", {
+    fetch("DeleteAnggota.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"

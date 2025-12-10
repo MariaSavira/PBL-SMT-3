@@ -321,7 +321,12 @@
                         <?php $i = 1;
                         foreach ($rows as $row): ?>
                             <tr>
-                                <td><input type="checkbox" style="width: 15px; height: 15px;"></td>
+                                <td>
+                                    <input
+                                        type="checkbox"
+                                        class="row-check"
+                                        value="<?= htmlspecialchars($row['id_anggota']) ?>">
+                                </td>
                                 <td class="text"><?= htmlspecialchars($row["id_anggota"]) ?></td>
                                 <td class="text"><?= htmlspecialchars($row["nama"]) ?></td>
                                 <td>

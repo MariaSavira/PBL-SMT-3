@@ -8,14 +8,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Berita Laboratorium</title>
+  <title>Pengumuman Laboratorium</title>
   <link rel="stylesheet" href="../Assets/Css/isi_berita.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />  
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/x-icon" href="../Assets/Image/Logo/Logo Without Text.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
   <style>
-
+    /* Loading Skeleton */
     .skeleton {
         background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
         background-size: 200% 100%;
@@ -35,21 +35,9 @@
         margin-bottom: 20px;
     }
 
-    .skeleton-subtitle {
-        height: 25px;
-        width: 60%;
-        margin-bottom: 15px;
-    }
-
     .skeleton-meta {
         height: 20px;
         width: 40%;
-        margin-bottom: 20px;
-    }
-
-    .skeleton-img {
-        height: 400px;
-        width: 100%;
         margin-bottom: 20px;
     }
 
@@ -67,6 +55,7 @@
         margin-bottom: 15px;
     }
 
+    /* Error State */
     .error-state {
         background: #fee2e2;
         color: #991b1b;
@@ -98,58 +87,70 @@
         transform: translateY(-2px);
     }
 
-    .konten-berita {
+    .konten-pengumuman {
         line-height: 1.8;
         font-size: 16px;
         color: #2c3e50;
     }
 
-    .konten-berita p {
+    .konten-pengumuman p {
         margin-bottom: 20px;
     }
 
-    .konten-berita ul, 
-    .konten-berita ol {
+    .konten-pengumuman ul, 
+    .konten-pengumuman ol {
         margin-bottom: 20px;
         padding-left: 30px;
     }
 
-    .konten-berita li {
+    .konten-pengumuman li {
         margin-bottom: 10px;
+    }
+
+    /* Badge untuk pengumuman */
+    .pengumuman-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
   <div id="header"></div>
  
+  <!-- HERO SECTION -->
   <section class="hero">
       <img src="../Assets/Image/Galeri-Berita/Heading.png" alt="Hero">
       <div class="hero-overlay"></div>
-      <h1>Berita Laboratorium</h1>
+      <h1>Pengumuman Laboratorium</h1>
       <p>
-          Ikuti perkembangan terbaru seputar kegiatan laboratorium, pengumuman penting, 
-          dan agenda riset yang sedang berjalan.
+          Informasi penting dan pengumuman terkini untuk seluruh anggota laboratorium
       </p>
   </section>
 
+  <!-- MAIN CONTENT -->
   <div class="container">
-
-      <div class="content" id="berita-content">
-
+      <!-- KONTEN PENGUMUMAN -->
+      <div class="content" id="pengumuman-content">
+          <!-- Skeleton Loading -->
           <div class="skeleton skeleton-title"></div>
-          <div class="skeleton skeleton-subtitle"></div>
           <div class="skeleton skeleton-meta"></div>
-          <div class="skeleton skeleton-img"></div>
           <div class="skeleton skeleton-text"></div>
           <div class="skeleton skeleton-text"></div>
           <div class="skeleton skeleton-text short"></div>
           <div class="skeleton skeleton-text"></div>
       </div>
 
+      <!-- SIDEBAR -->
       <aside class="sidebar">
-          <h3>Berita Terbaru</h3>
-          <div id="berita-sidebar">
-
+          <h3>Pengumuman Terbaru</h3>
+          <div id="pengumuman-sidebar">
+              <!-- Skeleton Loading -->
               <div class="skeleton sidebar-skeleton"></div>
               <div class="skeleton sidebar-skeleton"></div>
               <div class="skeleton sidebar-skeleton"></div>
@@ -161,7 +162,7 @@
   <script src="../Assets/Javascript/HeaderFooter.js"></script>
   
   <script>
-
+      // Fungsi format tanggal lengkap
       function formatTanggalLengkap(dateString) {
           const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
                         'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
@@ -175,18 +176,22 @@
           return `${day} ${month} ${year} | ${hours}:${minutes} WIB`;
       }
 
-      function getBeritaId() {
+      // Get ID dari URL
+      function getPengumumanId() {
           const urlParams = new URLSearchParams(window.location.search);
           return urlParams.get('id');
       }
 
-      function formatIsiBerita(isi) {
+      // Format isi pengumuman
+      function formatIsiPengumuman(isi) {
           if (!isi) return '';
-
+          
+          // Jika sudah ada HTML tags, kembalikan apa adanya
           if (isi.includes('<p>') || isi.includes('<ul>') || isi.includes('<ol>')) {
               return isi;
           }
-
+          
+          // Jika plain text, convert newlines to <br>
           return isi.split('\n\n').map(p => {
               if (p.trim()) {
                   return `<p>${p.replace(/\n/g, '<br>')}</p>`;
@@ -195,15 +200,16 @@
           }).join('');
       }
 
-      async function loadBeritaDetail() {
-          const id = getBeritaId();
-          const contentDiv = document.getElementById('berita-content');
+      // Load pengumuman detail
+      async function loadPengumumanDetail() {
+          const id = getPengumumanId();
+          const contentDiv = document.getElementById('pengumuman-content');
           
           if (!id) {
               contentDiv.innerHTML = `
                   <div class="error-state">
                       <i class="fas fa-exclamation-triangle"></i>
-                      <h4>ID Berita Tidak Ditemukan</h4>
+                      <h4>ID Pengumuman Tidak Ditemukan</h4>
                       <p>Silakan kembali ke halaman berita.</p>
                       <a href="Berita.php" class="btn-back">
                           <i class="fas fa-arrow-left me-2"></i>Kembali ke Berita
@@ -214,15 +220,15 @@
           }
 
           try {
-              const response = await fetch(`../Admin/CRUD/Berita_Lab/api_berita.php?id=${id}`);
+              const response = await fetch(`../Admin/CRUD/Pengumuman_Lab/proses_pengumuman.php?action=get_data`);
               const result = await response.json();
 
-              if (!result.success || !result.data) {
+              if (!result.success) {
                   contentDiv.innerHTML = `
                       <div class="error-state">
                           <i class="fas fa-exclamation-circle"></i>
-                          <h4>Berita Tidak Ditemukan</h4>
-                          <p>${result.message || 'Berita yang Anda cari tidak tersedia.'}</p>
+                          <h4>Pengumuman Tidak Ditemukan</h4>
+                          <p>${result.message || 'Pengumuman yang Anda cari tidak tersedia.'}</p>
                           <a href="Berita.php" class="btn-back">
                               <i class="fas fa-arrow-left me-2"></i>Kembali ke Berita
                           </a>
@@ -231,32 +237,38 @@
                   return;
               }
 
-              const berita = result.data;
+              // Cari pengumuman berdasarkan ID
+              const pengumuman = result.data.find(item => item.id_pengumuman == id);
+
+              if (!pengumuman) {
+                  contentDiv.innerHTML = `
+                      <div class="error-state">
+                          <i class="fas fa-exclamation-circle"></i>
+                          <h4>Pengumuman Tidak Ditemukan</h4>
+                          <p>Pengumuman yang Anda cari tidak tersedia.</p>
+                          <a href="Berita.php" class="btn-back">
+                              <i class="fas fa-arrow-left me-2"></i>Kembali ke Berita
+                          </a>
+                      </div>
+                  `;
+                  return;
+              }
 
               // Update title halaman
-              document.title = berita.judul + ' - Berita Laboratorium';
+              document.title = 'Pengumuman - Laboratorium';
 
-              // Tampilkan konten berita
-              const gambarUrl = berita.gambar 
-                  ? `../Assets/Image/Galeri-Berita/${berita.gambar}` 
-                  : '../Assets/Image/Galeri-Berita/default.jpg';
-
-                // SESUDAH - Gunakan nama_author dengan fallback
-                const authorName = berita.nama_author || 'Admin';
-
-                contentDiv.innerHTML = `
-                    <h2 class="judul-berita">${berita.judul}</h2>
-                    ${berita.subjudul ? `<div class="subjudul">${berita.subjudul}</div>` : ''}
-                    <div class="meta">
-                        <span><i class="far fa-calendar"></i> ${formatTanggalLengkap(berita.tanggal)}</span>
-                        <span><i class="far fa-user"></i> ${authorName}</span>
-                    </div>
-                    <img src="${gambarUrl}" 
-                        class="banner" 
-                        alt="${berita.judul}"
-                        onerror="this.src='../Assets/Image/Galeri-Berita/default.jpg'">
-                    <div class="konten-berita">${formatIsiBerita(berita.isi)}</div>
-                `;
+              // Tampilkan konten pengumuman
+              contentDiv.innerHTML = `
+                  <span class="pengumuman-badge">
+                      <i class="fas fa-bullhorn me-2"></i>Pengumuman
+                  </span>
+                  <h2 class="judul-berita">${pengumuman.isi.substring(0, 100)}...</h2>
+                  <div class="meta">
+                      <span><i class="far fa-calendar"></i> ${formatTanggalLengkap(pengumuman.tanggal_terbit)}</span>
+                      <span><i class="far fa-user"></i> ${pengumuman.uploader}</span>
+                  </div>
+                  <div class="konten-pengumuman">${formatIsiPengumuman(pengumuman.isi)}</div>
+              `;
 
           } catch (error) {
               console.error('Error:', error);
@@ -264,7 +276,7 @@
                   <div class="error-state">
                       <i class="fas fa-exclamation-triangle"></i>
                       <h4>Terjadi Kesalahan</h4>
-                      <p>Gagal memuat berita. Silakan coba lagi nanti.</p>
+                      <p>Gagal memuat pengumuman. Silakan coba lagi nanti.</p>
                       <a href="Berita.php" class="btn-back">
                           <i class="fas fa-arrow-left me-2"></i>Kembali ke Berita
                       </a>
@@ -273,38 +285,45 @@
           }
       }
 
-      // Load berita terbaru untuk sidebar
-      async function loadBeritaTerbaru() {
-          const sidebar = document.getElementById('berita-sidebar');
+      // Load pengumuman terbaru untuk sidebar
+      async function loadPengumumanTerbaru() {
+          const sidebar = document.getElementById('pengumuman-sidebar');
           
           try {
-              const response = await fetch('../Admin/CRUD/Berita_Lab/api_berita.php?limit=6');
+              const response = await fetch('../Admin/CRUD/Pengumuman_Lab/proses_pengumuman.php?action=get_data');
               const result = await response.json();
               
               sidebar.innerHTML = '';
               
               if (!result.success || result.data.length === 0) {
-                  sidebar.innerHTML = '<p class="text-muted small">Belum ada berita lainnya.</p>';
+                  sidebar.innerHTML = '<p class="text-muted small">Belum ada pengumuman lainnya.</p>';
                   return;
               }
 
-              const currentId = getBeritaId();
-              const beritaList = result.data;
+              const currentId = getPengumumanId();
               
-              // Filter berita (exclude current)
-              const otherBerita = beritaList.filter(b => b.id_berita != currentId).slice(0, 5);
+              // Filter pengumuman aktif dan exclude current
+              const pengumumanList = result.data
+                  .filter(p => p.status === 'Aktif' && p.id_pengumuman != currentId)
+                  .sort((a, b) => new Date(b.tanggal_terbit) - new Date(a.tanggal_terbit))
+                  .slice(0, 5);
 
-              if (otherBerita.length === 0) {
-                  sidebar.innerHTML = '<p class="text-muted small">Belum ada berita lainnya.</p>';
+              if (pengumumanList.length === 0) {
+                  sidebar.innerHTML = '<p class="text-muted small">Belum ada pengumuman lainnya.</p>';
                   return;
               }
 
-              otherBerita.forEach(berita => {
+              pengumumanList.forEach(pengumuman => {
                   const card = document.createElement('a');
-                  card.href = `isi_berita.php?id=${berita.id_berita}`;
+                  card.href = `isi_pengumuman.php?id=${pengumuman.id_pengumuman}`;
                   card.className = 'card';
+                  
+                  const previewText = pengumuman.isi.length > 80 
+                      ? pengumuman.isi.substring(0, 80) + '...' 
+                      : pengumuman.isi;
+                  
                   card.innerHTML = `
-                      <span>${berita.judul.length > 100 ? berita.judul.substring(0, 100) + '...' : berita.judul}</span>
+                      <span>${previewText}</span>
                       <i class="fa-solid fa-chevron-right arrow-icon"></i>
                   `;
                   sidebar.appendChild(card);
@@ -312,14 +331,14 @@
 
           } catch (error) {
               console.error('Error loading sidebar:', error);
-              sidebar.innerHTML = '<p class="text-muted small">Gagal memuat berita terbaru.</p>';
+              sidebar.innerHTML = '<p class="text-muted small">Gagal memuat pengumuman terbaru.</p>';
           }
       }
 
       // Load saat halaman dimuat
       document.addEventListener('DOMContentLoaded', function() {
-          loadBeritaDetail();
-          loadBeritaTerbaru();
+          loadPengumumanDetail();
+          loadPengumumanTerbaru();
       });
   </script>
 </body>

@@ -1,30 +1,88 @@
-const sortBtn  = document.getElementById("sort-btn");
-const sortMenu = document.getElementById("sort-menu");
+document.addEventListener("DOMContentLoaded", () => {
+    
+    const sortBtn  = document.getElementById("sort-btn");
+    const sortMenu = document.getElementById("sort-menu");
 
-sortBtn.addEventListener("click", () => {
-    sortMenu.classList.toggle("hidden");
-});
+    if (sortBtn && sortMenu) {
+        
+        sortBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            sortMenu.classList.toggle("hidden");
+        });
 
-document.addEventListener("click", (e) => {
-    if (!sortMenu.contains(e.target) && !sortBtn.contains(e.target)) {
-        sortMenu.classList.add("hidden");
+        
+        document.addEventListener("click", (e) => {
+            if (!sortMenu.contains(e.target) && !sortBtn.contains(e.target)) {
+                sortMenu.classList.add("hidden");
+            }
+        });
+
+        
+        sortMenu.querySelectorAll("div[data-sort]").forEach(item => {
+            item.addEventListener("click", () => {
+                const url = new URL(window.location.href);
+                url.searchParams.set("sort", item.dataset.sort);
+                url.searchParams.set("page", 1);
+                window.location.href = url.toString();
+            });
+        });
     }
-});
 
-sortMenu.querySelectorAll("div[data-sort]").forEach(item => {
-    item.addEventListener("click", () => {
+    
+    const searchInput = document.getElementById("search-input");
 
-        const url = new URL(window.location.href);
-        url.searchParams.set("sort", item.dataset.sort);
-        url.searchParams.set("page", 1);
+    if (searchInput) {
+        let timer = null;
 
-        window.location.href = url.toString();
-    });
-});
+        searchInput.addEventListener("keyup", function () {
+            
+            clearTimeout(timer);
+            const value = this.value;
 
-document.getElementById("search-input").addEventListener("keyup", function () {
-    const url = new URL(window.location.href);
-    url.searchParams.set("q", this.value);
-    url.searchParams.set("page", 1);
-    window.location.href = url.toString();
+            timer = setTimeout(() => {
+                const url = new URL(window.location.href);
+                url.searchParams.set("q", value);
+                url.searchParams.set("page", 1);
+                window.location.href = url.toString();
+            }, 400);
+        });
+    }
+
+    
+    const deleteSelectionBtn = document.querySelector(".delete-selection");
+
+    if (deleteSelectionBtn) {
+        deleteSelectionBtn.addEventListener("click", () => {
+            const checked = document.querySelectorAll(".row-check:checked");
+
+            if (checked.length === 0) {
+                alert("Tidak ada data yang dipilih.");
+                return;
+            }
+
+            if (!confirm("Yakin ingin menghapus data yang dipilih?")) {
+                return;
+            }
+
+            
+            const ids = Array.from(checked).map(c => c.value);
+            const formBody = ids.map(id => `ids[]=${encodeURIComponent(id)}`).join("&");
+
+            fetch("DeletePublikasi.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: formBody
+            })
+                .then(res => res.text())
+                .then(msg => {
+                    alert(msg || "Data berhasil dihapus.");
+                    location.reload();
+                })
+                .catch(err => {
+                    alert("Terjadi error: " + err);
+                });
+        });
+    }
 });
