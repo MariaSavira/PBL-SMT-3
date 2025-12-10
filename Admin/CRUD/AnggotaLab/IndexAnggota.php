@@ -1,148 +1,148 @@
 <!DOCTYPE html>
 <html>
 <?php
-require_once __DIR__ . '../../../Cek_Autentikasi.php';
-require __DIR__ . '../../../Koneksi/KoneksiSasa.php';
+    require_once __DIR__ . '../../../Cek_Autentikasi.php';
+    require __DIR__ . '../../../Koneksi/KoneksiSasa.php';
 
-$perPage = 6;
-$page    = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-if ($page < 1) $page = 1;
+    $perPage = 6;
+    $page    = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+    if ($page < 1) $page = 1;
 
-$search      = trim($_GET['q'] ?? '');
-$filterField = $_GET['filter_field'] ?? '';
-$filterValue = trim($_GET['filter_value'] ?? '');
-$sort        = $_GET['sort'] ?? 'default';
+    $search      = trim($_GET['q'] ?? '');
+    $filterField = $_GET['filter_field'] ?? '';
+    $filterValue = trim($_GET['filter_value'] ?? '');
+    $sort        = $_GET['sort'] ?? 'default';
 
-$conditions = [];
-$params     = [];
-$idx        = 1;
+    $conditions = [];
+    $params     = [];
+    $idx        = 1;
 
-if ($filterField !== '' && $filterValue !== '') {
-    $ff = strtolower($filterField);
-    $fv = strtolower($filterValue);
+    if ($filterField !== '' && $filterValue !== '') {
+        $ff = strtolower($filterField);
+        $fv = strtolower($filterValue);
 
-    if ($ff === 'jabatan') {
-        $conditions[] = "LOWER(jabatan) = $" . $idx;
-        $params[]     = $fv;
-        $idx++;
-    } elseif ($ff === 'status') {
-        if ($fv === 'aktif') {
-            $conditions[] = "status = TRUE";
-        } elseif ($fv === 'nonaktif') {
-            $conditions[] = "status = FALSE";
+        if ($ff === 'jabatan') {
+            $conditions[] = "LOWER(jabatan) = $" . $idx;
+            $params[]     = $fv;
+            $idx++;
+        } elseif ($ff === 'status') {
+            if ($fv === 'aktif') {
+                $conditions[] = "status = TRUE";
+            } elseif ($fv === 'nonaktif') {
+                $conditions[] = "status = FALSE";
+            }
+        } elseif ($ff === 'keahlian') {
+            $conditions[] = "keahlian::text ILIKE $" . $idx;
+            $params[]     = '%' . $filterValue . '%';
+            $idx++;
         }
-    } elseif ($ff === 'keahlian') {
-        $conditions[] = "keahlian::text ILIKE $" . $idx;
-        $params[]     = '%' . $filterValue . '%';
-        $idx++;
     }
-}
 
-$whereSql = $conditions ? 'WHERE ' . implode(' AND ', $conditions) : '';
+    $whereSql = $conditions ? 'WHERE ' . implode(' AND ', $conditions) : '';
 
-switch ($sort) {
-    case 'nama_asc':
-        $orderSql  = 'ORDER BY nama ASC';
-        $sortLabel = 'Nama A-Z';
-        break;
-    case 'nama_desc':
-        $orderSql  = 'ORDER BY nama DESC';
-        $sortLabel = 'Nama Z-A';
-        break;
-    default:
-        $orderSql  = 'ORDER BY id_anggota ASC';
-        $sortLabel = 'Default';
-        $sort      = 'default';
-}
-
-$currentFilterLabel = 'Filter';
-if ($filterField !== '' && $filterValue !== '') {
-    if ($filterField === 'jabatan') {
-        $currentFilterLabel = 'Jabatan: ' . $filterValue;
-    } elseif ($filterField === 'status') {
-        $currentFilterLabel = 'Status: ' . ucfirst($filterValue);
-    } elseif ($filterField === 'keahlian') {
-        $currentFilterLabel = 'Keahlian: ' . $filterValue;
+    switch ($sort) {
+        case 'nama_asc':
+            $orderSql  = 'ORDER BY nama ASC';
+            $sortLabel = 'Nama A-Z';
+            break;
+        case 'nama_desc':
+            $orderSql  = 'ORDER BY nama DESC';
+            $sortLabel = 'Nama Z-A';
+            break;
+        default:
+            $orderSql  = 'ORDER BY id_anggota ASC';
+            $sortLabel = 'Default';
+            $sort      = 'default';
     }
-}
 
-if (isset($_GET['export']) && $_GET['export'] === '1') {
-    $sqlExport = "SELECT id_anggota, nama, keahlian, jabatan, foto, status
-                    FROM mv_anggota_keahlian
-                    $whereSql
-                    $orderSql";
+    $currentFilterLabel = 'Filter';
+    if ($filterField !== '' && $filterValue !== '') {
+        if ($filterField === 'jabatan') {
+            $currentFilterLabel = 'Jabatan: ' . $filterValue;
+        } elseif ($filterField === 'status') {
+            $currentFilterLabel = 'Status: ' . ucfirst($filterValue);
+        } elseif ($filterField === 'keahlian') {
+            $currentFilterLabel = 'Keahlian: ' . $filterValue;
+        }
+    }
+
+    if (isset($_GET['export']) && $_GET['export'] === '1') {
+        $sqlExport = "SELECT id_anggota, nama, keahlian, jabatan, foto, status
+                        FROM mv_anggota_keahlian
+                        $whereSql
+                        $orderSql";
+
+        if ($params) {
+            $resExport = qparams($sqlExport, $params);
+        } else {
+            $resExport = q($sqlExport);
+        }
+
+        header('Content-Type: text/csv; charset=UTF-8');
+        header('Content-Disposition: attachment; filename="anggota_lab.csv"');
+
+        $out = fopen('php://output', 'w');
+        fputcsv($out, ['id_anggota', 'nama', 'keahlian', 'jabatan', 'foto', 'status']);
+
+        while ($row = pg_fetch_assoc($resExport)) {
+            fputcsv($out, [
+                $row['id_anggota'],
+                $row['nama'],
+                $row['keahlian'],
+                $row['jabatan'],
+                $row['foto'],
+                ($row['status'] === 't' || $row['status'] === true) ? 'Aktif' : 'Nonaktif',
+            ]);
+        }
+
+        fclose($out);
+        exit;
+    }
 
     if ($params) {
-        $resExport = qparams($sqlExport, $params);
+        $sqlCount = "SELECT COUNT(*) AS total
+                        FROM mv_anggota_keahlian
+                        $whereSql";
+        $resCount = qparams($sqlCount, $params);
     } else {
-        $resExport = q($sqlExport);
+        $resCount = q("SELECT COUNT(*) AS total FROM mv_anggota_keahlian");
     }
 
-    header('Content-Type: text/csv; charset=UTF-8');
-    header('Content-Disposition: attachment; filename="anggota_lab.csv"');
+    $countRow  = pg_fetch_assoc($resCount);
+    $totalData = (int) ($countRow['total'] ?? 0);
+    $totalPages = max(1, (int) ceil($totalData / $perPage));
 
-    $out = fopen('php://output', 'w');
-    fputcsv($out, ['id_anggota', 'nama', 'keahlian', 'jabatan', 'foto', 'status']);
-
-    while ($row = pg_fetch_assoc($resExport)) {
-        fputcsv($out, [
-            $row['id_anggota'],
-            $row['nama'],
-            $row['keahlian'],
-            $row['jabatan'],
-            $row['foto'],
-            ($row['status'] === 't' || $row['status'] === true) ? 'Aktif' : 'Nonaktif',
-        ]);
+    if ($page > $totalPages) {
+        $page = $totalPages;
     }
 
-    fclose($out);
-    exit;
-}
+    $offset = ($page - 1) * $perPage;
 
-if ($params) {
-    $sqlCount = "SELECT COUNT(*) AS total
-                    FROM mv_anggota_keahlian
-                    $whereSql";
-    $resCount = qparams($sqlCount, $params);
-} else {
-    $resCount = q("SELECT COUNT(*) AS total FROM mv_anggota_keahlian");
-}
+    $paramsWithPage   = $params;
+    $paramsWithPage[] = $perPage;
+    $paramsWithPage[] = $offset;
 
-$countRow  = pg_fetch_assoc($resCount);
-$totalData = (int) ($countRow['total'] ?? 0);
-$totalPages = max(1, (int) ceil($totalData / $perPage));
+    $sql = "SELECT *
+                FROM mv_anggota_keahlian
+                $whereSql
+                $orderSql
+                LIMIT $" . $idx . " OFFSET $" . ($idx + 1);
 
-if ($page > $totalPages) {
-    $page = $totalPages;
-}
+    $res  = qparams($sql, $paramsWithPage);
+    $rows = pg_fetch_all($res) ?: [];
 
-$offset = ($page - 1) * $perPage;
-
-$paramsWithPage   = $params;
-$paramsWithPage[] = $perPage;
-$paramsWithPage[] = $offset;
-
-$sql = "SELECT *
-            FROM mv_anggota_keahlian
-            $whereSql
-            $orderSql
-            LIMIT $" . $idx . " OFFSET $" . ($idx + 1);
-
-$res  = qparams($sql, $paramsWithPage);
-$rows = pg_fetch_all($res) ?: [];
-
-function build_query(array $extra = []): string
-{
-    $base = $_GET;
-    foreach ($extra as $k => $v) {
-        if ($v === null) {
-            unset($base[$k]);
-        } else {
-            $base[$k] = $v;
+    function build_query(array $extra = []): string
+    {
+        $base = $_GET;
+        foreach ($extra as $k => $v) {
+            if ($v === null) {
+                unset($base[$k]);
+            } else {
+                $base[$k] = $v;
+            }
         }
+        return '?' . http_build_query($base);
     }
-    return '?' . http_build_query($base);
-}
 ?>
 
 <head>
@@ -154,6 +154,8 @@ function build_query(array $extra = []): string
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
+    <link rel="icon" type="images/x-icon"
+        href="../../../Assets/Image/Logo/Logo Without Text.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="../../../Assets/Css/Admin/AnggotaLab.css">
 </head>
@@ -353,7 +355,41 @@ function build_query(array $extra = []): string
                                     <img src="<?= $src ?>" alt="Foto User" class="user-foto">
                                 </td>
                                 <td><span class="status aktif"><?= ($row["status"] === 't' || $row["status"] === true) ? 'Aktif' : 'Nonaktif'; ?></span></td>
-                                <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+
+                                <td class="action-cell">
+                                    <button
+                                        type="button"
+                                        class="action-toggle"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                    >
+                                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                                    </button>
+
+                                    <div class="action-menu">
+                                        <a href="EditAnggota.php?id=<?= $row['id_anggota'] ?>" class="action-item">
+                                            <i class="fa-solid fa-pen"></i>
+                                            <span>Edit</span>
+                                        </a>
+
+                                        <button
+                                            type="button"
+                                            class="action-item action-delete"
+                                            data-id="<?= $row['id_anggota'] ?>" style="border-radius: 0">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                            <span>Hapus</span>
+                                        </button>
+                                    </div>
+
+                                    <!-- form POST untuk delete -->
+                                    <form method="post"
+                                        action="DeleteAnggota.php"
+                                        class="delete-anggota-form">
+                                        <input type="hidden" name="id_anggota"
+                                            value="<?= $row['id_anggota'] ?>">
+                                    </form>
+                                </td>
+
                             </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>
@@ -362,7 +398,7 @@ function build_query(array $extra = []): string
         </div>
 
         <div class="table-footer">
-            <div class="delete-selection">
+            <div class="delete-selection" style="cursor: pointer">
                 <i class="fa-solid fa-trash"></i> Hapus data yang dipilih
             </div>
 
@@ -394,6 +430,11 @@ function build_query(array $extra = []): string
     </main>
     <script src="../../../Assets/Javascript/Admin/Sidebar.js"></script>
     <script src="../../../Assets/Javascript/Admin/Header.js"></script>
+
+    <script>
+        window.pageStatus  = <?= json_encode($_GET['status']  ?? '') ?>;
+        window.pageMessage = <?= json_encode($_GET['message'] ?? '') ?>;
+    </script>
     <script src="../../../Assets/Javascript/Admin/AnggotaLab.js"></script>
 </body>
 

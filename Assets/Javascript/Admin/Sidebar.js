@@ -50,4 +50,17 @@ document.addEventListener("DOMContentLoaded", async function () {
             a.classList.add("active");
         }
     });
+
+    let currentFile = window.location.pathname.split("/").pop();
+
+    const menuItems = document.querySelectorAll(".sidebar-menu .menu-item a");
+
+    menuItems.forEach(link => {
+        // Ambil file terakhir dari href
+        let linkFile = link.getAttribute("href").split("/").pop();
+
+        if (currentFile === linkFile) {
+            link.parentElement.classList.add("active");
+        }
+    });
 });

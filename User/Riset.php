@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '/../Admin/CRUD/Koneksi.php';
+require __DIR__ . '/../Admin/Koneksi/KoneksiSasa.php';
 
 // Ambil data bidang riset dari database
 $res  = q('SELECT id_riset, nama_bidang_riset FROM bidangriset ORDER BY id_riset ASC');

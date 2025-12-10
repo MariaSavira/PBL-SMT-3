@@ -51,4 +51,22 @@ document.addEventListener("DOMContentLoaded", async function () {
             headerTitle.style.visibility = ""; 
         }
     }
+
+    let titleText = "Laboratorium Business Analytics";
+
+    if (currentPath.includes("/anggotalab/")) {
+        titleText = "Anggota Laboratorium";
+    } else if (currentPath.includes("/publikasi/")) {
+        titleText = "Publikasi Laboratorium";
+    } else if (currentPath.includes("/risetlab/")) {
+        titleText = "Riset Laboratorium";
+    } else if (currentPath.includes("/karya/")) {
+        titleText = "Karya Laboratorium";
+    } else if (currentPath.includes("/peminjamanlab/")) {
+        titleText = "Peminjaman Laboratorium";
+    } else if (currentPath.endsWith("/dashboard.php")) {
+        titleText = "Dashboard";
+    }
+
+    headerTitle.textContent = titleText;
 });

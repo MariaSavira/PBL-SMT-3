@@ -1,0 +1,358 @@
+/* ========= BASE SAMA DENGAN Riset.css ========= */
+
+body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: #f2f6ff;
+}
+
+.heading {
+    display: block;
+    background: url('../Image/Heading/Heading.png') center/cover no-repeat;
+    color: white;
+    padding-top: clamp(110px, 13vw, 160px);
+    padding-bottom: clamp(60px, 10vw, 120px);
+    padding-inline: clamp(16px, 4vw, 40px);
+    text-align: center;
+}
+
+.heading h1 {
+    font-size: clamp(22px, 3vw, 24px);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.heading p {
+    font-size: 12px;
+    opacity: 0.9;
+    font-weight: 400;
+}
+
+/* Diagram (dipakai di halaman riset) */
+.diagram-container {
+    display: flex;
+    justify-content: center;
+    margin-top: clamp(-60px, -6vw, -60px);
+    padding-inline: clamp(16px, 4vw, 24px);
+}
+
+.diagram-img {
+    width: 100%;
+    max-width: 1200px;
+    background: white;
+    border-radius: 12px;
+    padding: clamp(12px, 2vw, 20px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.diagram-img:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Section title */
+.section-title {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 24px !important;
+    font-weight: 700;
+    color: #1d2d5a;
+}
+
+/* Tag list */
+.tag-list {
+    max-width: 1208px;
+    margin: 25px auto;
+    padding-inline: clamp(12px, 2vw, 20px);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: clamp(16px, 2.5vw, 34px);
+}
+
+.tag {
+    padding: 10px 30px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    font-weight: 600;
+    color: #7F7B7B;
+    transition: 0.3s ease;
+}
+
+.tag:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Stats */
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: clamp(20px, 4vw, 40px);
+    margin-top: clamp(30px, 5vw, 40px);
+    text-align: center;
+    flex-wrap: wrap;
+}
+
+.stat-box {
+    background: white;
+    border-radius: 12px;
+    padding: 20px 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: 0.3s ease;
+    font-size: 16px;
+    font-weight: 600;
+    color: #7F7B7B;
+}
+
+.stat-box:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.stat-number {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1d2d5a;
+}
+
+.stat-label {
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Button */
+.cta-btn {
+    display: block;
+    width: fit-content;
+    margin: 50px auto;
+    font-weight: 600;
+    padding: 12px 28px;
+    background: #1E5AA8;
+    color: white;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.cta-btn:hover {
+    background: #2c72cf;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+@media (max-width: 900px) {
+    .diagram-container {
+        margin-top: -40px;
+        padding: 0 16px;
+    }
+
+    .stats {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .stat-box {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .tag-list {
+        gap: 16px;
+        padding: 0 16px;
+    }
+}
+
+div.footer-logo {
+    height: 123px;
+}
+
+/* ============= TAMBAHAN KHUSUS HALAMAN ANGGOTA ============= */
+
+/* Wrapper kotak putih besar */
+.anggota-wrapper {
+    max-width: 1200px;
+    margin: clamp(-60px, -6vw, -60px) auto 60px auto;
+    padding-inline: clamp(16px, 4vw, 40px);
+}
+
+/* Card kepala lab */
+.kepala-lab-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: clamp(20px, 3vw, 32px);
+    display: flex;
+    gap: clamp(20px, 3vw, 40px);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.kepala-lab-photo {
+    position: relative;
+    /* width: min(260px, 100%); */
+    width: clamp(300px, 30vw, 600px);
+    flex-shrink: 0;
+}
+
+.kepala-lab-photo img {
+    width: 75%;
+    margin: 0px 2vw 0px 5vw;
+    border-radius: 12px;
+    object-fit: cover;
+    display: block;
+    /* background: #ffffff; */
+}
+
+.kepala-lab-badge {
+    position: absolute;
+    left: clamp(20%, 5vw, 30%);
+    bottom: 16px;
+    /* transform: translateX(-50%); */
+    padding: 6px 20px;
+    border-radius: 10px;
+    background: #E8E8E8;
+    color: #1E5AA8;
+    font-size: 12px;
+    font-weight: 600;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+.kepala-lab-info {
+    flex: 1;
+    margin: 0px clamp(30px, 5vw, 5vw) 0px clamp(15px, 2vw, 3vw);
+}
+
+.kepala-lab-name {
+    font-size: 22px;
+    font-weight: 600;
+    color: #1d2d5a;
+    margin-bottom: 10px;
+}
+
+.kepala-lab-desc {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.7;
+    margin: 16px 0px;
+}
+
+.kepala-lab-socmed {
+    display: flex;
+    gap: 10px;
+    margin: 16px 0px;
+}
+
+.kepala-lab-socmed a {
+    text-decoration: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 12px;
+    background: #eef3ff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #1E5AA8;
+    font-size: 14px;
+    transition: 0.3s ease;
+}
+
+.kepala-lab-socmed a:hover {
+    background: #1E5AA8;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.kepala-lab-subtitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1d2d5a;
+    margin: 16px 0px;
+}
+
+.kepala-lab-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.anggota-tag {
+    padding: 7px 16px;
+    background: #1E5AA8;
+    color: #fff;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.anggota-section-title {
+    margin: 40px 0px;
+}
+
+/* Grid peneliti */
+.peneliti-grid {
+    max-width: 1200px;
+    margin: 20px auto 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: clamp(18px, 2.5vw, 26px);
+}
+
+.peneliti-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 18px 14px 16px 14px;
+    text-align: center;
+    transition: 0.3s ease;
+}
+
+.peneliti-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.peneliti-photo {
+    width: 140px;
+    height: 185px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 0 auto 10px auto;
+    /* background: #f2f4ff; */
+}
+
+.peneliti-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.peneliti-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1d2d5a;
+    margin-bottom: 10px;
+}
+
+.peneliti-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+}
+
+@media (max-width: 900px) {
+    .kepala-lab-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .kepala-lab-photo {
+        width: 220px;
+    }
+}
