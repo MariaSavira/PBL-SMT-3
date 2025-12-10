@@ -105,6 +105,20 @@
         .pengumuman-item:hover {
             transform: translateX(5px);
         }
+
+        /* Author Badge Styling */
+        .author {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 8px;
+        }
+
+        .author i {
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -390,7 +404,7 @@
             }
         }
 
-        // Load List Berita Terkini
+        // Load List Berita Terkini - UPDATED UNTUK MENAMPILKAN NAMA AUTHOR
         async function loadBeritaTerkini() {
             const container = document.getElementById('berita-list');
             
@@ -431,6 +445,9 @@
                         ? `../Assets/Image/Galeri-Berita/${berita.gambar}` 
                         : '../Assets/Image/Galeri-Berita/default.jpg';
                     
+                    // PENTING: Gunakan nama_author jika ada, jika tidak ada gunakan 'Admin' sebagai fallback
+                    const authorName = berita.nama_author || berita.uploaded_by || 'Admin';
+                    
                     const card = document.createElement('div');
                     card.className = 'berita-card';
                     card.style.cursor = 'pointer';
@@ -442,7 +459,10 @@
                             <p class="tanggal">${formatTanggal(berita.tanggal)}</p>
                             <h4>${berita.judul}</h4>
                             <p>${truncateText(berita.isi, 120)}</p>
-                            <span class="author">${berita.uploaded_by}</span>
+                            <span class="author">
+                                <i class="fas fa-user"></i>
+                                ${authorName}
+                            </span>
                         </div>
                     `;
                     

@@ -15,21 +15,25 @@ $user_name = $_SESSION['user_name'] ?? 'Maria Savira';
 $search = $_GET['search'] ?? '';
 $filter = $_GET['filter'] ?? '';
 
-$query = "SELECT * FROM berita WHERE 1=1";
+// UPDATE QUERY INI - TAMBAHKAN JOIN
+$query = "SELECT b.*, a.nama as nama_uploader 
+          FROM berita b
+          LEFT JOIN anggotalab a ON b.uploaded_by = a.id_anggota
+          WHERE 1=1";
 $params = [];
 
 if ($search) {
-    $query .= " AND (judul ILIKE ? OR isi ILIKE ?)";
+    $query .= " AND (b.judul ILIKE ? OR b.isi ILIKE ?)";
     $params[] = "%$search%";
     $params[] = "%$search%";
 }
 
 if ($filter) {
-    $query .= " AND status = ?";
+    $query .= " AND b.status = ?";
     $params[] = $filter;
 }
 
-$query .= " ORDER BY tanggal DESC";
+$query .= " ORDER BY b.tanggal DESC";
 
 $stmt = $pdo->prepare($query);
 $stmt->execute($params);
@@ -679,7 +683,7 @@ $total_hasil = count($berita_list);
                                 <?php endif; ?>
                             </td>
                             <td><?= date('d-m-Y', strtotime($berita['tanggal'])) ?></td>
-                            <td><?= htmlspecialchars($berita['uploaded_by']) ?></td>
+                            <td><?= htmlspecialchars($berita['nama_uploader'] ?? 'Unknown') ?></td>
                             <td>
                                 <span class="status-badge status-<?= strtolower($berita['status']) ?>">
                                     <?= ucfirst($berita['status']) ?>
@@ -721,182 +725,6 @@ $total_hasil = count($berita_list);
     </div>
 
     <script src="../../../Assets/Javascript/Admin/berita.js"></script>
-   <script>
-// Toggle dropdown menu
-function toggleMenu(event, id) {
-    event.stopPropagation();
-    const menu = document.getElementById('menu-' + id);
-    const allMenus = document.querySelectorAll('.dropdown-menu');
-    
-    allMenus.forEach(m => {
-        if (m !== menu) m.classList.remove('show');
-    });
-    
-    menu.classList.toggle('show');
-}
 
-// Close dropdown when clicking outside
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.menu-dots')) {
-        document.querySelectorAll('.dropdown-menu').forEach(menu => {
-            menu.classList.remove('show');
-        });
-    }
-});
-
-// Check all functionality
-document.getElementById('checkAll')?.addEventListener('change', function() {
-    const checkboxes = document.querySelectorAll('tbody .checkbox');
-    checkboxes.forEach(cb => cb.checked = this.checked);
-    updateToast();
-});
-
-// Show toast when individual checkboxes are checked
-document.querySelectorAll('tbody .checkbox').forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-        updateToast();
-        
-        // Update check all status
-        const allCheckboxes = document.querySelectorAll('tbody .checkbox');
-        const checkedBoxes = document.querySelectorAll('tbody .checkbox:checked');
-        const checkAll = document.getElementById('checkAll');
-        if (checkAll) {
-            checkAll.checked = allCheckboxes.length === checkedBoxes.length && checkedBoxes.length > 0;
-        }
-    });
-});
-
-// Update toast notification
-function updateToast() {
-    const checkedBoxes = document.querySelectorAll('tbody .checkbox:checked');
-    const toast = document.getElementById('deleteToast');
-    const toastText = document.getElementById('toastText');
-    
-    if (checkedBoxes.length > 0) {
-        toast.classList.add('show');
-        toastText.textContent = `Hapus ${checkedBoxes.length} data yang dipilih`;
-    } else {
-        toast.classList.remove('show');
-    }
-}
-
-// Bulk delete confirmation
-function confirmBulkDelete() {
-    const checkedBoxes = document.querySelectorAll('tbody .checkbox:checked');
-    
-    if (checkedBoxes.length === 0) {
-        alert('Pilih setidaknya satu berita untuk dihapus');
-        return;
-    }
-    
-    const ids = Array.from(checkedBoxes).map(cb => cb.value);
-    const count = ids.length;
-    
-    const message = `Apakah Anda yakin ingin menghapus ${count} berita? Tindakan ini tidak dapat dibatalkan.`;
-    document.getElementById('deleteMessage').textContent = message;
-    document.getElementById('deleteModal').classList.add('show');
-    
-    // Set up bulk delete handler
-    const confirmBtn = document.getElementById('confirmDeleteBtn');
-    confirmBtn.onclick = function() {
-        closeDeleteModal();
-        executeBulkDelete(ids);
-    };
-}
-
-// Execute bulk delete
-function executeBulkDelete(ids) {
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = 'hapus_berita.php';
-    
-    ids.forEach(id => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'ids[]';
-        input.value = id;
-        form.appendChild(input);
-    });
-    
-    document.body.appendChild(form);
-    form.submit();
-}
-
-// Single delete confirmation
-let deleteId = null;
-function confirmDelete(id, judul) {
-    deleteId = id;
-    const message = `Apakah Anda yakin ingin menghapus berita "${judul}"? Tindakan ini tidak dapat dibatalkan.`;
-    document.getElementById('deleteMessage').textContent = message;
-    document.getElementById('deleteModal').classList.add('show');
-    
-    // Set handler untuk single delete
-    const confirmBtn = document.getElementById('confirmDeleteBtn');
-    confirmBtn.onclick = function() {
-        if (deleteId) {
-            window.location.href = 'hapus_berita.php?id=' + deleteId;
-        }
-    };
-}
-
-function closeDeleteModal() {
-    document.getElementById('deleteModal').classList.remove('show');
-    deleteId = null;
-}
-
-// Close modal on outside click
-document.getElementById('deleteModal')?.addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeDeleteModal();
-    }
-});
-
-// Close modal on ESC key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        closeDeleteModal();
-    }
-});
-
-// Sidebar toggle
-document.addEventListener('DOMContentLoaded', function() {
-    function checkSidebarState() {
-        const sidebar = document.querySelector('.sidebar, #sidebar');
-        if (sidebar) {
-            if (sidebar.classList.contains('expanded') || sidebar.classList.contains('open')) {
-                document.body.classList.add('sidebar-expanded');
-            } else {
-                document.body.classList.remove('sidebar-expanded');
-            }
-        }
-    }
-    
-    setTimeout(checkSidebarState, 100);
-    
-    const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                checkSidebarState();
-            }
-        });
-    });
-    
-    setTimeout(function() {
-        const sidebar = document.querySelector('.sidebar, #sidebar');
-        if (sidebar) {
-            observer.observe(sidebar, { 
-                attributes: true,
-                attributeFilter: ['class'],
-                subtree: true
-            });
-        }
-    }, 200);
-    
-    document.addEventListener('sidebarToggle', checkSidebarState);
-    window.addEventListener('sidebarStateChange', checkSidebarState);
-});
-
-console.log('Berita script loaded');
-</script>
 </body>
 </html>

@@ -15,7 +15,7 @@
   <link rel="icon" type="image/x-icon" href="../Assets/Image/Logo/Logo Without Text.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
   <style>
-    /* Loading Skeleton */
+
     .skeleton {
         background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
         background-size: 200% 100%;
@@ -67,7 +67,6 @@
         margin-bottom: 15px;
     }
 
-    /* Error State */
     .error-state {
         background: #fee2e2;
         color: #991b1b;
@@ -123,7 +122,6 @@
 <body>
   <div id="header"></div>
  
-  <!-- HERO SECTION -->
   <section class="hero">
       <img src="../Assets/Image/Galeri-Berita/Heading.png" alt="Hero">
       <div class="hero-overlay"></div>
@@ -134,11 +132,10 @@
       </p>
   </section>
 
-  <!-- MAIN CONTENT -->
   <div class="container">
-      <!-- KONTEN BERITA -->
+
       <div class="content" id="berita-content">
-          <!-- Skeleton Loading -->
+
           <div class="skeleton skeleton-title"></div>
           <div class="skeleton skeleton-subtitle"></div>
           <div class="skeleton skeleton-meta"></div>
@@ -149,11 +146,10 @@
           <div class="skeleton skeleton-text"></div>
       </div>
 
-      <!-- SIDEBAR -->
       <aside class="sidebar">
           <h3>Berita Terbaru</h3>
           <div id="berita-sidebar">
-              <!-- Skeleton Loading -->
+
               <div class="skeleton sidebar-skeleton"></div>
               <div class="skeleton sidebar-skeleton"></div>
               <div class="skeleton sidebar-skeleton"></div>
@@ -165,7 +161,7 @@
   <script src="../Assets/Javascript/HeaderFooter.js"></script>
   
   <script>
-      // Fungsi format tanggal lengkap
+
       function formatTanggalLengkap(dateString) {
           const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
                         'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
@@ -179,22 +175,18 @@
           return `${day} ${month} ${year} | ${hours}:${minutes} WIB`;
       }
 
-      // Get ID dari URL
       function getBeritaId() {
           const urlParams = new URLSearchParams(window.location.search);
           return urlParams.get('id');
       }
 
-      // Format isi berita
       function formatIsiBerita(isi) {
           if (!isi) return '';
-          
-          // Jika sudah ada HTML tags, kembalikan apa adanya
+
           if (isi.includes('<p>') || isi.includes('<ul>') || isi.includes('<ol>')) {
               return isi;
           }
-          
-          // Jika plain text, convert newlines to <br>
+
           return isi.split('\n\n').map(p => {
               if (p.trim()) {
                   return `<p>${p.replace(/\n/g, '<br>')}</p>`;
@@ -203,7 +195,6 @@
           }).join('');
       }
 
-      // Load berita detail
       async function loadBeritaDetail() {
           const id = getBeritaId();
           const contentDiv = document.getElementById('berita-content');
@@ -250,19 +241,22 @@
                   ? `../Assets/Image/Galeri-Berita/${berita.gambar}` 
                   : '../Assets/Image/Galeri-Berita/default.jpg';
 
-              contentDiv.innerHTML = `
-                  <h2 class="judul-berita">${berita.judul}</h2>
-                  ${berita.subjudul ? `<div class="subjudul">${berita.subjudul}</div>` : ''}
-                  <div class="meta">
-                      <span><i class="far fa-calendar"></i> ${formatTanggalLengkap(berita.tanggal)}</span>
-                      <span><i class="far fa-user"></i> ${berita.uploaded_by}</span>
-                  </div>
-                  <img src="${gambarUrl}" 
-                       class="banner" 
-                       alt="${berita.judul}"
-                       onerror="this.src='../Assets/Image/Galeri-Berita/default.jpg'">
-                  <div class="konten-berita">${formatIsiBerita(berita.isi)}</div>
-              `;
+                // SESUDAH - Gunakan nama_author dengan fallback
+                const authorName = berita.nama_author || 'Admin';
+
+                contentDiv.innerHTML = `
+                    <h2 class="judul-berita">${berita.judul}</h2>
+                    ${berita.subjudul ? `<div class="subjudul">${berita.subjudul}</div>` : ''}
+                    <div class="meta">
+                        <span><i class="far fa-calendar"></i> ${formatTanggalLengkap(berita.tanggal)}</span>
+                        <span><i class="far fa-user"></i> ${authorName}</span>
+                    </div>
+                    <img src="${gambarUrl}" 
+                        class="banner" 
+                        alt="${berita.judul}"
+                        onerror="this.src='../Assets/Image/Galeri-Berita/default.jpg'">
+                    <div class="konten-berita">${formatIsiBerita(berita.isi)}</div>
+                `;
 
           } catch (error) {
               console.error('Error:', error);

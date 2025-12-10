@@ -13,8 +13,13 @@ try {
     $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
     
     if ($id > 0) {
-        // Ambil satu berita by ID
-        $stmt = $pdo->prepare("SELECT * FROM berita WHERE id_berita = ? AND status = 'publish'");
+        // Ambil satu berita by ID dengan JOIN ke anggota_lab
+        $stmt = $pdo->prepare("
+            SELECT b.*, a.nama as nama_author 
+            FROM berita b
+            LEFT JOIN anggotalab a ON b.uploaded_by = a.id_anggota
+            WHERE b.id_berita = ? AND b.status = 'publish'
+        ");
         $stmt->execute([$id]);
         $berita = $stmt->fetch();
         
@@ -32,8 +37,14 @@ try {
             ]);
         }
     } else {
-        // Ambil semua berita yang dipublish
-        $query = "SELECT * FROM berita WHERE status = 'publish' ORDER BY tanggal DESC";
+        // Ambil semua berita yang dipublish dengan JOIN ke anggota_lab
+        $query = "
+            SELECT b.*, a.nama as nama_author 
+            FROM berita b
+            LEFT JOIN anggotalab a ON b.uploaded_by = a.id_anggota
+            WHERE b.status = 'publish' 
+            ORDER BY b.tanggal DESC
+        ";
         
         if ($limit > 0) {
             $query .= " LIMIT " . $limit;

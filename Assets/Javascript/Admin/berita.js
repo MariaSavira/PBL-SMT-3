@@ -65,7 +65,7 @@ function updateToast() {
     }
 }
 
-// Bulk delete confirmation
+// Bulk delete confirmation - DIPERBAIKI
 function confirmBulkDelete() {
     const checkedBoxes = document.querySelectorAll('tbody .checkbox:checked');
     
@@ -79,17 +79,30 @@ function confirmBulkDelete() {
     
     const message = `Apakah Anda yakin ingin menghapus ${count} berita? Tindakan ini tidak dapat dibatalkan.`;
     document.getElementById('deleteMessage').textContent = message;
-    document.getElementById('deleteModal').classList.add('show');
+    
+    // Tampilkan modal
+    const modal = document.getElementById('deleteModal');
+    modal.classList.add('show');
     
     // Set up bulk delete handler
     const confirmBtn = document.getElementById('confirmDeleteBtn');
-    confirmBtn.onclick = function() {
+    
+    // Hapus event listener lama jika ada
+    const newConfirmBtn = confirmBtn.cloneNode(true);
+    confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+    
+    // Tambah event listener baru
+    newConfirmBtn.addEventListener('click', function() {
+        console.log('Bulk delete confirmed for IDs:', ids);
         executeBulkDelete(ids);
-    };
+    });
 }
 
-// Execute bulk delete
+// Execute bulk delete - DIPERBAIKI
 function executeBulkDelete(ids) {
+    console.log('Executing bulk delete for:', ids);
+    
+    // Buat form dan submit
     const form = document.createElement('form');
     form.method = 'POST';
     form.action = 'hapus_berita.php';
@@ -103,24 +116,39 @@ function executeBulkDelete(ids) {
     });
     
     document.body.appendChild(form);
+    
+    // Close modal sebelum submit
+    closeDeleteModal();
+    
+    // Submit form
     form.submit();
 }
 
-// Single delete confirmation
+// Single delete confirmation - DIPERBAIKI
 let deleteId = null;
 
 function confirmDelete(id, judul) {
     deleteId = id;
     const message = `Apakah Anda yakin ingin menghapus berita "${judul}"? Tindakan ini tidak dapat dibatalkan.`;
     document.getElementById('deleteMessage').textContent = message;
-    document.getElementById('deleteModal').classList.add('show');
+    
+    const modal = document.getElementById('deleteModal');
+    modal.classList.add('show');
     
     // Set up single delete handler
-    document.getElementById('confirmDeleteBtn').onclick = function() {
+    const confirmBtn = document.getElementById('confirmDeleteBtn');
+    
+    // Hapus event listener lama
+    const newConfirmBtn = confirmBtn.cloneNode(true);
+    confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+    
+    // Tambah event listener baru
+    newConfirmBtn.addEventListener('click', function() {
+        console.log('Single delete confirmed for ID:', deleteId);
         if (deleteId) {
             window.location.href = 'hapus_berita.php?id=' + deleteId;
         }
-    };
+    });
 }
 
 function closeDeleteModal() {
@@ -327,3 +355,9 @@ function setButtonLoading(button, isLoading) {
 
 console.log('Berita.js loaded successfully');
 console.log('Current page:', window.location.pathname);
+
+// Global functions for inline onclick handlers
+window.toggleMenu = toggleMenu;
+window.confirmDelete = confirmDelete;
+window.confirmBulkDelete = confirmBulkDelete;
+window.closeDeleteModal = closeDeleteModal;
