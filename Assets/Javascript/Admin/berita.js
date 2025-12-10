@@ -37,23 +37,76 @@ if (checkAllBox) {
 
 // Individual checkbox change
 document.querySelectorAll('tbody .checkbox').forEach(checkbox => {
-    checkbox.addEventListener('change', updateToast);
+    checkbox.addEventListener('change', function() {
+        updateToast();
+        
+        // Update "check all" status
+        const allCheckboxes = document.querySelectorAll('tbody .checkbox');
+        const checkedBoxes = document.querySelectorAll('tbody .checkbox:checked');
+        const checkAllBox = document.getElementById('checkAll');
+        
+        if (checkAllBox) {
+            checkAllBox.checked = allCheckboxes.length === checkedBoxes.length && checkedBoxes.length > 0;
+        }
+    });
 });
 
 // Update toast notification based on selected items
 function updateToast() {
     const checkedBoxes = document.querySelectorAll('tbody .checkbox:checked');
     const toast = document.getElementById('deleteToast');
+    const toastText = document.getElementById('toastText');
     
     if (checkedBoxes.length > 0) {
         toast.classList.add('show');
-        toast.querySelector('span').textContent = `Hapus ${checkedBoxes.length} data yang dipilih`;
+        toastText.textContent = `Hapus ${checkedBoxes.length} data yang dipilih`;
     } else {
         toast.classList.remove('show');
     }
 }
 
-// Delete confirmation modal
+// Bulk delete confirmation
+function confirmBulkDelete() {
+    const checkedBoxes = document.querySelectorAll('tbody .checkbox:checked');
+    
+    if (checkedBoxes.length === 0) {
+        alert('Pilih setidaknya satu berita untuk dihapus');
+        return;
+    }
+    
+    const ids = Array.from(checkedBoxes).map(cb => cb.value);
+    const count = ids.length;
+    
+    const message = `Apakah Anda yakin ingin menghapus ${count} berita? Tindakan ini tidak dapat dibatalkan.`;
+    document.getElementById('deleteMessage').textContent = message;
+    document.getElementById('deleteModal').classList.add('show');
+    
+    // Set up bulk delete handler
+    const confirmBtn = document.getElementById('confirmDeleteBtn');
+    confirmBtn.onclick = function() {
+        executeBulkDelete(ids);
+    };
+}
+
+// Execute bulk delete
+function executeBulkDelete(ids) {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'hapus_berita.php';
+    
+    ids.forEach(id => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'ids[]';
+        input.value = id;
+        form.appendChild(input);
+    });
+    
+    document.body.appendChild(form);
+    form.submit();
+}
+
+// Single delete confirmation
 let deleteId = null;
 
 function confirmDelete(id, judul) {
@@ -61,21 +114,18 @@ function confirmDelete(id, judul) {
     const message = `Apakah Anda yakin ingin menghapus berita "${judul}"? Tindakan ini tidak dapat dibatalkan.`;
     document.getElementById('deleteMessage').textContent = message;
     document.getElementById('deleteModal').classList.add('show');
+    
+    // Set up single delete handler
+    document.getElementById('confirmDeleteBtn').onclick = function() {
+        if (deleteId) {
+            window.location.href = 'hapus_berita.php?id=' + deleteId;
+        }
+    };
 }
 
 function closeDeleteModal() {
     document.getElementById('deleteModal').classList.remove('show');
     deleteId = null;
-}
-
-// Confirm delete button
-const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-if (confirmDeleteBtn) {
-    confirmDeleteBtn.addEventListener('click', function() {
-        if (deleteId) {
-            window.location.href = 'hapus_berita.php?id=' + deleteId;
-        }
-    });
 }
 
 // Close modal when clicking overlay
@@ -275,6 +325,5 @@ function setButtonLoading(button, isLoading) {
     }
 }
 
-// Console log for debugging (hapus di production)
 console.log('Berita.js loaded successfully');
 console.log('Current page:', window.location.pathname);

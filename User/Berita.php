@@ -49,6 +49,25 @@
             border-radius: 16px;
         }
 
+        /* Pengumuman Skeleton */
+        .skeleton-pengumuman {
+            display: flex;
+            gap: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .skeleton-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .skeleton-content {
+            flex: 1;
+        }
+
         /* Error State */
         .error-state {
             background: #fee2e2;
@@ -75,6 +94,16 @@
             font-size: 64px;
             margin-bottom: 20px;
             opacity: 0.5;
+        }
+
+        /* Pengumuman Item Enhancement */
+        .pengumuman-item {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pengumuman-item:hover {
+            transform: translateX(5px);
         }
     </style>
 </head>
@@ -107,38 +136,31 @@
     <!-- SECTION BAWAH WRAPPER -->
     <section class="content-wrapper">
 
-        <!-- PENGUMUMAN (Static - Manual Input) -->
+        <!-- PENGUMUMAN (Dinamis dari API) -->
         <div class="pengumuman-wrapper">
             <h3 class="judul-pengumuman">Pengumuman</h3>
 
-            <div class="pengumuman">
-                <div class="pengumuman-item">
-                    <div class="icon">
-                        <img src="../Assets/Image/Galeri-Berita/icon1.svg" alt="icon">
-                    </div>
-                    <div>
-                        <h4>Pengumuman Persyaratan Bantuan UKT / SPP Tahun 2025</h4>
-                        <p class="tanggal2">November 10, 2025</p>
-                    </div>
-                </div>
-
-                <div class="pengumuman-item">
-                    <div class="icon">
-                        <img src="../Assets/Image/Galeri-Berita/icon2.svg" alt="icon">
-                    </div>
-                    <div>
-                        <h4>BEASISWA UNGGULAN BAGI MASYARAKAT BERPRESTASI DAN PENYANDANG DISABILITAS 2025</h4>
-                        <p class="tanggal">November 10, 2025</p>
+            <div class="pengumuman" id="pengumuman-list">
+                <!-- Skeleton Loading -->
+                <div class="skeleton-pengumuman">
+                    <div class="skeleton skeleton-icon"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text short"></div>
                     </div>
                 </div>
-
-                <div class="pengumuman-item">
-                    <div class="icon">
-                        <img src="../Assets/Image/Galeri-Berita/icon3.svg" alt="icon">
+                <div class="skeleton-pengumuman">
+                    <div class="skeleton skeleton-icon"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text short"></div>
                     </div>
-                    <div>
-                        <h4>Batas Pendaftaran dan Pelaksanaan Ujian Skripsi Tahap III Tahun Ajaran 2024/2025</h4>
-                        <p class="tanggal">November 10, 2025</p>
+                </div>
+                <div class="skeleton-pengumuman">
+                    <div class="skeleton skeleton-icon"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text short"></div>
                     </div>
                 </div>
             </div>
@@ -199,6 +221,13 @@
     <script src="../Assets/Javascript/HeaderFooter.js"></script>
     
     <script>
+        // Icon images untuk pengumuman
+        const pengumumanIcons = [
+            '../Assets/Image/Galeri-Berita/icon1.svg',
+            '../Assets/Image/Galeri-Berita/icon1.svg',
+            '../Assets/Image/Galeri-Berita/icon1.svg'
+        ];
+
         // Fungsi format tanggal Indonesia
         function formatTanggal(dateString) {
             const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
@@ -213,12 +242,107 @@
             return `${month} ${day}, ${year} | ${hours}:${minutes} WIB`;
         }
 
+        // Fungsi format tanggal pendek untuk pengumuman
+        function formatTanggalPendek(dateString) {
+            const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                          'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            const date = new Date(dateString);
+            const day = date.getDate();
+            const month = bulan[date.getMonth()];
+            const year = date.getFullYear();
+            
+            return `${month} ${day}, ${year}`;
+        }
+
         // Fungsi truncate text
         function truncateText(text, maxLength) {
             if (!text) return '';
             const stripped = text.replace(/<[^>]*>/g, '');
             if (stripped.length <= maxLength) return stripped;
             return stripped.substr(0, maxLength) + '...';
+        }
+
+        // Load Pengumuman (Dinamis dari database)
+        async function loadPengumuman() {
+            const container = document.getElementById('pengumuman-list');
+            
+            try {
+                const response = await fetch('../Admin/CRUD/Pengumuman_Lab/proses_pengumuman.php?action=get_data');
+                const result = await response.json();
+                
+                container.innerHTML = '';
+                
+                if (!result.success) {
+                    container.innerHTML = `
+                        <div class="error-state">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>${result.message || 'Gagal memuat pengumuman'}</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Filter hanya pengumuman yang aktif
+                const pengumumanAktif = result.data.filter(item => item.status === 'Aktif');
+                
+                // Sort by date descending
+                pengumumanAktif.sort((a, b) => new Date(b.tanggal_terbit) - new Date(a.tanggal_terbit));
+                
+                // Ambil 3 pengumuman terbaru
+                const pengumumanTerbaru = pengumumanAktif.slice(0, 3);
+                
+                if (pengumumanTerbaru.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-bell"></i>
+                            <h4>Belum Ada Pengumuman</h4>
+                            <p>Belum ada pengumuman yang dipublikasikan</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                pengumumanTerbaru.forEach((pengumuman, index) => {
+                    // Gunakan icon berurutan, jika lebih dari 3 maka loop kembali ke awal
+                    const iconIndex = index % pengumumanIcons.length;
+                    const iconUrl = pengumumanIcons[iconIndex];
+                    
+                    const item = document.createElement('div');
+                    item.className = 'pengumuman-item';
+                    item.style.cursor = 'pointer';
+                    
+                    // Redirect ke halaman detail jika diklik
+                    item.onclick = () => {
+                    window.location.href = `isi_pengumuman.php?id=${pengumuman.id_pengumuman}`;
+                    };
+                    
+                    // Truncate isi untuk preview
+                    const isiPreview = pengumuman.isi.length > 100 
+                        ? pengumuman.isi.substring(0, 100) + '...' 
+                        : pengumuman.isi;
+                    
+                    item.innerHTML = `
+                        <div class="icon">
+                            <img src="${iconUrl}" alt="icon" onerror="this.src='../Assets/Image/Galeri-Berita/icon1.svg'">
+                        </div>
+                        <div>
+                            <h4>${isiPreview}</h4>
+                            <p class="tanggal2">${formatTanggalPendek(pengumuman.tanggal_terbit)}</p>
+                        </div>
+                    `;
+                    
+                    container.appendChild(item);
+                });
+                
+            } catch (error) {
+                console.error('Error loading pengumuman:', error);
+                container.innerHTML = `
+                    <div class="error-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Terjadi kesalahan saat memuat pengumuman</p>
+                    </div>
+                `;
+            }
         }
 
         // Load Highlight Berita (Berita Terbaru)
@@ -338,8 +462,10 @@
 
         // Filter functionality (optional - bisa dikembangkan nanti)
         document.addEventListener('DOMContentLoaded', function() {
-            loadHighlightBerita();
-            loadBeritaTerkini();
+            // Load semua data saat halaman dimuat
+            loadPengumuman();      // Load pengumuman dinamis
+            loadHighlightBerita(); // Load berita highlight
+            loadBeritaTerkini();   // Load berita terkini
             
             // Event listener untuk filter (jika ingin diimplementasikan)
             document.getElementById('filterTag')?.addEventListener('change', function() {

@@ -389,19 +389,6 @@ $total_hasil = count($berita_list);
             background: #fef2f2;
         }
 
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            display: none;
-            align-items: center;
-            gap: 10px;
-            z-index: 1000;
-        }
 
         .toast.show {
             display: flex;
@@ -490,6 +477,36 @@ $total_hasil = count($berita_list);
 
         .btn-delete:hover {
             background: #b91c1c;
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: none;
+            align-items: center;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .btn-delete-bulk {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-delete-bulk:hover {
+            background: #b91c1c;
+            transform: translateY(-1px);
         }
 
         @media (max-width: 768px) {
@@ -640,9 +657,9 @@ $total_hasil = count($berita_list);
                     <?php else: ?>
                         <?php foreach ($berita_list as $index => $berita): ?>
                         <tr>
-                            <td>
-                                <input type="checkbox" class="checkbox">
-                            </td>
+                        <td>
+                            <input type="checkbox" class="checkbox" value="<?= $berita['id_berita'] ?>">
+                        </td>
                             <td><?= str_pad($berita['id_berita'], 2, '0', STR_PAD_LEFT) ?></td>
                             <td style="max-width: 300px;">
                                 <div class="berita-judul"><?= htmlspecialchars($berita['judul']) ?></div>
@@ -684,9 +701,10 @@ $total_hasil = count($berita_list);
 
         <div class="toast" id="deleteToast">
             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/>
+                <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
             </svg>
-            <span>Hapus data yang dipilih</span>
+            <span id="toastText">Hapus data yang dipilih</span>
+            <button class="btn-delete-bulk" onclick="confirmBulkDelete()">Hapus</button>
         </div>
     </div>
 
@@ -703,131 +721,182 @@ $total_hasil = count($berita_list);
     </div>
 
     <script src="../../../Assets/Javascript/Admin/berita.js"></script>
-    <script>
-        // Toggle dropdown menu
-        function toggleMenu(event, id) {
-            event.stopPropagation();
-            const menu = document.getElementById('menu-' + id);
-            const allMenus = document.querySelectorAll('.dropdown-menu');
-            
-            // Close all other menus
-            allMenus.forEach(m => {
-                if (m !== menu) m.classList.remove('show');
-            });
-            
-            // Toggle current menu
-            menu.classList.toggle('show');
-        }
+   <script>
+// Toggle dropdown menu
+function toggleMenu(event, id) {
+    event.stopPropagation();
+    const menu = document.getElementById('menu-' + id);
+    const allMenus = document.querySelectorAll('.dropdown-menu');
+    
+    allMenus.forEach(m => {
+        if (m !== menu) m.classList.remove('show');
+    });
+    
+    menu.classList.toggle('show');
+}
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.menu-dots')) {
-                document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                    menu.classList.remove('show');
-                });
-            }
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.menu-dots')) {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            menu.classList.remove('show');
         });
+    }
+});
 
-        // Check all functionality
-        document.getElementById('checkAll').addEventListener('change', function() {
-            const checkboxes = document.querySelectorAll('tbody .checkbox');
-            checkboxes.forEach(cb => cb.checked = this.checked);
-            
-            if (this.checked && checkboxes.length > 0) {
-                document.getElementById('deleteToast').classList.add('show');
+// Check all functionality
+document.getElementById('checkAll')?.addEventListener('change', function() {
+    const checkboxes = document.querySelectorAll('tbody .checkbox');
+    checkboxes.forEach(cb => cb.checked = this.checked);
+    updateToast();
+});
+
+// Show toast when individual checkboxes are checked
+document.querySelectorAll('tbody .checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        updateToast();
+        
+        // Update check all status
+        const allCheckboxes = document.querySelectorAll('tbody .checkbox');
+        const checkedBoxes = document.querySelectorAll('tbody .checkbox:checked');
+        const checkAll = document.getElementById('checkAll');
+        if (checkAll) {
+            checkAll.checked = allCheckboxes.length === checkedBoxes.length && checkedBoxes.length > 0;
+        }
+    });
+});
+
+// Update toast notification
+function updateToast() {
+    const checkedBoxes = document.querySelectorAll('tbody .checkbox:checked');
+    const toast = document.getElementById('deleteToast');
+    const toastText = document.getElementById('toastText');
+    
+    if (checkedBoxes.length > 0) {
+        toast.classList.add('show');
+        toastText.textContent = `Hapus ${checkedBoxes.length} data yang dipilih`;
+    } else {
+        toast.classList.remove('show');
+    }
+}
+
+// Bulk delete confirmation
+function confirmBulkDelete() {
+    const checkedBoxes = document.querySelectorAll('tbody .checkbox:checked');
+    
+    if (checkedBoxes.length === 0) {
+        alert('Pilih setidaknya satu berita untuk dihapus');
+        return;
+    }
+    
+    const ids = Array.from(checkedBoxes).map(cb => cb.value);
+    const count = ids.length;
+    
+    const message = `Apakah Anda yakin ingin menghapus ${count} berita? Tindakan ini tidak dapat dibatalkan.`;
+    document.getElementById('deleteMessage').textContent = message;
+    document.getElementById('deleteModal').classList.add('show');
+    
+    // Set up bulk delete handler
+    const confirmBtn = document.getElementById('confirmDeleteBtn');
+    confirmBtn.onclick = function() {
+        closeDeleteModal();
+        executeBulkDelete(ids);
+    };
+}
+
+// Execute bulk delete
+function executeBulkDelete(ids) {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'hapus_berita.php';
+    
+    ids.forEach(id => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'ids[]';
+        input.value = id;
+        form.appendChild(input);
+    });
+    
+    document.body.appendChild(form);
+    form.submit();
+}
+
+// Single delete confirmation
+let deleteId = null;
+function confirmDelete(id, judul) {
+    deleteId = id;
+    const message = `Apakah Anda yakin ingin menghapus berita "${judul}"? Tindakan ini tidak dapat dibatalkan.`;
+    document.getElementById('deleteMessage').textContent = message;
+    document.getElementById('deleteModal').classList.add('show');
+    
+    // Set handler untuk single delete
+    const confirmBtn = document.getElementById('confirmDeleteBtn');
+    confirmBtn.onclick = function() {
+        if (deleteId) {
+            window.location.href = 'hapus_berita.php?id=' + deleteId;
+        }
+    };
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteModal').classList.remove('show');
+    deleteId = null;
+}
+
+// Close modal on outside click
+document.getElementById('deleteModal')?.addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeDeleteModal();
+    }
+});
+
+// Close modal on ESC key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeDeleteModal();
+    }
+});
+
+// Sidebar toggle
+document.addEventListener('DOMContentLoaded', function() {
+    function checkSidebarState() {
+        const sidebar = document.querySelector('.sidebar, #sidebar');
+        if (sidebar) {
+            if (sidebar.classList.contains('expanded') || sidebar.classList.contains('open')) {
+                document.body.classList.add('sidebar-expanded');
             } else {
-                document.getElementById('deleteToast').classList.remove('show');
+                document.body.classList.remove('sidebar-expanded');
             }
-        });
-
-        // Show toast when individual checkboxes are checked
-        document.querySelectorAll('tbody .checkbox').forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                const anyChecked = Array.from(document.querySelectorAll('tbody .checkbox')).some(cb => cb.checked);
-                if (anyChecked) {
-                    document.getElementById('deleteToast').classList.add('show');
-                } else {
-                    document.getElementById('deleteToast').classList.remove('show');
-                }
-            });
-        });
-
-        // Delete confirmation
-        let deleteId = null;
-        function confirmDelete(id, judul) {
-            deleteId = id;
-            document.getElementById('deleteMessage').textContent = 
-                `Apakah Anda yakin ingin menghapus berita "${judul}"? Tindakan ini tidak dapat dibatalkan.`;
-            document.getElementById('deleteModal').classList.add('show');
         }
-
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').classList.remove('show');
-            deleteId = null;
-        }
-
-        document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
-            if (deleteId) {
-                window.location.href = 'hapus_berita.php?id=' + deleteId;
+    }
+    
+    setTimeout(checkSidebarState, 100);
+    
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                checkSidebarState();
             }
         });
-
-        // Close modal on outside click
-        document.getElementById('deleteModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeDeleteModal();
-            }
-        });
-
-        // Close modal on ESC key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeDeleteModal();
-            }
-        });
-
-        // Sidebar toggle - Observe sidebar changes
-        document.addEventListener('DOMContentLoaded', function() {
-            // Function to check sidebar state
-            function checkSidebarState() {
-                const sidebar = document.querySelector('.sidebar, #sidebar');
-                if (sidebar) {
-                    if (sidebar.classList.contains('expanded') || sidebar.classList.contains('open')) {
-                        document.body.classList.add('sidebar-expanded');
-                    } else {
-                        document.body.classList.remove('sidebar-expanded');
-                    }
-                }
-            }
-            
-            // Check initial state
-            setTimeout(checkSidebarState, 100);
-            
-            // Observe sidebar class changes
-            const observer = new MutationObserver(function(mutations) {
-                mutations.forEach(function(mutation) {
-                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                        checkSidebarState();
-                    }
-                });
+    });
+    
+    setTimeout(function() {
+        const sidebar = document.querySelector('.sidebar, #sidebar');
+        if (sidebar) {
+            observer.observe(sidebar, { 
+                attributes: true,
+                attributeFilter: ['class'],
+                subtree: true
             });
-            
-            // Start observing
-            setTimeout(function() {
-                const sidebar = document.querySelector('.sidebar, #sidebar');
-                if (sidebar) {
-                    observer.observe(sidebar, { 
-                        attributes: true,
-                        attributeFilter: ['class'],
-                        subtree: true
-                    });
-                }
-            }, 200);
-            
-            // Also listen for custom events if sidebar uses them
-            document.addEventListener('sidebarToggle', checkSidebarState);
-            window.addEventListener('sidebarStateChange', checkSidebarState);
-        });
-    </script>
+        }
+    }, 200);
+    
+    document.addEventListener('sidebarToggle', checkSidebarState);
+    window.addEventListener('sidebarStateChange', checkSidebarState);
+});
+
+console.log('Berita script loaded');
+</script>
 </body>
 </html>
