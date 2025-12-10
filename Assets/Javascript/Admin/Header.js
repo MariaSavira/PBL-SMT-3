@@ -20,8 +20,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     
     const headerEl = await loadComponent(
         "header",
-        "../../../Admin/Header.php",
-        "../../../Assets/Css/Admin/Header.css"
+        "/PBL-SMT-3/Admin/Header.php",
+        "/PBL-SMT-3/Assets/Css/Admin/Header.css"
     );
 
     const dropdown = document.getElementById("profileDropdown");

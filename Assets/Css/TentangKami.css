@@ -37,6 +37,19 @@
     line-height: 1.6;
 } */
 
+p {
+    font-size: 12px;
+}
+
+h4 {
+    color: #1E5AA8;
+    font-size: 16px;
+}
+
+li {
+    font-size: 12px;
+}
+
 body {
     margin: 0;
     font-family: "Poppins", sans-serif;
@@ -166,13 +179,31 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 35px;
+    gap: 50px;
     margin-bottom: 40px;
 }
 
-.visi-img,
+.visi-card,
+.misi-card {
+    background-color: #F3F7FF;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    transition: 0.25s ease;
+}
+
+.visi-card:hover,
+.misi-card:hover {
+    background-color: #F3F7FF;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+.visi-img {
+    height: 370px;
+    width: 484px;
+}
+
 .misi-img {
-    width: 300px;
+    height: 373px;
+    width: 324px;
 }
 
 .visi-card ul,

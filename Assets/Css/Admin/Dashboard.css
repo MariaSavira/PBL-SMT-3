@@ -25,6 +25,10 @@
 body {
     background: #f3f6fb;
     color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    display: flex;
 }
 
 /* layout utama tanpa sidebar */
@@ -32,12 +36,21 @@ body {
     min-height: calc(100vh - 4px);
     display: flex;
     justify-content: center;
+    flex: 1;
 }
 
-.main {
-    width: 100%;
+.content {
+    margin-left: 260px;   
+    /* width: 100%; */
+    width: calc(100% - 260px);
     max-width: 1200px;
     padding: 32px 40px 40px;
+    transition: margin-left 0.25s ease, width 0.25s ease;
+}
+
+.content.collapsed {
+    margin-left: 85px;
+    width: calc(100% - 85px);
 }
 
 /* ================== TOPBAR ================== */

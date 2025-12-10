@@ -1,3 +1,15 @@
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.content-header .header-title {
+    font-size: 28px;
+    font-weight: 600;
+}
+
 .profile-dropdown {
     position: relative;
     display: flex;

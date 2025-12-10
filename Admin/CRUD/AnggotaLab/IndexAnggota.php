@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html>
 <?php
     require_once __DIR__ . '../../../Cek_Autentikasi.php';
     require __DIR__ . '../../../Koneksi/KoneksiSasa.php';
@@ -144,7 +142,8 @@
         return '?' . http_build_query($base);
     }
 ?>
-
+<!DOCTYPE html>
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

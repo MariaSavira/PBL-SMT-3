@@ -1,30 +1,113 @@
 <?php
-require_once __DIR__ . '../../../Cek_Autentikasi.php';
-require __DIR__ . '/../../Koneksi/KoneksiPDO.php';
+    require_once __DIR__ . '../../../Cek_Autentikasi.php';
+    require __DIR__ . '/../../Koneksi/KoneksiPDO.php';
 
-$limit = 6;
-$page  = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-if ($page < 1) $page = 1;
-$offset = ($page - 1) * $limit;
+    $limit = 6;
+    $page  = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    if ($page < 1) $page = 1;
+    $offset = ($page - 1) * $limit;
 
-// (optional) buat value di input search, pencarian tetap pakai JS
-$search = trim($_GET['q'] ?? '');
+    $filterField = $_GET['filter_field'] ?? '';
+    $filterValue = trim($_GET['filter_value'] ?? '');
 
-$totalQuery = $db->query("SELECT COUNT(*) AS total FROM peminjaman_lab");
-$totalData  = $totalQuery->fetch()['total'] ?? 0;
-$totalPages = max(1, (int)ceil($totalData / $limit));
+    $conditions = [];
+    $params     = [];  
 
-$stmt = $db->prepare("
-    SELECT *
-    FROM peminjaman_lab
-    ORDER BY id_peminjaman DESC
-    LIMIT :limit OFFSET :offset
-");
-$stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-$stmt->execute();
+    $currentFilterLabel = 'Filter';
 
-$result = $stmt->fetchAll();
+    if ($filterField !== '' && $filterValue !== '') {
+        $ff = strtolower($filterField);
+
+        if ($ff === 'status') {
+            $statusDb = strtolower($filterValue);
+
+            $conditions[]           = "status = :status_filter";
+            $params[':status_filter'] = $statusDb;
+
+            $currentFilterLabel = 'Status: ' . $filterValue;
+        }
+    }
+
+    $whereSql = $conditions ? 'WHERE ' . implode(' AND ', $conditions) : '';
+
+    $sort = $_GET['sort'] ?? 'default';
+
+    $allowedSort = ['default', 'latest', 'oldest', 'az', 'za'];
+    if (!in_array($sort, $allowedSort, true)) {
+        $sort = 'default';
+    }
+
+    switch ($sort) {
+        case 'latest':
+            $orderSql  = "ORDER BY tanggal_pengajuan DESC, id_peminjaman DESC";
+            $sortLabel = "Terbaru";
+            break;
+
+        case 'oldest':
+            $orderSql  = "ORDER BY tanggal_pengajuan ASC, id_peminjaman ASC";
+            $sortLabel = "Terlama";
+            break;
+
+        case 'az':
+            $orderSql  = "ORDER BY LOWER(nama_peminjam) ASC, id_peminjaman ASC";
+            $sortLabel = "Nama A–Z";
+            break;
+
+        case 'za':
+            $orderSql  = "ORDER BY LOWER(nama_peminjam) DESC, id_peminjaman DESC";
+            $sortLabel = "Nama Z–A";
+            break;
+
+        case 'default':
+        default:
+            $orderSql  = "ORDER BY id_peminjaman DESC";
+            $sortLabel = "Default";
+            $sort      = "default";
+            break;
+    }
+
+    $search = trim($_GET['q'] ?? '');
+
+    $sqlCount = "SELECT COUNT(*) AS total FROM peminjaman_lab $whereSql";
+    $stmtCount = $db->prepare($sqlCount);
+    foreach ($params as $key => $val) {
+        $stmtCount->bindValue($key, $val);
+    }
+    $stmtCount->execute();
+    $totalData = (int)($stmtCount->fetch()['total'] ?? 0);
+    $totalPages = max(1, (int)ceil($totalData / $limit));
+
+    $sql = "
+        SELECT *
+        FROM peminjaman_lab
+        $whereSql
+        $orderSql
+        LIMIT :limit OFFSET :offset
+    ";
+    $stmt = $db->prepare($sql);
+
+    foreach ($params as $key => $val) {
+        $stmt->bindValue($key, $val);
+    }
+
+    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+
+    function build_query(array $extra = []): string
+    {
+        $base = $_GET;
+        foreach ($extra as $k => $v) {
+            if ($v === null) {
+                unset($base[$k]);
+            } else {
+                $base[$k] = $v;
+            }
+        }
+        return '?' . http_build_query($base);
+    }
 ?>
 
 <!DOCTYPE html>
@@ -53,10 +136,8 @@ $result = $stmt->fetchAll();
     <main class="content" id="content">
         <div id="header"></div>
 
-        <!-- ===== TOP CONTROLS (sama pola dengan IndexAnggotaLab) ===== -->
         <div class="top-controls">
-
-            <!-- SEARCH (pakai ID sama untuk JS realtime) -->
+            
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <input
@@ -67,12 +148,11 @@ $result = $stmt->fetchAll();
                 >
             </div>
 
-            <!-- FILTER AREA – cuma visual, kalau mau bisa kamu isi JS filter status -->
             <div class="filter-area">
                 <div class="filter-dropdown">
                     <button type="button" class="filter-toggle">
                         <i class="fa-solid fa-sliders"></i>
-                        <span>Status Peminjaman</span>
+                        <span><?= htmlspecialchars($currentFilterLabel) ?></span>
                         <i class="fa-solid fa-chevron-down caret"></i>
                     </button>
 
@@ -80,29 +160,36 @@ $result = $stmt->fetchAll();
                         <div class="filter-section">
                             <div class="filter-section-title">Status</div>
 
-                            <!-- tombol ini bisa kamu pakai di JS untuk filter client-side -->
-                            <button type="button" class="filter-item filter-status" data-status="">
-                                Semua
-                            </button>
-                            <button type="button" class="filter-item filter-status" data-status="pending">
-                                Pending
-                            </button>
-                            <button type="button" class="filter-item filter-status" data-status="disetujui">
-                                Disetujui
-                            </button>
-                            <button type="button" class="filter-item filter-status" data-status="ditolak">
-                                Ditolak
-                            </button>
+                            <a href="<?= htmlspecialchars(build_query([
+                                            'filter_field' => 'status',
+                                            'filter_value' => 'Disetujui',
+                                            'page'        => 1
+                                        ])) ?>" class="filter-item">Disetujui</a>
+
+                            <a href="<?= htmlspecialchars(build_query([
+                                            'filter_field' => 'status',
+                                            'filter_value' => 'Pending',
+                                            'page'        => 1
+                                        ])) ?>" class="filter-item">Pending</a>
+
+                            <a href="<?= htmlspecialchars(build_query([
+                                            'filter_field' => 'status',
+                                            'filter_value' => 'Ditolak',
+                                            'page'        => 1
+                                        ])) ?>" class="filter-item">Ditolak</a>
+
                         </div>
                     </div>
                 </div>
 
-                <a href="#" class="clear-filter" id="clearStatusFilter">
-                    Hapus Filter
-                </a>
+                <a href="<?= htmlspecialchars(build_query([
+                                'filter_field' => null,
+                                'filter_value' => null,
+                                'page'        => 1
+                            ])) ?>" class="clear-filter">Hapus Filter</a>
             </div>
 
-            <!-- ACTION BUTTONS (export + sort) -->
+            
             <div class="right-actions">
                 <a href="export.php" style="text-decoration:none;">
                     <button type="button" class="export">
@@ -114,22 +201,22 @@ $result = $stmt->fetchAll();
                 <div class="sort-wrapper">
                     <button id="sort-btn" class="sort">
                         <i class="fa-solid fa-arrow-down-wide-short"></i>
-                        Urutkan : <strong id="sort-label">Default</strong>
+                        Urutkan : <strong id="sort-label"><?= htmlspecialchars($sortLabel) ?></strong>
                     </button>
 
-                    <!-- Dropdown sort (JS-mu yang lama tetap bisa pakai ini) -->
+                    
                     <div id="sort-menu" class="sort-menu hidden">
-                        <div data-sort="default">Default</div>
-                        <div data-sort="latest">Terbaru</div>
-                        <div data-sort="oldest">Terlama</div>
-                        <div data-sort="az">Nama A–Z</div>
-                        <div data-sort="za">Nama Z–A</div>
+                        <div data-sort="default" class="<?= $sort === 'default' ? 'active' : '' ?>">Default</div>
+                        <div data-sort="latest"  class="<?= $sort === 'latest'  ? 'active' : '' ?>">Terbaru</div>
+                        <div data-sort="oldest"  class="<?= $sort === 'oldest'  ? 'active' : '' ?>">Terlama</div>
+                        <div data-sort="az"      class="<?= $sort === 'az'      ? 'active' : '' ?>">Nama A–Z</div>
+                        <div data-sort="za"      class="<?= $sort === 'za'      ? 'active' : '' ?>">Nama Z–A</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ===== TABLE WRAPPER (stylenya disamakan dengan AnggotaLab) ===== -->
+        
         <div class="table-container">
             <table>
                 <thead>
@@ -233,7 +320,7 @@ $result = $stmt->fetchAll();
             </table>
         </div>
 
-        <!-- ===== MODAL CATATAN ===== -->
+        
         <div id="catatan-modal" class="modal-overlay">
             <div class="modal-box">
                 <h3 class="modal-title">Edit Catatan</h3>
@@ -252,7 +339,7 @@ $result = $stmt->fetchAll();
             </div>
         </div>
 
-        <!-- ===== FOOTER (hapus terpilih + pagination ala AnggotaLab) ===== -->
+        
         <div class="table-footer">
             <div class="delete-selection" style="cursor: pointer">
                 <i class="fa-solid fa-trash"></i>
@@ -261,31 +348,32 @@ $result = $stmt->fetchAll();
 
             <div class="pagination">
                 <?php
-                // show previous
+                // PREV
                 if ($page > 1) {
-                    echo "<a href='?page=" . ($page - 1) . "' class='page-link prev'>&laquo; Sebelumnya</a>";
+                    echo "<a href='" . htmlspecialchars(build_query(['page' => $page - 1])) . "' class='page-link prev'>&laquo; Sebelumnya</a>";
                 }
 
-                // Always show page 1
+                // Page 1
                 if ($page > 3) {
-                    echo "<a href='?page=1' class='page-link'>1</a>";
+                    echo "<a href='" . htmlspecialchars(build_query(['page' => 1])) . "' class='page-link'>1</a>";
                     echo "<span class='dots'>...</span>";
                 }
 
-                // Middle pages (page-1, page, page+1)
+                // current-1, current, current+1
                 for ($i = max(1, $page - 1); $i <= min($totalPages, $page + 1); $i++) {
-                    echo "<a href='?page=$i' class='page-link " . ($i == $page ? "active" : "") . "'>$i</a>";
+                    $activeClass = ($i == $page) ? "active" : "";
+                    echo "<a href='" . htmlspecialchars(build_query(['page' => $i])) . "' class='page-link {$activeClass}'>{$i}</a>";
                 }
 
-                // Always show last page
+                // last page
                 if ($page < $totalPages - 2) {
                     echo "<span class='dots'>...</span>";
-                    echo "<a href='?page=$totalPages' class='page-link'>$totalPages</a>";
+                    echo "<a href='" . htmlspecialchars(build_query(['page' => $totalPages])) . "' class='page-link'>{$totalPages}</a>";
                 }
 
-                // next
+                // NEXT
                 if ($page < $totalPages) {
-                    echo "<a href='?page=" . ($page + 1) . "' class='page-link next'>Berikutnya &raquo;</a>";
+                    echo "<a href='" . htmlspecialchars(build_query(['page' => $page + 1])) . "' class='page-link next'>Berikutnya &raquo;</a>";
                 }
                 ?>
             </div>

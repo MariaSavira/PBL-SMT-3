@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -6,6 +7,9 @@
 }
 
 body {
+    /* background: #f5f7fb;
+    color: #111827;
+    display: flex; */
     padding: 0;
     margin: 0;
     font-family: "Poppins", sans-serif;
@@ -14,7 +18,10 @@ body {
     display: flex;
 }
 
+
 .content {
+    /* flex: 1;
+    padding: 24px 32px 40px 32px; */
     margin-left: 260px;
     padding: 40px;
     width: calc(100% - 260px);
@@ -37,12 +44,26 @@ body {
     font-weight: 600;
 }
 
-/* ===== TOP CONTROLS (search + filter + actions) ===== */
 .top-controls {
+    width: 100%;
     display: flex;
+    justify-content: space-between;
     align-items: center;
     margin: 25px 0;
     gap: 20px;
+}
+
+.left-tools {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    width: 600px; /* biar rapih */
+}
+
+.right-tools {
+    display: flex;
+    align-items: center;
+    gap: 14px;
 }
 
 .search-box {
@@ -62,12 +83,23 @@ body {
     font-size: 15px;
 }
 
-/* ==== Filter area – copy dari AnggotaLab ==== */
+/* .search-box i {
+    color: #6b7280;
+    font-size: 16px;
+} */
+
+/* .search-box input {
+    border: none;
+    outline: none;
+    font-size: 14px;
+    width: 100%;
+    background: transparent;
+} */
+
 .filter-area {
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 14px;
+    gap: 10px;
 }
 
 .filter-dropdown {
@@ -89,7 +121,7 @@ body {
     transition: 0.2s ease;
 }
 
-.filter-toggle i.caret {
+.filter-toggle i {
     font-size: 10px;
 }
 
@@ -99,7 +131,7 @@ body {
 }
 
 .filter-menu {
-    position: absolute;
+    /* position: absolute;
     top: 110%;
     left: 0;
     min-width: 230px;
@@ -108,12 +140,34 @@ body {
     padding: 8px 0;
     box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
     display: none;
-    z-index: 30;
+    z-index: 30; */
+    position: absolute;
+    left: 0;
+    top: 110%;
+    z-index: 50;
+    display: none;
 }
 
 .filter-menu.open {
     display: block;
 }
+
+/* .filter-menu .active {
+    background: #eef3ff;
+    color: #1e40af;
+} */
+
+/* .filter-menu .filter-item {
+    display: block;
+    padding: 10px 16px;
+    font-size: 13px;
+    color: #374151;
+    text-decoration: none;
+} */
+
+/* .filter-item:hover {
+    background: #f3f4f6;
+} */
 
 .filter-section {
     padding: 8px 14px 10px;
@@ -134,16 +188,6 @@ body {
 }
 
 .filter-item {
-    /* display: block;
-    width: 100%;
-    text-align: left;
-    padding: 6px 8px;
-    border-radius: 8px;
-    font-size: 13px;
-    color: #111827;
-    background: none;
-    border: none;
-    cursor: pointer; */
     display: block;
     padding: 6px 8px;
     border-radius: 8px;
@@ -171,7 +215,17 @@ body {
     text-decoration: underline;
 }
 
-/* ===== Right actions (Export + Sort) ===== */
+/* .clear-filter {
+    font-size: 12px;
+    color: #6b7280;
+    text-decoration: none;
+    margin-left: 6px;
+} */
+
+.filter-dropdown:hover .filter-menu {
+    display: none;
+}
+
 .right-actions {
     margin-left: auto;
     display: flex;
@@ -191,15 +245,13 @@ button {
     color: #0C2A4C;
 }
 
+.sort-wrapper {
+    position: relative;
+}
+
 .sort {
     background: #ffffff;
     box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-}
-
-/* Sort dropdown khusus Peminjaman */
-.sort-wrapper {
-    position: relative;
-    display: inline-block;
 }
 
 .sort-menu {
@@ -228,7 +280,16 @@ button {
     background: #f3f3f3;
 }
 
-/* ===== Table layout – disamakan dengan AnggotaLab ===== */
+.btn-primary {
+    padding: 10px 20px;
+    background: #1E5AA8;
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
 .table-container {
     margin-top: 10px;
     background: #ffffff;
@@ -277,22 +338,12 @@ tbody tr:hover {
     background: #f3f6ff;
 }
 
-/* email biar nggak kepanjangan */
-td.email-column {
-    white-space: normal;
-    word-break: break-word;
-    max-width: 220px;
-    line-height: 1.4;
+.no-data {
+    text-align: center;
+    padding: 30px 0;
+    color: #9ca3af;
 }
 
-td.approved-by {
-    max-width: 130px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* ===== Footer bawah table: delete selection + pagination ===== */
 .table-footer {
     margin-top: 20px;
     display: flex;
@@ -307,6 +358,17 @@ td.approved-by {
     color: #1f4fc7;
     font-size: 15px;
 }
+
+/* .table-actions a {
+    color: #1e40af;
+    font-size: 13px;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.table-actions a:hover {
+    text-decoration: underline;
+} */
 
 .pagination {
     display: flex;
@@ -348,142 +410,21 @@ td.approved-by {
     font-size: 12px;
 }
 
-/* ===== Status, tombol simpan, badge dst. ===== */
-
-.status-dropdown {
-    background-color: #ffffff;
-    color: #111827;
-    padding: 6px 16px;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
-    font-weight: 500;
-    font-size: 13px;
-    cursor: pointer;
-    outline: none;
-}
-
-.status-dropdown:hover {
-    background-color: #f9fafb;
-}
-
-.btn-save {
-    background-color: #1f4fc7;
-    color: #ffffff;
-    padding: 8px 14px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.25s ease;
-}
-
-.btn-save:hover {
-    background-color: #074c81;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-}
-
-.btn-save:active {
-    transform: scale(0.95);
-}
-
-/* ===== Modal catatan ===== */
-
-.modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-}
-
-.modal-overlay.open {
-    display: flex;
-}
-
-.modal-box {
-    background: #ffffff;
-    padding: 24px;
-    border-radius: 12px;
-    width: 360px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-    animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-    from { transform: translateY(-10px); opacity: 0; }
-    to   { transform: translateY(0); opacity: 1; }
-}
-
-.modal-title {
-    margin: 0 0 14px 0;
-    font-size: 18px;
-    font-weight: 600;
-}
-
-.modal-textarea {
-    width: 100%;
-    height: 110px;
-    resize: none;
-    padding: 12px;
-    margin-bottom: 18px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 14px;
-    line-height: 1.5;
-    outline: none;
-    transition: all 0.2s ease;
-}
-
-.modal-textarea:focus {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
-}
-
-.modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
-
-.btn-cancel {
-    background: #f3f4f6;
-    color: #111827;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background 0.2s;
-}
-
-.btn-cancel:hover {
-    background: #e5e7eb;
-}
-
-/* optional badge kalau mau dipakai */
 .badge {
-    padding: 6px 14px;
-    border-radius: 20px;
-    color: white;
-    font-weight: 600;
-    text-transform: capitalize;
-    font-size: 14px;
     display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
 }
 
-.badge-pending {
-    background-color: #f7b731;
-    color: #000;
+.badge.aktif {
+    background: #ecfdf5;
+    border: 1px solid #4ade80;
+    color: #15803d;
 }
 
-.badge-disetujui {
-    background-color: #2ecc71;
-}
-
-.badge-ditolak {
-    background-color: #e74c3c;
+.badge.draft {
+    background: #fefce8;
+    border: 1px solid #facc15;
+    color: #92400e;
 }

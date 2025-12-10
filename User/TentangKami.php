@@ -54,7 +54,7 @@
 
                 <div class="profil-text">
                     <h2>Laboratorium Business Analytics</h2>
-                    <p style="font-size: 12px;">
+                    <p>
                         Laboratorium Business Analytics adalah fasilitas akademik yang dirancang sebagai ekosistem praktik end-to-end
                         untuk analisis bisnis berbasis data—mulai dari pengambilan, pengolahan, pemodelan, hingga penyajian insight secara profesional.
                         Lab ini menjadi pusat pembelajaran berbasis proyek, pusat penelitian terapan yang dapat diuji ulang, serta pusat layanan data bagi mitra industri dan instansi.<br><br>
@@ -75,25 +75,25 @@
             <div class="card">
                 <img src="../Assets/Image/TentangKami/Group 75.png">
                 <h4>Pendidikan dan Pembelajaran</h4>
-                <p>Menyediakan ekosistem praktik analitik yang lengkap...</p>
+                <p>Menyediakan ekosistem praktik end-to-end yang konsisten, data terkurasi, dan perangkat lunak standar untuk memastikan mahasiswa lulus dengan portofolio proyek analitik yang relevan.</p>
             </div>
 
             <div class="card">
                 <img src="../Assets/Image/TentangKami/Icon.png">
                 <h4>Riset dan Inovasi</h4>
-                <p>Menginisiasi riset terapan berbasis data dan komputasi...</p>
+                <p>Memfasilitasi penelitian terapan dosen dan mahasiswa dengan sarana komputasi, repositori data, dan prosedur yang menjamin keterulangan (replikasi) serta menghasilkan Karya Intelektual (HKI)</p>
             </div>
 
             <div class="card">
                 <img src="../Assets/Image/TentangKami/Vector (9).png">
                 <h4>Kemitraan dan Solusi</h4>
-                <p>Kolaborasi strategis bersama industri dan pemerintahan...</p>
+                <p>Menghubungkan Lab dengan industri dan pemerintah untuk proyek nyata, magang terstruktur, dan studi kasus, sehingga kompetensi lulusan selaras dengan kebutuhan pasar kerja.</p>
             </div>
 
             <div class="card">
                 <img src="../Assets/Image/TentangKami/Group.png">
                 <h4>Sertifikasi Kompetensi</h4>
-                <p>Pelatihan & uji kompetensi sesuai kebutuhan industri...</p>
+                <p>Menyelenggarakan pelatihan dan uji kompetensi berkala (BNSP/SKKNI) di TUK Lab, serta menargetkan sertifikasi internasional untuk meningkatkan daya saing global lulusan.</p>
             </div>
             </div>
         </div>
@@ -109,22 +109,29 @@
                         <img src="../Assets/Image/TentangKami/visi.png" class="visi-img">
 
                         <div class="card visi-card">
+                            <img src="../Assets/Image/TentangKami/Vector (11).png" style="margin-top: 10px;">
                             <h4>Visi</h4>
                             <p>
-                                Menjadi laboratorium unggul rujukan nasional sebagai inkubator solusi cerdas berbasis data...
+                                Menjadi laboratorium unggul rujukan<br>
+                                nasional sebagai inkubator solusi cerdas<br>
+                                berbasis data,  yang berfungsi sebagai mitra<br>
+                                strategis industri untuk mengakselerasi<br>
+                                transformasi bisnis dan pengambilan<br>
+                                keputusan yang berdampak
                             </p>
                         </div>
                 </div>
 
                 <div class="misi">
                         <div class="card misi-card">
+                            <img src="../Assets/Image/TentangKami/Vector (10).png" style="margin-top: 10px;">
                             <h4>Misi</h4>
                             <ul>
-                                <li>Mengembangkan riset terapan</li>
-                                <li>Mengin­tegrasikan berbagai disiplin ilmu</li>
-                                <li>Membangun kemitraan strategis</li>
-                                <li>Mengembangkan talenta dosen & mahasiswa</li>
-                                <li>Menjalankan tata kelola profesional & berkelanjutan</li>
+                                <li>Mengembangkan riset terapan
+                                <li>Mengintegrasikan berbagai disiplin ilmu</li>
+                                <li>Membangun kemitraan strategis dengan industry</li>
+                                <li>Mengembangkan talenta (dosen dan<br> mahasiswa)</li>
+                                <li>Menjalankan tata kelola laboratorium yang<br> profesional, etis, dan berkelanjutan</li>
                             </ul>
                         </div>
                         <img src="../Assets/Image/TentangKami/misi.png" class="misi-img">

@@ -26,8 +26,8 @@ async function loadComponent(id, file, url) { //async function maksundya asinkro
 document.addEventListener("DOMContentLoaded", async function () {
     await loadComponent(
         "sidebar",
-        "../../../Admin/Sidebar.html",
-        "../../../Assets/Css/Admin/Sidebar.css"); //fungsi async bisa pake await
+        "/PBL-SMT-3/Admin/Sidebar.html",
+        "/PBL-SMT-3/Assets/Css/Admin/Sidebar.css"); //fungsi async bisa pake await
 
     const sidebar = document.getElementById("ini-sidebar");
     const content = document.getElementById("content");

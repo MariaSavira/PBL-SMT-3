@@ -257,7 +257,7 @@
                                     <button type="button" class="dropdown-item" data-value="Kepala Lab">Kepala Lab</button>
                                     <button type="button" class="dropdown-item" data-value="Peneliti">Peneliti</button>
                                     <button type="button" class="dropdown-item" data-value="Staff">Staff</button>
-                                </div>
+                            </div>
 
                                 <!-- nilai yang beneran dikirim ke PHP -->
                                 <input type="hidden" name="jabatan" id="jabatan_hidden" value="">

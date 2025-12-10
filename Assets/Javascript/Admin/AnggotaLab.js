@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const yakin = confirm('Yakin ingin menghapus data anggota ini?');
             if (yakin) {
-                form.submit(); // POST ke DeleteAnggota.php
+                form.submit();
             }
             e.stopPropagation();
             return;

@@ -1,3 +1,21 @@
+document.addEventListener('DOMContentLoaded', function () {
+    const toggle = document.querySelector('.filter-toggle');
+    const menu = document.querySelector('.filter-menu');
+
+    if (!toggle || !menu) return;
+
+    toggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        menu.classList.toggle('open');
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!menu.contains(e.target)) {
+            menu.classList.remove('open');
+        }
+    });
+});
+
 const dirtyRows = new Set();
 
 //  POPUP VARIABLES 
@@ -106,98 +124,34 @@ document.getElementById("search-input").addEventListener("keyup", function () {
 
 // --- SORTING ---
 
-const sortBtn = document.getElementById("sort-btn");
+const sortBtn  = document.getElementById("sort-btn");
 const sortMenu = document.getElementById("sort-menu");
-const sortLabel = document.getElementById("sort-label");
-
-// ambil semua baris tabel sekali di awal
-const tbody = document.querySelector("table tbody");
-const originalRows = Array.from(tbody.querySelectorAll("tr"));
-
-// simpan index asli, buat nanti balik ke default
-originalRows.forEach((row, idx) => {
-    row.dataset.originalIndex = idx;
-});
 
 // buka / tutup dropdown
 sortBtn.addEventListener("click", () => {
     sortMenu.classList.toggle("hidden");
 });
 
-// kalau klik di luar dropdown → tutup
+// klik di luar → tutup
 document.addEventListener("click", (e) => {
     if (!sortMenu.contains(e.target) && !sortBtn.contains(e.target)) {
         sortMenu.classList.add("hidden");
     }
 });
 
-// fungsi bantu buat apply urutan baru ke tbody
-function applyOrder(rows) {
-    rows.forEach(tr => tbody.appendChild(tr));
-}
-
-// fungsi sortir
-function sortRows(type) {
-    let rows = Array.from(tbody.querySelectorAll("tr"));
-
-    if (type === "default") {
-        // urutkan kembali sesuai index asli
-        rows.sort((a, b) => a.dataset.originalIndex - b.dataset.originalIndex);
-        sortLabel.textContent = "Default";
-    }
-
-    if (type === "latest") {
-        // tanggal pakai di kolom ke-7 (index 6)
-        // kalau mau pakai tanggal pengajuan, ganti 6 -> 5
-        rows.sort((a, b) => {
-            const tA = new Date(a.children[6].innerText);
-            const tB = new Date(b.children[6].innerText);
-            return tB - tA; // terbaru dulu
-        });
-        sortLabel.textContent = "Terbaru";
-    }
-
-    if (type === "oldest") {
-        rows.sort((a, b) => {
-            const tA = new Date(a.children[6].innerText);
-            const tB = new Date(b.children[6].innerText);
-            return tA - tB; // terlama dulu
-        });
-        sortLabel.textContent = "Terlama";
-    }
-
-    if (type === "az") {
-        // nama peminjam di kolom ke-3 (index 2)
-        rows.sort((a, b) => {
-            const nA = a.children[2].innerText.toLowerCase();
-            const nB = b.children[2].innerText.toLowerCase();
-            return nA.localeCompare(nB);
-        });
-        sortLabel.textContent = "Nama A–Z";
-    }
-
-    if (type === "za") {
-        rows.sort((a, b) => {
-            const nA = a.children[2].innerText.toLowerCase();
-            const nB = b.children[2].innerText.toLowerCase();
-            return nB.localeCompare(nA);
-        });
-        sortLabel.textContent = "Nama Z–A";
-    }
-
-    applyOrder(rows);
-}
-
-// klik opsi di dropdown
+// klik opsi di dropdown → reload dengan ?sort=...
 sortMenu.querySelectorAll("div[data-sort]").forEach(item => {
     item.addEventListener("click", () => {
         const type = item.dataset.sort;
-        sortRows(type);
-        sortMenu.classList.add("hidden");
+
+        // ambil URL sekarang
+        const url = new URL(window.location.href);
+        url.searchParams.set("sort", type);
+        url.searchParams.set("page", 1);   // tiap ganti sort, mulai dari halaman 1
+
+        window.location.href = url.toString();
     });
 });
-
-
 
 // SCRIPT DELETE TETAP, JANGAN DIUBAH
 document.querySelector('.delete-selection').addEventListener('click', () => {
