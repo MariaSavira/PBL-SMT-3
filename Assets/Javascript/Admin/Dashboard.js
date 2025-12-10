@@ -17,8 +17,8 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("Labels dari PHP:", labelsPeminjaman);
             console.log("Data   dari PHP:", dataPeminjaman);
 
+            // tidak ada data, jangan gambar grafik
             if (!labelsPeminjaman.length || !dataPeminjaman.length) {
-                // kalau kosong, jangan gambar apa-apa
                 return;
             }
 
@@ -53,46 +53,121 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ==========================
-    // 2. FILTER DROPDOWN
+    // 2. AKSI EDIT / HAPUS ANGGOTA TERBARU
     // ==========================
-    const filterToggle = document.getElementById("filterToggle");
-    const filterMenu   = document.getElementById("filterMenu");
-    const filterLabel  = document.getElementById("filterLabel");
+    const editButtons   = document.querySelectorAll(".anggota-section .btn-edit");
+    const deleteButtons = document.querySelectorAll(".anggota-section .btn-delete");
 
-    if (filterToggle && filterMenu && filterLabel) {
-        filterToggle.addEventListener("click", function (e) {
+    // Catatan:
+    // Saat ini .btn-edit & .btn-delete masih <a href="...">
+    // JS di bawah hanya aktif kalau nanti diganti jadi <button>.
+    editButtons.forEach(btn => {
+        if (btn.tagName && btn.tagName.toLowerCase() === "a") return;
+
+        btn.addEventListener("click", function () {
+            const card = this.closest(".member-card");
+            const id   = this.dataset.id || (card && card.dataset.id);
+            if (!id) return;
+
+            window.location.href = "EditAnggota.php?id=" + encodeURIComponent(id);
+        });
+    });
+
+    deleteButtons.forEach(btn => {
+        if (btn.tagName && btn.tagName.toLowerCase() === "a") return;
+
+        btn.addEventListener("click", function () {
+            const card = this.closest(".member-card");
+            const id   = this.dataset.id || (card && card.dataset.id);
+            if (!id) return;
+
+            if (!confirm("Yakin ingin menghapus anggota ini?")) return;
+            window.location.href = "HapusAnggota.php?id=" + encodeURIComponent(id);
+        });
+    });
+
+    // ==========================
+    // 3. NOTIFIKASI LONCENG (DROPDOWN + MARK AS READ)
+    // ==========================
+    const notifToggle = document.getElementById("notifToggle");
+    const notifMenu   = document.getElementById("notifMenu");
+    const notifBadge  = document.querySelector(".notif-badge");
+
+    // supaya request tandai-dibaca hanya sekali
+    let notifSudahKirimMarkRead = false;
+
+    if (notifToggle && notifMenu) {
+        notifToggle.addEventListener("click", function (e) {
             e.stopPropagation();
-            filterMenu.classList.toggle("show");
+
+            // toggle dropdown
+            notifMenu.classList.toggle("show");
+
+            // kalau baru pertama kali dibuka, kirim request untuk tandai sudah dibaca
+            if (notifMenu.classList.contains("show") && !notifSudahKirimMarkRead) {
+                notifSudahKirimMarkRead = true;
+
+                // cek dukungan fetch (browser lama banget aja yang nggak punya)
+                if (typeof fetch === "function") {
+                    fetch("TandaiNotifDibaca.php", {
+                        method: "POST"
+                    })
+                    .then(function () {
+                        // hilangkan badge merah kalau ada
+                        if (notifBadge) {
+                            notifBadge.remove();
+                        }
+
+                        // hapus class 'unread' di semua item notif
+                        document
+                            .querySelectorAll(".notif-item.unread")
+                            .forEach(function (item) {
+                                item.classList.remove("unread");
+                            });
+                    })
+                    .catch(function (err) {
+                        console.error("Gagal update status notif:", err);
+                    });
+                }
+            }
         });
 
-        filterMenu.querySelectorAll("button").forEach(btn => {
-            btn.addEventListener("click", function () {
-                filterLabel.textContent = this.textContent;
-                filterMenu.querySelectorAll("button").forEach(b => b.classList.remove("active"));
-                this.classList.add("active");
-                filterMenu.classList.remove("show");
-            });
+        // klik di dalam menu tidak menutup dropdown
+        notifMenu.addEventListener("click", function (e) {
+            e.stopPropagation();
         });
 
-        document.addEventListener("click", () => {
-            filterMenu.classList.remove("show");
+        // klik di luar menutup dropdown
+        document.addEventListener("click", function () {
+            notifMenu.classList.remove("show");
         });
     }
 
     // ==========================
-    // 3. KALENDER POPUP
+    // 4. KALENDER (ICON -> INPUT DATE)
     // ==========================
     const calendarBtn   = document.getElementById("calendarButton");
     const calendarInput = document.getElementById("calendarInput");
 
-    if (calendarBtn && calendarInput && typeof calendarInput.showPicker === "function") {
-        calendarBtn.addEventListener("click", (e) => {
+    if (calendarBtn && calendarInput) {
+        calendarBtn.addEventListener("click", function (e) {
             e.preventDefault();
-            calendarInput.showPicker();
+            e.stopPropagation();
+
+            // showPicker() didukung Chrome/Edge/Opera modern
+            if (typeof calendarInput.showPicker === "function") {
+                calendarInput.showPicker();
+            } else {
+                // fallback browser lain
+                calendarInput.focus();
+                calendarInput.click();
+            }
         });
 
-        calendarInput.addEventListener("change", () => {
-            console.log("Tanggal terpilih:", calendarInput.value);
+        // opsional: listener ketika tanggal dipilih
+        calendarInput.addEventListener("change", function () {
+            console.log("Tanggal dipilih:", this.value);
+            // kalau nanti mau dipakai filter data, logika bisa ditaruh di sini
         });
     }
 

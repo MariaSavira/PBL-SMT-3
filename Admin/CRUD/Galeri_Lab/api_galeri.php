@@ -24,15 +24,13 @@ try {
     
     $galeri_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    // Format data untuk frontend
     $result = [];
     foreach ($galeri_items as $item) {
         $result[] = [
             'id' => $item['id_galeri'],
             'judul' => $item['judul'],
             'deskripsi' => $item['deskripsi'],
-            // IMPORTANT: Sesuaikan path image dengan struktur folder Anda
-            'image' => '../Assets/Image/Galeri-Berita/' . $item['file_path'],
+            'image' => '/PBL-SMT-3/Assets/Image/Galeri-Berita/' . $item['file_path'],
             'tipe' => $item['tipe_media'],
             'tanggal' => date('d M Y', strtotime($item['tanggal_upload'])),
             'author' => $item['uploaded_by']

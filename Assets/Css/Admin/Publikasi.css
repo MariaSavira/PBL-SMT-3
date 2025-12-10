@@ -131,20 +131,15 @@ body {
 }
 
 .filter-menu {
-    /* position: absolute;
-    top: 110%;
-    left: 0;
-    min-width: 230px;
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 8px 0;
-    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
-    display: none;
-    z-index: 30; */
     position: absolute;
     left: 0;
     top: 110%;
     z-index: 50;
+    min-width: 220px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 8px 0;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
     display: none;
 }
 
@@ -170,9 +165,13 @@ body {
 } */
 
 .filter-section {
-    padding: 8px 14px 10px;
-    border-top: 1px solid #f3f4f6;
+    padding: 10px 14px;
+    border-top: 1px solid #f0f0f0;
 }
+
+/* .filter-menu .filter-section:first-of-type {
+    border-top: none !important;
+} */
 
 .filter-section:first-child {
     border-top: none;
@@ -259,11 +258,11 @@ button {
     top: 110%;
     right: 0;
     background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
-    padding: 8px 0;
+    border-radius: 12px;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+    padding: 6px 0;
     width: 170px;
-    z-index: 40;
+    z-index: 60;
 }
 
 .sort-menu.hidden {

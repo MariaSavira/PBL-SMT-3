@@ -287,7 +287,7 @@ $result = empty($params)
                                         <button
                                             type="button"
                                             class="action-item action-delete"
-                                            data-id="<?= $row['id_anggota'] ?>" style="border-radius: 0">
+                                            data-id="<?= $row['id_publikasi'] ?>" style="border-radius: 0">
                                             <i class="fa-solid fa-trash-can"></i>
                                             <span>Hapus</span>
                                         </button>
@@ -296,15 +296,10 @@ $result = empty($params)
                                     <!-- form POST untuk delete -->
                                     <form method="post"
                                         action="DeletePublikasi.php"
-                                        class="delete-anggota-form">
+                                        class="delete-publikasi-form">
                                         <input type="hidden" name="id_publikasi"
                                             value="<?= $row['id_publikasi'] ?>">
                                     </form>
-                                </td>
-                                <td class="table-actions">
-                                    <a  class="action-edit">Edit</a>
-                                    <a href="DeletePublikasi.php?id=<?= $row['id_publikasi'] ?>" class="action-delete"
-                                        onclick="return confirm('Yakin ingin menghapus?')">Hapus</a>
                                 </td>
                             </tr>
                         <?php endwhile; ?>

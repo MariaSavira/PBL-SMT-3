@@ -325,7 +325,7 @@
                                     <input
                                         type="checkbox"
                                         class="row-check"
-                                        value="<?= htmlspecialchars($row['id_anggota']) ?>">
+                                        value="<?= $row['id_anggota'] ?>">
                                 </td>
                                 <td class="text"><?= htmlspecialchars($row["id_anggota"]) ?></td>
                                 <td class="text"><?= htmlspecialchars($row["nama"]) ?></td>
