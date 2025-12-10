@@ -284,7 +284,7 @@ document.querySelectorAll('.btn-save').forEach(btn => {
         }
 
         // Kirim ke server
-        fetch("../../UpdateStatus.php", {
+        fetch("../../../UpdateStatus.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
