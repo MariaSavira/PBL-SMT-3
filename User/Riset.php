@@ -64,12 +64,13 @@ $totalRisetAktif = is_array($rows) ? count($rows) : 0;
             </div>
             <div class="stat-label">Jumlah Riset Aktif</div>
         </div>
+    </div>
 
     <a href="Publikasi.html" class="cta-btn">Lihat Publikasi</a>
 
     <div id="footer"></div>
 
-        <div class="section-title">Bidang Riset Utama</div>
+        <!-- <div class="section-title">Bidang Riset Utama</div>
 
         <div class="tag-list">
             <div class="tag">Anomaly Detection</div>
@@ -102,7 +103,7 @@ $totalRisetAktif = is_array($rows) ? count($rows) : 0;
         </div>
 
         <a href="Publikasi.html" class="cta-btn">Lihat Publikasi</a>
-        <div id="footer"></div>
+        <div id="footer"></div> -->
 
         <script src="../Assets/Javascript/HeaderFooter.js"></script>
     </body>

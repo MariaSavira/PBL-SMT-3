@@ -11,16 +11,6 @@
             display: flex;
         }
 
-        /* Sidebar placeholder */
-        #sidebar {
-            width: 80px;
-            transition: width 0.3s ease;
-        }
-
-        #sidebar.active {
-            width: 250px;
-        }
-
         /* Main content */
         .main-content {
             flex: 1;
