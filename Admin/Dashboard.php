@@ -1,10 +1,9 @@
 <?php
-// panggil koneksi (file koneksi.php yang berisi fungsi q() dan qparams())
+
 require __DIR__ . '/CRUD/koneksi.php';
 
-// ----------------------------
 // INISIALISASI NILAI STATISTIK
-// ----------------------------
+
 $totalArtikel         = 0;  // akan diisi dari tabel berita
 $totalAnggotaAktif    = 0;  // akan diisi dari tabel anggotalab
 $totalAjuanPeminjaman = 0;  // akan diisi dari tabel peminjaman_lab
@@ -13,10 +12,8 @@ $totalAjuanPeminjaman = 0;  // akan diisi dari tabel peminjaman_lab
 $labelsBulan = [];
 $dataBulan   = [];
 
-// ----------------------------
 // TOTAL ARTIKEL DARI TABEL berita
-// ----------------------------
-// kalau mau hanya yang published, bisa ubah jadi: WHERE status = 'published'
+
 try {
     $resultArtikel = q("SELECT COUNT(*) AS total FROM berita");
     $rowArtikel    = pg_fetch_assoc($resultArtikel);
@@ -25,9 +22,8 @@ try {
     $totalArtikel = 0;
 }
 
-// ----------------------------
 // TOTAL AJUAN PEMINJAMAN LAB
-// ----------------------------
+
 try {
     $resultAjuan = q("SELECT COUNT(*) AS total FROM peminjaman_lab");
     $rowAjuan    = pg_fetch_assoc($resultAjuan);
@@ -36,9 +32,9 @@ try {
     $totalAjuanPeminjaman = 0;
 }
 
-// ----------------------------
+
 // TOTAL ANGGOTA AKTIF DARI TABEL anggotalab
-// ----------------------------
+
 try {
     $resultAnggota = q("
         SELECT COUNT(*) AS total
@@ -51,9 +47,8 @@ try {
     $totalAnggotaAktif = 0;
 }
 
-// ----------------------------
 // DATA GRAFIK PEMINJAMAN PER BULAN
-// ----------------------------
+
 try {
     $sqlPerBulan = "
         SELECT 
@@ -83,9 +78,8 @@ try {
     $dataBulan   = [];
 }
 
-// ----------------------------
 // ANGGOTA TERBARU DARI TABEL anggotalab
-// ----------------------------
+
 $anggotaTerbaru = null;
 
 try {
@@ -111,9 +105,8 @@ try {
     $anggotaTerbaru = null;
 }
 
-// ----------------------------
 // NOTIF AJUAN TERBARU (PENDING SAJA, TANPA dibaca_admin)
-// ----------------------------
+
 $notifAjuan      = [];
 $jumlahNotifBaru = 0;
 
@@ -137,9 +130,7 @@ try {
             status
         FROM peminjaman_lab
         WHERE status = 'pending'
-        ORDER BY tanggal_pengajuan DESC, id_peminjaman DESC
-        LIMIT 5;
-    ");
+        ORDER BY tanggal_pengajuan DESC, id_peminjaman DESC");
 
     while ($row = pg_fetch_assoc($qNotifList)) {
         $notifAjuan[] = $row;
@@ -149,9 +140,9 @@ try {
     $notifAjuan      = [];
 }
 
-// ----------------------------
+
 // PENGUMUMAN TERBARU DARI TABEL pengumuman
-// ----------------------------
+
 $pengumumanTerbaru = [];
 
 try {
@@ -165,9 +156,7 @@ try {
             status
         FROM pengumuman
         WHERE status = 'Aktif'
-        ORDER BY tanggal_terbit DESC, created_at DESC, id_pengumuman DESC
-        LIMIT 3;
-    ";
+        ORDER BY tanggal_terbit DESC, created_at DESC, id_pengumuman DESC";
 
     $resultPengumuman = q($sqlPengumuman);
     while ($row = pg_fetch_assoc($resultPengumuman)) {
