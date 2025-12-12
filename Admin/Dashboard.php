@@ -17,37 +17,22 @@ try {
 } catch (Throwable $e) {
 }
 
-<<<<<<< HEAD
 // TOTAL AJUAN PEMINJAMAN LAB
 
-=======
-/* ------------------- TOTAL AJUAN ------------------- */
->>>>>>> b977c2c2f3cf3c8b386b1803e0270941eade35ab
 try {
     $res = q("SELECT COUNT(*) AS total FROM peminjaman_lab");
     $totalAjuanPeminjaman = (int)(pg_fetch_result($res, 0, 'total') ?? 0);
 } catch (Throwable $e) {
 }
 
-<<<<<<< HEAD
-
-// TOTAL ANGGOTA AKTIF DARI TABEL anggotalab
-
-=======
 /* ------------------- TOTAL ANGGOTA AKTIF ------------------- */
->>>>>>> b977c2c2f3cf3c8b386b1803e0270941eade35ab
 try {
     $res = q("SELECT COUNT(*) AS total FROM anggotalab WHERE status = TRUE");
     $totalAnggotaAktif = (int)(pg_fetch_result($res, 0, 'total') ?? 0);
 } catch (Throwable $e) {
 }
 
-<<<<<<< HEAD
-// DATA GRAFIK PEMINJAMAN PER BULAN
-
-=======
 /* ------------------- DATA PEMINJAMAN PER BULAN ------------------- */
->>>>>>> b977c2c2f3cf3c8b386b1803e0270941eade35ab
 try {
     $sql = "
         SELECT 
@@ -69,12 +54,7 @@ try {
 } catch (Throwable $e) {
 }
 
-<<<<<<< HEAD
-// ANGGOTA TERBARU DARI TABEL anggotalab
-
-=======
 /* ------------------- ANGGOTA TERBARU ------------------- */
->>>>>>> b977c2c2f3cf3c8b386b1803e0270941eade35ab
 $anggotaTerbaru = null;
 try {
     $sql = "
@@ -89,14 +69,8 @@ try {
 } catch (Throwable $e) {
 }
 
-<<<<<<< HEAD
-// NOTIF AJUAN TERBARU (PENDING SAJA, TANPA dibaca_admin)
-
-$notifAjuan      = [];
-=======
 /* ------------------- NOTIFIKASI ------------------- */
 $notifAjuan = [];
->>>>>>> b977c2c2f3cf3c8b386b1803e0270941eade35ab
 $jumlahNotifBaru = 0;
 try {
     $res = q("SELECT COUNT(*) AS total FROM peminjaman_lab WHERE status = 'pending'");
@@ -106,47 +80,28 @@ try {
         SELECT id_peminjaman, nama_peminjam, keperluan, tanggal_pengajuan, status
         FROM peminjaman_lab
         WHERE status = 'pending'
-<<<<<<< HEAD
-        ORDER BY tanggal_pengajuan DESC, id_peminjaman DESC");
-
-    while ($row = pg_fetch_assoc($qNotifList)) {
-=======
         ORDER BY tanggal_pengajuan DESC, id_peminjaman DESC
         LIMIT 5;
     ";
     $res = q($sql);
     while ($row = pg_fetch_assoc($res)) {
->>>>>>> b977c2c2f3cf3c8b386b1803e0270941eade35ab
         $notifAjuan[] = $row;
     }
 } catch (Throwable $e) {
 }
 
-<<<<<<< HEAD
-
-// PENGUMUMAN TERBARU DARI TABEL pengumuman
-
-=======
 /* ------------------- PENGUMUMAN ------------------- */
->>>>>>> b977c2c2f3cf3c8b386b1803e0270941eade35ab
 $pengumumanTerbaru = [];
 try {
     $sql = "
         SELECT id_pengumuman, isi, tanggal_terbit, uploader
         FROM pengumuman
         WHERE status = 'Aktif'
-<<<<<<< HEAD
-        ORDER BY tanggal_terbit DESC, created_at DESC, id_pengumuman DESC";
-
-    $resultPengumuman = q($sqlPengumuman);
-    while ($row = pg_fetch_assoc($resultPengumuman)) {
-=======
         ORDER BY tanggal_terbit DESC, created_at DESC
         LIMIT 3;
     ";
     $res = q($sql);
     while ($row = pg_fetch_assoc($res)) {
->>>>>>> b977c2c2f3cf3c8b386b1803e0270941eade35ab
         $pengumumanTerbaru[] = $row;
     }
 } catch (Throwable $e) {
