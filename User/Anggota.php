@@ -82,6 +82,7 @@ require_once __DIR__ . '/../Admin/Cek_Autentikasi.php';
                 </div>
             </div>
 
+            <a href="DetailAnggota.php" style="text-decoration: none;">
             <div class="kepala-lab-info">
                 <h2 class="kepala-lab-name">
                     Dr. Rakhmat Arianto, S.ST., M.Kom.
@@ -96,7 +97,7 @@ require_once __DIR__ . '/../Admin/Cek_Autentikasi.php';
                 <hr>
 
                 <div class="kepala-lab-socmed">
-                    <a href="DetailAnggota.html" aria-label="Google Scholar">
+                    <a href="#" aria-label="Google Scholar">
                         <i class="fa-solid fa-graduation-cap"></i>
                     </a>
                     <a href="#" aria-label="LinkedIn">
@@ -117,6 +118,7 @@ require_once __DIR__ . '/../Admin/Cek_Autentikasi.php';
                 </div>
             </div>
         </div>
+        </a>
 
         <!-- JUDUL PARA PENELITI -->
         <div class="section-title anggota-section-title">
@@ -127,7 +129,7 @@ require_once __DIR__ . '/../Admin/Cek_Autentikasi.php';
         <div class="peneliti-grid">
             <!-- 1 -->
             <div class="peneliti-card">
-                <a href="DetailAnggota.html">
+                <a href="DetailAnggota.php">
                     <div class="peneliti-photo">
                         <img src="../Assets/Image/AnggotaLab/2.png"
                             alt="Hendra Pradibta, S.E., M.Sc.">

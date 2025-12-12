@@ -39,16 +39,16 @@ try {
     $mail->SMTPAuth   = true;
 
     // GANTI DENGAN EMAIL GMAIL KAMU
-    $mail->Username   = 'cwawaaa123@gmail.com';
+    $mail->Username   = 'rakhmatariyantodummymail@gmail.com';
     // GANTI DENGAN APP PASSWORD (BUKAN password biasa)
-    $mail->Password   = 'vbrw xvrt qzpo ydna';
+    $mail->Password   = 'prqg pkpc adbf mvwr';
 
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port       = 587;
 
     // ========== PENGIRIM & PENERIMA ==========
-    $mail->setFrom('kussyafira@gmail.com', 'Form Kontak Lab BA');
-    $mail->addAddress('cwawaaa123@gmail.com', 'Admin Lab BA');
+    $mail->setFrom('mariasavira2006@gmail.com', 'Form Kontak Lab BA');
+    $mail->addAddress('rakhmatariyantodummymail@gmail.com', 'Admin Lab BA');
 
     // kalau nanti nambah field email pengirim di form, bisa pakai:
     // $mail->addReplyTo($_POST['email'], $nama);
