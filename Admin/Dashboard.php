@@ -1,6 +1,7 @@
 <?php
-
-require __DIR__ . '/CRUD/koneksi.php';
+    // panggil koneksi (file koneksi.php yang berisi fungsi q() dan qparams())
+    require_once __DIR__ . '/Cek_Autentikasi.php';
+    require __DIR__ . '../Koneksi/KoneksiSasa.php';
 
 // INISIALISASI NILAI STATISTIK
 
@@ -178,9 +179,11 @@ try {
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+    <link rel="icon" type="images/x-icon"
+        href="../Assets/Image/Logo/Logo Without Text.png" />
     <link rel="stylesheet" href="../Assets/Css/Admin/Dashboard.css">
-
+    <link rel="stylesheet" href="../Assets/Css/Admin/Sidebar.css">
+    <link rel="stylesheet" href="../Assets/Css/Admin/Header.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- kirim data PHP ke JavaScript -->
@@ -190,6 +193,9 @@ try {
     </script>
 </head>
 <body>
+    <div id="sidebar"></div>
+        <div class="layout">
+            <main class="content" id="content">
 
 <div class="layout">
     <main class="main">
@@ -256,6 +262,7 @@ try {
                                 <?php endif; ?>
                             </div>
                         </div>
+                        <img src="../Assets/Image/Logo/Maskot.png" alt="Maskot" class="header-logo">
                     </div>
 
                     <!-- KALENDER DI SAMPING LONCENG -->
@@ -369,69 +376,33 @@ try {
                     // Ambil SEMUA ajuan berstatus pending (tanpa LIMIT) untuk card kanan
                     $ajuanPending = [];
 
-                    try {
-                        $sqlPending = "
-                            SELECT 
-                                id_peminjaman,
-                                nama_peminjam,
-                                keperluan AS nama_kegiatan,
-                                tanggal_pengajuan,
-                                status
-                            FROM peminjaman_lab
-                            WHERE status = 'pending'
-                            ORDER BY tanggal_pengajuan DESC, id_peminjaman DESC;
-                        ";
+                    <article class="stat-card">
+                        <h4>Total Ajuan Peminjaman Lab</h4>
+                        <p class="value"><?= $totalAjuanPeminjaman ?></p>
+                    </article>
+                </section>
 
-                        $resultPending = q($sqlPending);
-                        while ($row = pg_fetch_assoc($resultPending)) {
-                            $ajuanPending[] = $row;
-                        }
-                    } catch (Throwable $e) {
-                        $ajuanPending = [];
-                    }
-                    ?>
+                <!-- GRID BESAR -->
+                <section class="content-grid">
 
-                    <?php if (empty($ajuanPending)): ?>
-                        <p class="empty-text" style="font-size:14px;color:#6b7280;margin-top:8px;">
-                            Belum ada ajuan peminjaman berstatus pending.
-                        </p>
-                    <?php else: ?>
+                    <!-- ANGGOTA TERBARU -->
+                    <div class="anggota-section">
+                        <h3 class="section-title">Anggota Terbaru</h3>
 
-                        <p style="font-size:13px;color:#6b7280;margin:8px 0 6px 0;">
-                            Ajuan peminjaman terbaru yang perlu ditinjau:
-                        </p>
+                        <div class="card">
+                            <div class="member-card">
+                                <div class="member-info">
+                                    <div class="member-avatar"></div>
 
                         <!-- AREA SCROLL -->
                         <div style="overflow-y:auto; padding-right:6px; max-height:340px;">
 
-                            <?php foreach ($ajuanPending as $ajuan): ?>
-                                <div class="ajuan-latest"
-                                     style="margin-top:8px; padding-top:6px; border-top:1px solid #eef2ff;">
-
-                                    <p style="font-size:15px;font-weight:600;margin-bottom:2px;">
-                                        <?= htmlspecialchars($ajuan['nama_peminjam']) ?>
-                                    </p>
-
-                                    <p style="font-size:13px;color:#4b5563;margin-bottom:6px;">
-                                        <?= htmlspecialchars($ajuan['nama_kegiatan'] ?? '-') ?>
-                                    </p>
-
-                                    <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#6b7280;">
-                                        <span><?= date('d M Y', strtotime($ajuan['tanggal_pengajuan'])) ?></span>
-
-                                        <span style="
-                                            padding:2px 8px;
-                                            border-radius:999px;
-                                            background:#fef3c7;
-                                            color:#92400e;
-                                            font-weight:500;
-                                        ">
-                                            <?= htmlspecialchars($ajuan['status']) ?>
-                                        </span>
+                                        <div class="member-tags">
+                                            <span class="tag-pill">IT Governance</span>
+                                            <span class="tag-pill">Data Analytics</span>
+                                        </div>
                                     </div>
-
                                 </div>
-                            <?php endforeach; ?>
 
                         </div>
                     <?php endif; ?>
@@ -482,13 +453,27 @@ try {
                         </div>
                     </div>
 
-                </div>
-            </div>
+                    <!-- AJUAN TERBARU -->
+                    <div class="ajuan-section">
+                        <div class="card card-ajuan">
+                            <h3 class="card-title-center">Ajuan Terbaru</h3>
 
-        </section>
+                            <?php
+                            // Ambil SEMUA ajuan berstatus pending (tanpa LIMIT)
+                            $ajuanPending = [];
 
-    </main>
-</div>
+                            try {
+                                $sqlPending = "
+                                    SELECT 
+                                        id_peminjaman,
+                                        nama_peminjam,
+                                        keperluan AS nama_kegiatan,
+                                        tanggal_pengajuan,
+                                        status
+                                    FROM peminjaman_lab
+                                    WHERE status = 'pending'
+                                    ORDER BY tanggal_pengajuan DESC, id_peminjaman DESC;
+                                ";
 
 <!-- ?v=4 supaya browser ambil file JS terbaru (anti cache) -->
 <script src="../Assets/Javascript/Admin/Dashboard.js?v=4"></script>

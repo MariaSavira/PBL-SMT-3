@@ -26,14 +26,12 @@ async function loadComponent(id, file, url) { //async function maksundya asinkro
 document.addEventListener("DOMContentLoaded", async function () {
     await loadComponent(
         "sidebar",
-        "../../../Admin/Sidebar.html",
-        "../../../Assets/Css/Admin/Sidebar.css"); //fungsi async bisa pake await
+        "/PBL-SMT-3/Admin/Sidebar.html",
+        "/PBL-SMT-3/Assets/Css/Admin/Sidebar.css"); //fungsi async bisa pake await
 
     const sidebar = document.getElementById("ini-sidebar");
     const content = document.getElementById("content");
     const logo = document.getElementById("sidebar-toggle");
-
-    console.log(logo);
 
     logo.addEventListener("click", () => {
         // sidebar.classList.toggle("sidebar");
@@ -51,6 +49,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (a.getAttribute("href") === currentPage.split("/")) {
             a.classList.add("active");
         }
-        console.log(link);
+    });
+
+    let currentFile = window.location.pathname.split("/").pop();
+
+    const menuItems = document.querySelectorAll(".sidebar-menu .menu-item a");
+
+    menuItems.forEach(link => {
+        // Ambil file terakhir dari href
+        let linkFile = link.getAttribute("href").split("/").pop();
+
+        if (currentFile === linkFile) {
+            link.parentElement.classList.add("active");
+        }
     });
 });

@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '/../Admin/CRUD/Koneksi.php';
+require __DIR__ . '/../Admin/Koneksi/KoneksiSasa.php';
 
 // Ambil data bidang riset dari database
 $res  = q('SELECT id_riset, nama_bidang_riset FROM bidangriset ORDER BY id_riset ASC');
@@ -64,24 +64,46 @@ $totalRisetAktif = is_array($rows) ? count($rows) : 0;
             </div>
             <div class="stat-label">Jumlah Riset Aktif</div>
         </div>
-        <div class="stat-box">
-            <div class="stat-number">8</div>
-            <div class="stat-label">Kolaborator</div>
-        </div>
-        <div class="stat-box">
-            <div class="stat-number">7</div>
-            <div class="stat-label">Bidang Fokus</div>
-        </div>
-        <div class="stat-box">
-            <div class="stat-number">42</div>
-            <div class="stat-label">Publikasi</div>
-        </div>
-    </div>
 
     <a href="Publikasi.html" class="cta-btn">Lihat Publikasi</a>
 
     <div id="footer"></div>
 
-    <script src="../Assets/Javascript/HeaderFooter.js"></script>
-</body>
+        <div class="section-title">Bidang Riset Utama</div>
+
+        <div class="tag-list">
+            <div class="tag">Anomaly Detection</div>
+            <div class="tag">Identity Theft</div>
+            <div class="tag">Fraud Detection</div>
+            <div class="tag">Brand Image Analysis</div>
+            <div class="tag">Customer Analytics</div>
+            <div class="tag">Competitive Monitoring</div>
+            <div class="tag">Digital Marketing Analysis</div>
+            <div class="tag">New Product Development</div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-number">25</div>
+                <div class="stat-label">Jumlah Riset Aktif</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">8</div>
+                <div class="stat-label">Kolaborator</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">7</div>
+                <div class="stat-label">Bidang Fokus</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">42</div>
+                <div class="stat-label">Publikasi</div>
+            </div>
+        </div>
+
+        <a href="Publikasi.html" class="cta-btn">Lihat Publikasi</a>
+        <div id="footer"></div>
+
+        <script src="../Assets/Javascript/HeaderFooter.js"></script>
+    </body>
 </html>
