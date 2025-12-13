@@ -1,5 +1,6 @@
 <?php
-    require_once __DIR__ . '../../Admin/Cek_Autentikasi.php'
+    require_once __DIR__ . '../../Admin/Cek_Autentikasi.php';
+    require __DIR__ . '../../Admin/Koneksi/KoneksiNajwa.php';
 ?>
 
 <!DOCTYPE html>
