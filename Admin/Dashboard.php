@@ -33,14 +33,14 @@ try {
 /* ------------------- DATA PEMINJAMAN PER BULAN ------------------- */
 try {
     $sql = "
-        SELECT 
-            EXTRACT(MONTH FROM tanggal_pengajuan)::int AS bulan,
-            COUNT(*) AS total
-        FROM peminjaman_lab
-        WHERE tanggal_pengajuan IS NOT NULL
-        GROUP BY bulan
-        ORDER BY bulan;
-    ";
+                SELECT 
+                    EXTRACT(MONTH FROM tanggal_pengajuan)::int AS bulan,
+                    COUNT(*) AS total
+                FROM peminjaman_lab
+                WHERE tanggal_pengajuan IS NOT NULL
+                GROUP BY bulan
+                ORDER BY bulan;
+            ";
     $res = q($sql);
     while ($row = pg_fetch_assoc($res)) {
         $bulan = (int)$row['bulan'];
@@ -56,12 +56,12 @@ try {
 $anggotaTerbaru = null;
 try {
     $sql = "
-        SELECT id_anggota, nama, jabatan, foto, deskripsi, created_at
-        FROM anggotalab
-        WHERE status = TRUE
-        ORDER BY created_at DESC, id_anggota DESC
-        LIMIT 1;
-    ";
+                SELECT id_anggota, nama, jabatan, foto, deskripsi, created_at
+                FROM anggotalab
+                WHERE status = TRUE
+                ORDER BY created_at DESC, id_anggota DESC
+                LIMIT 1;
+            ";
     $res = q($sql);
     $anggotaTerbaru = pg_fetch_assoc($res) ?: null;
 } catch (Throwable $e) {
@@ -75,12 +75,12 @@ try {
     $jumlahNotifBaru = (int)(pg_fetch_result($res, 0, 'total') ?? 0);
 
     $sql = "
-        SELECT id_peminjaman, nama_peminjam, keperluan, tanggal_pengajuan, status
-        FROM peminjaman_lab
-        WHERE status = 'pending'
-        ORDER BY tanggal_pengajuan DESC, id_peminjaman DESC
-        LIMIT 5;
-    ";
+                SELECT id_peminjaman, nama_peminjam, keperluan, tanggal_pengajuan, status
+                FROM peminjaman_lab
+                WHERE status = 'pending'
+                ORDER BY tanggal_pengajuan DESC, id_peminjaman DESC
+                LIMIT 5;
+            ";
     $res = q($sql);
     while ($row = pg_fetch_assoc($res)) {
         $notifAjuan[] = $row;
@@ -92,12 +92,12 @@ try {
 $pengumumanTerbaru = [];
 try {
     $sql = "
-        SELECT id_pengumuman, isi, tanggal_terbit, uploader
-        FROM pengumuman
-        WHERE status = 'Aktif'
-        ORDER BY tanggal_terbit DESC, created_at DESC
-        LIMIT 3;
-    ";
+                SELECT id_pengumuman, isi, tanggal_terbit, uploader
+                FROM pengumuman
+                WHERE status = 'Aktif'
+                ORDER BY tanggal_terbit DESC, created_at DESC
+                LIMIT 3;
+            ";
     $res = q($sql);
     while ($row = pg_fetch_assoc($res)) {
         $pengumumanTerbaru[] = $row;
@@ -134,7 +134,93 @@ try {
     <div class="layout">
         <main class="content" id="content">
 
-            <header class="topbar">
+            <div class="content-header">
+                <!-- KIRI: greeting + maskot -->
+                <div class="topbar-left">
+                    <div class="greeting">
+                        <h1>Halo, Maria Savira</h1>
+                        <p>Ini adalah rekapan dari lab business analytics</p>
+                    </div>
+                    <img src="../Assets/Image/Logo/Maskot.png" class="header-logo">
+                </div>
+
+                <!-- KANAN: notif + profil dalam satu baris -->
+                <div class="header-right">
+                    <div class="notif-wrapper">
+                        <button class="icon-circle" id="notifToggle">
+                            <i class="fa-regular fa-bell"></i>
+                            <?php if ($jumlahNotifBaru > 0): ?>
+                                <span class="notif-badge"><?= $jumlahNotifBaru ?></span>
+                            <?php endif; ?>
+                        </button>
+
+                        <div class="notif-dropdown" id="notifMenu">
+                            <div class="notif-header">
+                                <span>Notifications</span>
+                                <span class="notif-total"><?= count($notifAjuan) ?></span>
+                            </div>
+
+                            <div class="notif-list">
+                                <?php if (empty($notifAjuan)): ?>
+                                    <p class="empty-text">Belum ada ajuan pending.</p>
+                                <?php else: ?>
+                                    <?php foreach ($notifAjuan as $n): ?>
+                                        <div class="notif-item unread">
+                                            <div class="notif-icon">
+                                                <i class="fa-regular fa-envelope"></i>
+                                            </div>
+                                            <div class="notif-content">
+                                                <p class="notif-title">
+                                                    <?= htmlspecialchars($n['nama_peminjam']) ?>
+                                                    <span class="notif-link"><?= htmlspecialchars($n['keperluan']) ?></span>
+                                                </p>
+                                                <p class="notif-time">
+                                                    <?= date('d M Y', strtotime($n['tanggal_pengajuan'])) ?>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <button class="profile-toggle" type="button" id="profileToggle">
+                            <span class="profile-name"><?= htmlspecialchars($_SESSION['nama']) ?></span>
+
+                            <?php
+                            $folderUrl = '/PBL-SMT-3/Assets/Image/AnggotaLab/';
+                            $folderFs  = $_SERVER['DOCUMENT_ROOT'] . $folderUrl;
+                            $foto      = $_SESSION['foto'] ?? '';
+
+                            if (!empty($foto) && file_exists($folderFs . $foto)) {
+                                $src = $folderUrl . $foto;
+                            } else {
+                                $src = $folderUrl . 'No-Profile.png';
+                            }
+                            ?>
+
+                            <img src="<?= $src ?>" alt="Foto User" class="user-foto header-foto">
+                            <i class="fa-solid fa-chevron-down profile-arrow"></i>
+                        </button>
+
+                        <div class="profile-menu" id="profileMenu">
+                            <a href="../ProfilAdmin/EditProfil.php" class="profile-menu-item">
+                                <i class="fa-regular fa-user"></i>
+                                <span>Lihat Profil</span>
+                            </a>
+                            <a href="../../Logout.php" class="profile-menu-item">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                                <span>Logout</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- <header class="topbar">
                 <div class="topbar-left">
                     <div class="greeting">
                         <h1>Halo, Maria Savira</h1>
@@ -146,7 +232,6 @@ try {
                 <div class="topbar-right">
                     <div class="topbar-icons">
 
-                        <!-- NOTIF -->
                         <div class="notif-wrapper">
                             <button class="icon-circle" id="notifToggle">
                                 <i class="fa-regular fa-bell"></i>
@@ -185,18 +270,9 @@ try {
                                 </div>
                             </div>
                         </div>
-
-                        <!-- KALENDER -->
-                        <div class="calendar-wrapper">
-                            <button class="icon-circle small-icon">
-                                <i class="fa-regular fa-calendar-days"></i>
-                            </button>
-                            <input type="date" id="calendarInput" class="calendar-input-hidden">
-                        </div>
-
                     </div>
                 </div>
-            </header>
+            </header> -->
 
             <section class="stats-row">
                 <article class="stat-card">
@@ -302,12 +378,13 @@ try {
                         $ajuanPending = [];
                         try {
                             $sql = "
-                SELECT id_peminjaman, nama_peminjam, keperluan AS nama_kegiatan,
-                       tanggal_pengajuan, status
-                FROM peminjaman_lab
-                WHERE status = 'pending'
-                ORDER BY tanggal_pengajuan DESC, id_peminjaman DESC
-            ";
+                                SELECT id_peminjaman, nama_peminjam, keperluan AS nama_kegiatan,
+                                    tanggal_pengajuan, status
+                                FROM peminjaman_lab
+                                WHERE status = 'pending'
+                                ORDER BY tanggal_pengajuan DESC, id_peminjaman DESC
+                            ";
+
                             $res = q($sql);
 
                             while ($row = pg_fetch_assoc($res)) {
@@ -387,7 +464,7 @@ try {
                 </div>
         </main>
     </div>
-    <script src="../Assets/Javascript/Admin/Header.js"></script>
+    <script src="../Assets/Javascript/Admin/HeaderDashboard.js"></script>
     <script src="../Assets/Javascript/Admin/Sidebar.js"></script>
     <script src="../Assets/Javascript/Admin/Dashboard.js"></script>
 

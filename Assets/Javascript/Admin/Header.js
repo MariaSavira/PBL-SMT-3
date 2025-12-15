@@ -60,8 +60,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         titleText = "Publikasi Laboratorium";
     } else if (currentPath.includes("/risetlab/")) {
         titleText = "Riset Laboratorium";
-    } else if (currentPath.includes("/galeri/")) {
+    } else if (currentPath.includes("/galeri_lab/")) {
         titleText = "Galeri Laboratorium";
+    } else if (currentPath.includes("/berita_lab/")) {
+        titleText = "Berita Laboratorium";
     } else if (currentPath.includes("/karya/")) {
         titleText = "Karya Laboratorium";
     } else if (currentPath.includes("/peminjamanlab/")) {

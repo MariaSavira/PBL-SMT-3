@@ -220,7 +220,7 @@ $result = empty($params)
                         <th>Riset</th>
                         <th>Tanggal Terbit</th>
                         <th>Status</th>
-                        <th>Aksi</th>
+                        <th></th>
                     </tr>
                 </thead>
 

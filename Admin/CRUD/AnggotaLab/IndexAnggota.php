@@ -365,8 +365,7 @@
                                         type="button"
                                         class="action-toggle"
                                         aria-haspopup="true"
-                                        aria-expanded="false"
-                                    >
+                                        aria-expanded="false">
                                         <i class="fa-solid fa-ellipsis-vertical"></i>
                                     </button>
 
@@ -440,6 +439,7 @@
         window.pageMessage = <?= json_encode($_GET['message'] ?? '') ?>;
     </script>
     <script src="../../../Assets/Javascript/Admin/AnggotaLab.js"></script>
+    <script src="../../../Assets/Javascript/Admin/Profile.js"></script>
 </body>
 
 </html>

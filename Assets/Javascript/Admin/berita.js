@@ -1,363 +1,318 @@
-// Assets/Javascript/Admin/berita.js
-// JavaScript untuk handling interaksi halaman berita
+(() => {
+  "use strict";
 
-// Toggle dropdown menu
-function toggleMenu(event, id) {
+  // =========================
+  // Helpers
+  // =========================
+  function qs(sel, root = document) { return root.querySelector(sel); }
+  function qsa(sel, root = document) { return Array.from(root.querySelectorAll(sel)); }
+
+  // =========================
+  // NOTIFICATION (Profile.js style)
+  // =========================
+  function initNotification() {
+    const notifEl = document.getElementById("notification");
+    const notifIconEl = document.getElementById("notification-icon");
+    const notifTitleEl = document.getElementById("notification-title");
+    const notifMsgEl = document.getElementById("notification-message");
+    const btnTutupNotif = document.getElementById("closeNotification");
+    const overlay = document.getElementById("overlay");
+
+    if (!notifEl || !notifIconEl || !notifTitleEl || !notifMsgEl || !btnTutupNotif || !overlay) return;
+
+    function hideNotif() {
+      notifEl.style.display = "none";
+      overlay.style.display = "none";
+    }
+
+    function tampilNotif(isSuccess, pesan) {
+      notifEl.classList.remove("success", "error");
+
+      if (isSuccess) {
+        notifEl.classList.add("success");
+        notifTitleEl.textContent = "Success";
+        notifMsgEl.textContent = pesan || "Aksi berhasil dilakukan.";
+        notifIconEl.innerHTML = '<i class="fa-regular fa-circle-check"></i>';
+      } else {
+        notifEl.classList.add("error");
+        notifTitleEl.textContent = "Error";
+        notifMsgEl.textContent = pesan || "Terjadi kesalahan. Silakan coba lagi.";
+        notifIconEl.innerHTML = '<i class="fa-regular fa-circle-xmark"></i>';
+      }
+
+      notifEl.style.display = "block";
+      overlay.style.display = "block";
+
+      setTimeout(hideNotif, 5000);
+    }
+
+    btnTutupNotif.addEventListener("click", hideNotif);
+
+    const statusFromPhp = window.profileStatus || "";
+    const messageFromPhp = window.profileMessage || "";
+    const redirectUrl = window.profileRedirectUrl || "";
+
+    if (statusFromPhp === "success") {
+      tampilNotif(true, messageFromPhp);
+      setTimeout(() => {
+        if (redirectUrl) window.location.href = redirectUrl;
+      }, 2000);
+    } else if (statusFromPhp === "error") {
+      tampilNotif(false, messageFromPhp);
+    }
+  }
+
+  // =========================
+  // DROPDOWN ACTION (⋮)
+  // =========================
+  function toggleMenu(event, id) {
     event.stopPropagation();
-    const menu = document.getElementById('menu-' + id);
-    const allMenus = document.querySelectorAll('.dropdown-menu');
-    
-    // Close all other menus
-    allMenus.forEach(m => {
-        if (m !== menu) m.classList.remove('show');
+
+    const menu = document.getElementById("menu-" + id);
+    if (!menu) return;
+
+    const isOpen = menu.classList.contains("show");
+    qsa(".action-menu").forEach(m => m.classList.remove("show"));
+    if (!isOpen) menu.classList.add("show");
+  }
+
+  // =========================
+  // FILTER DROPDOWN (STATUS)
+  // =========================
+  function initFilterDropdown() {
+    const filterToggle = qs(".filter-toggle");
+    const filterMenu = qs(".filter-menu");
+    if (!filterToggle || !filterMenu) return;
+
+    filterToggle.addEventListener("click", function (e) {
+      e.stopPropagation();
+      filterMenu.classList.toggle("open");
     });
-    
-    // Toggle current menu
-    menu.classList.toggle('show');
-}
 
-// Close dropdown when clicking outside
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.menu-dots')) {
-        document.querySelectorAll('.dropdown-menu').forEach(menu => {
-            menu.classList.remove('show');
-        });
-    }
-});
-
-// Checkbox "Select All" functionality
-const checkAllBox = document.getElementById('checkAll');
-if (checkAllBox) {
-    checkAllBox.addEventListener('change', function() {
-        const checkboxes = document.querySelectorAll('tbody .checkbox');
-        checkboxes.forEach(cb => cb.checked = this.checked);
-        updateToast();
+    document.addEventListener("click", function (e) {
+      if (!filterMenu.contains(e.target) && !filterToggle.contains(e.target)) {
+        filterMenu.classList.remove("open");
+      }
     });
-}
+  }
 
-// Individual checkbox change
-document.querySelectorAll('tbody .checkbox').forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-        updateToast();
-        
-        // Update "check all" status
-        const allCheckboxes = document.querySelectorAll('tbody .checkbox');
-        const checkedBoxes = document.querySelectorAll('tbody .checkbox:checked');
-        const checkAllBox = document.getElementById('checkAll');
-        
-        if (checkAllBox) {
-            checkAllBox.checked = allCheckboxes.length === checkedBoxes.length && checkedBoxes.length > 0;
-        }
+  // =========================
+  // SORT DROPDOWN
+  // =========================
+  function initSortDropdown() {
+    const sortBtn = document.getElementById("sort-btn");
+    const sortMenu = document.getElementById("sort-menu");
+    if (!sortBtn || !sortMenu) return;
+
+    sortBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      sortMenu.classList.toggle("hidden");
     });
-});
 
-// Update toast notification based on selected items
-function updateToast() {
-    const checkedBoxes = document.querySelectorAll('tbody .checkbox:checked');
-    const toast = document.getElementById('deleteToast');
-    const toastText = document.getElementById('toastText');
-    
+    qsa("[data-sort]", sortMenu).forEach(item => {
+      item.addEventListener("click", function () {
+        const sort = this.dataset.sort;
+        const url = new URL(window.location.href);
+        url.searchParams.set("sort", sort);
+        url.searchParams.set("page", "1");
+        window.location.href = url.toString();
+      });
+    });
+
+    document.addEventListener("click", function () {
+      sortMenu.classList.add("hidden");
+    });
+  }
+
+  // =========================
+  // CLEAR FILTER
+  // =========================
+  function initClearFilter() {
+    const clearBtn = document.getElementById("clearFilterBtn");
+    if (!clearBtn) return;
+
+    clearBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      const url = new URL(window.location.href);
+      url.searchParams.delete("status");
+      url.searchParams.delete("search");
+      url.searchParams.delete("sort");
+      url.searchParams.set("page", "1");
+      window.location.href = url.toString();
+    });
+  }
+
+  // =========================
+  // TOAST (bulk selection)
+  // =========================
+  function updateToast() {
+    const checkedBoxes = qsa("tbody .checkbox:checked");
+    const toast = document.getElementById("deleteToast");
+    if (!toast) return;
+
+    const toastText = document.getElementById("toastText");
     if (checkedBoxes.length > 0) {
-        toast.classList.add('show');
-        toastText.textContent = `Hapus ${checkedBoxes.length} data yang dipilih`;
+      toast.classList.add("show");
+      if (toastText) toastText.textContent = `Hapus ${checkedBoxes.length} data yang dipilih`;
     } else {
-        toast.classList.remove('show');
+      toast.classList.remove("show");
+      if (toastText) toastText.textContent = "";
     }
-}
+  }
 
-// Bulk delete confirmation - DIPERBAIKI
-function confirmBulkDelete() {
-    const checkedBoxes = document.querySelectorAll('tbody .checkbox:checked');
-    
+  function initBulkSelection() {
+    const checkAllBox = document.getElementById("checkAll");
+    const rowCheckboxes = qsa("tbody .checkbox");
+
+    if (checkAllBox) {
+      checkAllBox.addEventListener("change", function () {
+        rowCheckboxes.forEach(cb => cb.checked = this.checked);
+        updateToast();
+      });
+    }
+
+    rowCheckboxes.forEach(cb => {
+      cb.addEventListener("change", function () {
+        updateToast();
+
+        const allCheckboxes = qsa("tbody .checkbox");
+        const checkedBoxes = qsa("tbody .checkbox:checked");
+        if (checkAllBox) {
+          checkAllBox.checked = (allCheckboxes.length === checkedBoxes.length && checkedBoxes.length > 0);
+        }
+      });
+    });
+  }
+
+  // =========================
+  // DELETE (SIMPLE confirm)
+  // =========================
+  function confirmDelete(id, judul) {
+    // tutup menu ⋮ biar rapi
+    qsa(".action-menu").forEach(m => m.classList.remove("show"));
+
+    const ok = window.confirm(`Apakah Anda yakin ingin menghapus berita "${judul}"?\nTindakan ini tidak dapat dibatalkan.`);
+    if (!ok) return false;
+
+    window.location.href = "hapus_berita.php?id=" + encodeURIComponent(id);
+    return false; // penting biar gak nge-trigger apa2 lagi
+  }
+
+  function confirmBulkDelete() {
+    const checkedBoxes = qsa("tbody .checkbox:checked");
     if (checkedBoxes.length === 0) {
-        alert('Pilih setidaknya satu berita untuk dihapus');
-        return;
+      alert("Pilih setidaknya satu berita untuk dihapus");
+      return false;
     }
-    
-    const ids = Array.from(checkedBoxes).map(cb => cb.value);
-    const count = ids.length;
-    
-    const message = `Apakah Anda yakin ingin menghapus ${count} berita? Tindakan ini tidak dapat dibatalkan.`;
-    document.getElementById('deleteMessage').textContent = message;
-    
-    // Tampilkan modal
-    const modal = document.getElementById('deleteModal');
-    modal.classList.add('show');
-    
-    // Set up bulk delete handler
-    const confirmBtn = document.getElementById('confirmDeleteBtn');
-    
-    // Hapus event listener lama jika ada
-    const newConfirmBtn = confirmBtn.cloneNode(true);
-    confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
-    
-    // Tambah event listener baru
-    newConfirmBtn.addEventListener('click', function() {
-        console.log('Bulk delete confirmed for IDs:', ids);
-        executeBulkDelete(ids);
-    });
-}
 
-// Execute bulk delete - DIPERBAIKI
-function executeBulkDelete(ids) {
-    console.log('Executing bulk delete for:', ids);
-    
-    // Buat form dan submit
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = 'hapus_berita.php';
-    
+    const ids = checkedBoxes.map(cb => cb.value);
+    const ok = window.confirm(`Apakah Anda yakin ingin menghapus ${ids.length} berita?\nTindakan ini tidak dapat dibatalkan.`);
+    if (!ok) return false;
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "hapus_berita.php";
+
     ids.forEach(id => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'ids[]';
-        input.value = id;
-        form.appendChild(input);
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = "ids[]";
+      input.value = id;
+      form.appendChild(input);
     });
-    
+
     document.body.appendChild(form);
-    
-    // Close modal sebelum submit
-    closeDeleteModal();
-    
-    // Submit form
     form.submit();
-}
+    return false;
+  }
 
-// Single delete confirmation - DIPERBAIKI
-let deleteId = null;
+  // (opsional) biar gak error kalau HTML lama masih manggil
+  function closeDeleteModal() { return false; }
 
-function confirmDelete(id, judul) {
-    deleteId = id;
-    const message = `Apakah Anda yakin ingin menghapus berita "${judul}"? Tindakan ini tidak dapat dibatalkan.`;
-    document.getElementById('deleteMessage').textContent = message;
-    
-    const modal = document.getElementById('deleteModal');
-    modal.classList.add('show');
-    
-    // Set up single delete handler
-    const confirmBtn = document.getElementById('confirmDeleteBtn');
-    
-    // Hapus event listener lama
-    const newConfirmBtn = confirmBtn.cloneNode(true);
-    confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
-    
-    // Tambah event listener baru
-    newConfirmBtn.addEventListener('click', function() {
-        console.log('Single delete confirmed for ID:', deleteId);
-        if (deleteId) {
-            window.location.href = 'hapus_berita.php?id=' + deleteId;
-        }
-    });
-}
-
-function closeDeleteModal() {
-    document.getElementById('deleteModal').classList.remove('show');
-    deleteId = null;
-}
-
-// Close modal when clicking overlay
-document.getElementById('deleteModal')?.addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeDeleteModal();
-    }
-});
-
-// ESC key to close modal
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        closeDeleteModal();
-    }
-});
-
-// Search functionality with debounce
-let searchTimeout;
-const searchInput = document.querySelector('input[name="search"]');
-if (searchInput) {
-    searchInput.addEventListener('input', function() {
+  // =========================
+  // SEARCH debounce (auto submit)
+  // =========================
+  function initSearchDebounce() {
+    let searchTimeout;
+    const searchInput = qs('input[name="search"]');
+    if (searchInput && searchInput.form) {
+      searchInput.addEventListener("input", function () {
         clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => {
-            this.form.submit();
-        }, 500);
+        searchTimeout = setTimeout(() => this.form.submit(), 500);
+      });
+    }
+  }
+
+  // =========================
+  // Image preview (form tambah/edit)
+  // =========================
+  function previewImage(input) {
+    const preview = document.getElementById("imagePreview");
+    const uploadArea = document.getElementById("uploadArea");
+    const changeBtn = document.getElementById("changeImageBtn");
+    const uploadContent = uploadArea?.querySelector(".upload-content");
+
+    if (!input.files || !input.files[0]) return;
+
+    const file = input.files[0];
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
+
+    if (!allowedTypes.includes(file.type)) {
+      alert("Format file tidak diizinkan. Gunakan JPG, PNG, atau GIF.");
+      input.value = "";
+      return;
+    }
+
+    // FIX: 5MB
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Ukuran file terlalu besar. Maksimal 5MB.");
+      input.value = "";
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      if (preview) {
+        preview.src = e.target.result;
+        preview.classList.add("show");
+      }
+      if (uploadArea) uploadArea.classList.add("has-image");
+      if (changeBtn) changeBtn.classList.add("show");
+      if (uploadContent) uploadContent.style.display = "none";
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // =========================
+  // Close action menus when click outside
+  // =========================
+  function initGlobalCloseMenus() {
+    document.addEventListener("click", function () {
+      qsa(".action-menu").forEach(m => m.classList.remove("show"));
     });
-}
+  }
 
-// Auto-hide success/error messages
-window.addEventListener('DOMContentLoaded', function() {
-    const successMsg = document.querySelector('.alert-success');
-    const errorMsg = document.querySelector('.alert-error');
-    
-    if (successMsg) {
-        setTimeout(() => {
-            successMsg.style.animation = 'slideOut 0.3s ease';
-            setTimeout(() => successMsg.remove(), 300);
-        }, 3000);
-    }
-    
-    if (errorMsg) {
-        setTimeout(() => {
-            errorMsg.style.animation = 'slideOut 0.3s ease';
-            setTimeout(() => errorMsg.remove(), 300);
-        }, 5000);
-    }
-});
+  // =========================
+  // Boot
+  // =========================
+  document.addEventListener("DOMContentLoaded", function () {
+    initNotification();
+    initFilterDropdown();
+    initSortDropdown();
+    initClearFilter();
+    initBulkSelection();
+    initSearchDebounce();
+    initGlobalCloseMenus();
+  });
 
-// Image preview in forms
-function previewImage(input) {
-    const preview = document.getElementById('imagePreview');
-    const uploadArea = document.getElementById('uploadArea');
-    const changeBtn = document.getElementById('changeImageBtn');
-    const uploadContent = uploadArea?.querySelector('.upload-content');
+  // =========================
+  // Expose global untuk inline onclick
+  // =========================
+  window.toggleMenu = toggleMenu;
+  window.confirmDelete = confirmDelete;             // SINGLE
+  window.confirmBulkDelete = confirmBulkDelete;     // BULK
+  window.closeDeleteModal = closeDeleteModal;       // compat
+  window.previewImage = previewImage;
 
-    if (input.files && input.files[0]) {
-        const file = input.files[0];
-        
-        // Validate file type
-        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-        if (!allowedTypes.includes(file.type)) {
-            alert('Format file tidak diizinkan. Gunakan JPG, PNG, atau GIF.');
-            input.value = '';
-            return;
-        }
-        
-        // Validate file size (500MB)
-        if (file.size > 500000000) {
-            alert('Ukuran file terlalu besar. Maksimal 500MB.');
-            input.value = '';
-            return;
-        }
-        
-        const reader = new FileReader();
-        
-        reader.onload = function(e) {
-            if (preview) {
-                preview.src = e.target.result;
-                preview.classList.add('show');
-            }
-            if (uploadArea) {
-                uploadArea.classList.add('has-image');
-            }
-            if (changeBtn) {
-                changeBtn.classList.add('show');
-            }
-            if (uploadContent) {
-                uploadContent.style.display = 'none';
-            }
-        }
-        
-        reader.readAsDataURL(file);
-    }
-}
-
-// Form validation
-const beritaForm = document.getElementById('formBerita');
-if (beritaForm) {
-    beritaForm.addEventListener('submit', function(e) {
-        const judul = document.getElementById('judul').value.trim();
-        const isi = document.getElementById('isi').value.trim();
-        const tanggal = document.getElementById('tanggal').value;
-        
-        if (!judul) {
-            alert('Judul berita harus diisi!');
-            e.preventDefault();
-            return;
-        }
-        
-        if (!isi) {
-            alert('Isi berita harus diisi!');
-            e.preventDefault();
-            return;
-        }
-        
-        if (!tanggal) {
-            alert('Tanggal terbit harus diisi!');
-            e.preventDefault();
-            return;
-        }
-        
-        // Disable submit button to prevent double submission
-        const submitBtn = document.getElementById('submitBtn');
-        if (submitBtn) {
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Menyimpan...';
-        }
-    });
-}
-
-// Sidebar responsive handling
-document.addEventListener('DOMContentLoaded', function() {
-    // Function to check sidebar state
-    function checkSidebarState() {
-        const sidebar = document.querySelector('.sidebar, #sidebar');
-        if (sidebar) {
-            if (sidebar.classList.contains('expanded') || sidebar.classList.contains('open')) {
-                document.body.classList.add('sidebar-expanded');
-            } else {
-                document.body.classList.remove('sidebar-expanded');
-            }
-        }
-    }
-    
-    // Check initial state
-    setTimeout(checkSidebarState, 100);
-    
-    // Observe sidebar class changes
-    const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                checkSidebarState();
-            }
-        });
-    });
-    
-    // Start observing
-    setTimeout(function() {
-        const sidebar = document.querySelector('.sidebar, #sidebar');
-        if (sidebar) {
-            observer.observe(sidebar, { 
-                attributes: true,
-                attributeFilter: ['class'],
-                subtree: true
-            });
-        }
-    }, 200);
-    
-    // Also listen for custom events if sidebar uses them
-    document.addEventListener('sidebarToggle', checkSidebarState);
-    window.addEventListener('sidebarStateChange', checkSidebarState);
-});
-
-// Smooth scroll for navigation
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    });
-});
-
-// Loading state for buttons
-function setButtonLoading(button, isLoading) {
-    if (isLoading) {
-        button.dataset.originalText = button.textContent;
-        button.textContent = 'Memproses...';
-        button.disabled = true;
-    } else {
-        button.textContent = button.dataset.originalText || button.textContent;
-        button.disabled = false;
-    }
-}
-
-console.log('Berita.js loaded successfully');
-console.log('Current page:', window.location.pathname);
-
-// Global functions for inline onclick handlers
-window.toggleMenu = toggleMenu;
-window.confirmDelete = confirmDelete;
-window.confirmBulkDelete = confirmBulkDelete;
-window.closeDeleteModal = closeDeleteModal;
+})();

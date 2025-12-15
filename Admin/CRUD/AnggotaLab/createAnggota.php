@@ -4,6 +4,7 @@
 
     $status  = '';
     $message = '';
+    $redirectTo = 'IndexAnggota.php';
 
     $nama       = '';
     $username   = '';
@@ -30,7 +31,7 @@
         $deskripsi = trim($_POST['deskripsi'] ?? '');
         $keahlianDipilih = $_POST['keahlian'] ?? [];
 
-            $linkLabel = $_POST['link_label'] ?? [];
+    $linkLabel = $_POST['link_label'] ?? [];
     $linkUrl   = $_POST['link_url']   ?? [];
 
     $links = [];
@@ -383,6 +384,7 @@
     <script>
         window.profileStatus  = <?= json_encode($status  ?? '') ?>;
         window.profileMessage = <?= json_encode($message ?? '') ?>;
+        window.profileRedirectUrl  = <?= json_encode($redirectTo) ?>;
     </script>
     <script src="../../../Assets/Javascript/Admin/Profile.js"></script>
     <script src="../../../Assets/Javascript/Admin/FormAnggotaLab.js"></script>

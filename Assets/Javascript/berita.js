@@ -1,22 +1,18 @@
-// File: Assets/Javascript/berita.js
-// JavaScript untuk halaman Berita.html (menggunakan database)
-
-// Fungsi untuk memuat data berita dari API
 async function loadBerita(tag = null, tahun = null) {
   try {
     let url = '../Assets/Php/api_berita.php?action=list';
-    
+
     if (tag) {
       url += '&tag=' + encodeURIComponent(tag);
     }
-    
+
     if (tahun) {
       url += '&tahun=' + tahun;
     }
-    
+
     const response = await fetch(url);
     const result = await response.json();
-    
+
     if (result.success) {
       return result.data;
     } else {
@@ -29,13 +25,12 @@ async function loadBerita(tag = null, tahun = null) {
   }
 }
 
-// Fungsi untuk menampilkan highlight berita
 function displayHighlight(beritaList) {
   const highlightSection = document.querySelector('.highlight-wrapper');
   if (!highlightSection) return;
 
   const highlightBerita = beritaList.find(b => b.isHighlight);
-  
+
   if (!highlightBerita) {
     highlightSection.innerHTML = '<p class="text-center">Tidak ada berita highlight</p>';
     return;
@@ -62,7 +57,7 @@ function displayBeritaList(beritaList) {
 
   // Cari atau buat container untuk berita cards
   let beritaCardsContainer = document.querySelector('.berita-cards-container');
-  
+
   if (!beritaCardsContainer) {
     const header = beritaContainer.querySelector('.berita-terkini-header');
     beritaCardsContainer = document.createElement('div');
@@ -95,13 +90,13 @@ function displayBeritaList(beritaList) {
         <span class="author">${berita.penulis}</span>
       </div>
     `;
-    
+
     // Tambahkan event listener untuk klik
     card.style.cursor = 'pointer';
     card.addEventListener('click', () => {
       window.location.href = `Isi_berita.html?id=${berita.id}`;
     });
-    
+
     beritaCardsContainer.appendChild(card);
   });
 }
@@ -111,7 +106,7 @@ async function loadTags() {
   try {
     const response = await fetch('../Assets/Php/api_berita.php?action=tags');
     const result = await response.json();
-    
+
     if (result.success) {
       return result.data;
     }
@@ -127,7 +122,7 @@ async function loadYears() {
   try {
     const response = await fetch('../Assets/Php/api_berita.php?action=years');
     const result = await response.json();
-    
+
     if (result.success) {
       return result.data;
     }
@@ -145,7 +140,7 @@ async function setupFilters() {
 
   if (tagSelect) {
     const tags = await loadTags();
-    tagSelect.innerHTML = '<option value="">Tag</option>' + 
+    tagSelect.innerHTML = '<option value="">Tag</option>' +
       tags.map(tag => `<option value="${tag}">${tag}</option>`).join('');
 
     tagSelect.addEventListener('change', async (e) => {
@@ -158,7 +153,7 @@ async function setupFilters() {
 
   if (tahunSelect) {
     const years = await loadYears();
-    tahunSelect.innerHTML = '<option value="">Tahun</option>' + 
+    tahunSelect.innerHTML = '<option value="">Tahun</option>' +
       years.map(y => `<option value="${y}">${y}</option>`).join('');
 
     tahunSelect.addEventListener('change', async (e) => {

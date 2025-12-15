@@ -81,7 +81,7 @@ p {
 }
 
 .heading p {
-    font-size: 12px;
+    font-size: clamp(12px, 1.5vw, 12px);
     opacity: 0.9;
     font-weight: 400;
 }

@@ -1,38 +1,46 @@
 <?php
-// sambung ke koneksi PostgreSQL
-require __DIR__ . '/../Koneksi.php';
+    // sambung ke koneksi PostgreSQL
+    require_once __DIR__ . '../../../Cek_Autentikasi.php';
+    require __DIR__ . '../../../Koneksi/KoneksiSasa.php';
 
-$errors    = [];
-$namaRiset = '';   // biar nggak undefined di bagian value input
+    $status      = '';
+    $message     = '';
+    $redirectTo  = 'IndexRiset.php';
 
-// kalau form disubmit
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $namaRiset = trim($_POST['namaRiset'] ?? '');
+    $namaRiset   = '';      // biar tetap keisi di form
 
-    // validasi
-    if ($namaRiset === '') {
-        $errors[] = 'Nama riset wajib diisi.';
-    } else {
-        try {
-            // pakai helper qparams() dari Koneksi.php
-            qparams(
-                'INSERT INTO bidangriset (nama_bidang_riset) VALUES ($1)',
-                [$namaRiset]
-            );
+    // kalau form disubmit
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            // kalau sukses, balik ke index dengan status
-            header('Location: IndexRiset.php?status=created');
-            exit;
-        } catch (Throwable $e) {
-            // kalau mau debug:
-            // echo $e->getMessage();
-            $errors[] = 'Gagal menyimpan data ke database.';
+        $namaRiset = trim($_POST['namaRiset'] ?? '');
+
+        // validasi
+        if ($namaRiset === '') {
+            $status   = 'error';
+            $message  = 'Nama riset tidak boleh kosong.';
+        } else {
+            try {
+                qparams(
+                    'INSERT INTO bidangriset (nama_bidang_riset) VALUES ($1)',
+                    [$namaRiset]
+                );
+
+                // kalau mau langsung redirect hard:
+                // header('Location: IndexRiset.php?status=created');
+                // exit;
+
+                $status  = 'success';
+                $message = 'Riset baru berhasil ditambahkan';
+            } catch (Throwable $e) {
+                $status  = 'error';
+                $message = 'Gagal menyimpan: ' . $e->getMessage();
+            }
         }
     }
-}
 ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,56 +61,84 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="icon" type="images/x-icon"
         href="../../../Assets/Image/Logo/Logo Without Text.png" />
     <link rel="stylesheet" href="../../../Assets/Css/Admin/Sidebar.css">
-    <link rel="stylesheet" href="../../../Assets/Css/Admin/TambahRiset.css">
+    <link rel="stylesheet" href="../../../Assets/Css/Admin/FormRiset.css">
 </head>
 
 <body>
 
     <!-- sidebar akan di-inject lewat JS -->
-     <div id="sidebar"></div>
+    <div id="sidebar"></div>
 
-    <main class="content">
+    <main class="content" id="content">
+        <div id="header"></div>
 
-        <!-- tombol kembali -->
-        <button class="btn-back" onclick="window.location.href='IndexRiset.php'">
-            <i class="fa-solid fa-chevron-left"></i>
-            <span>Kembali</span>
-        </button>
+        <div class="content-header page-header">
+            <button class="btn-back" onclick="window.location.href='IndexRiset.php'">
+                <i class="fa-solid fa-chevron-left"></i>
+                Kembali
+            </button>
 
-        <!-- judul halaman -->
-        <h1 class="page-title">Tambah Riset</h1>
+            <h1 class="page-title">Tambah Riset</h1>
+            <div></div>
+        </div>
 
-        <!-- pesan error -->
-        <?php if (!empty($errors)): ?>
-            <div class="alert alert-error">
-                <?php foreach ($errors as $err): ?>
-                    <p><?= htmlspecialchars($err) ?></p>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
+        <section class="profile-layout">
 
-        <!-- card form -->
-        <section class="form-card">
-            <form method="post" action="">
-                <div class="form-group">
-                    <label for="namaRiset">Nama Riset</label>
-                    <input
-                        type="text"
-                        id="namaRiset"
-                        name="namaRiset"
-                        placeholder="Masukkan nama riset"
-                        value="<?= htmlspecialchars($namaRiset) ?>">
-                </div>
+            <form class="profile-form" method="post" action="">
+                <div class="form-card">
+                    <h2 class="form-title">Data Riset</h2>
+                    <p class="form-subtitle">
+                        Tambahkan bidang riset baru dengan mengisi informasi berikut.
+                    </p>
 
-                <div class="form-actions">
-                    <button type="submit" class="btn-save">
-                        Simpan
-                    </button>
+                    <div class="form-grid">
+                        <div class="field-group">
+                            <label for="namaRiset">Nama Riset</label>
+                            <input
+                                type="text"
+                                id="namaRiset"
+                                name="namaRiset"
+                                class="field-input"
+                                placeholder="Masukkan nama riset"
+                                value="<?= htmlspecialchars($namaRiset) ?>">
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary btn-save">
+                                Simpan Riset
+                                <i class="fa-solid fa-check"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </form>
         </section>
 
     </main>
+
+    <!-- NOTIFICATION OVERLAY -->
+    <div id="notification" class="notification" style="display:none;">
+        <div class="notification-content">
+            <div class="notification-icon" id="notification-icon"></div>
+            <div class="notification-text">
+                <div class="notification-title" id="notification-title"></div>
+                <div class="notification-message" id="notification-message"></div>
+            </div>
+            <button id="closeNotification" class="close-btn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    </div>
+    <div id="overlay" class="overlay" style="display:none;"></div>
+
+    <script src="../../../Assets/Javascript/Admin/Header.js"></script>
     <script src="../../../Assets/Javascript/Admin/Sidebar.js"></script>
+    <script>
+        window.profileStatus      = <?= json_encode($status  ?? '') ?>;
+        window.profileMessage     = <?= json_encode($message ?? '') ?>;
+        window.profileRedirectUrl = <?= json_encode($redirectTo) ?>;
+    </script>
+    <script src="../../../Assets/Javascript/Admin/Profile.js"></script>
 </body>
+
 </html>

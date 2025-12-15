@@ -1,7 +1,7 @@
 <?php
 // admin/test_config.php
 // Test koneksi database
-
+require_once __DIR__ . '../../../Cek_Autentikasi.php';
 require_once 'config.php';
 
 echo "<!DOCTYPE html>

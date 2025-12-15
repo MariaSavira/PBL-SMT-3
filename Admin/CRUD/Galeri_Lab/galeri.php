@@ -1,16 +1,16 @@
 <?php
-session_start();
-require_once 'config.php';
+    require_once __DIR__ . '../../../Cek_Autentikasi.php';
+    require_once 'config.php';
 
-try {
-    $stmt = $pdo->query("SELECT * FROM galeri ORDER BY tanggal_upload DESC");
-    $galeri_items = $stmt->fetchAll();
-} catch(PDOException $e) {
-    $error = "Error: " . $e->getMessage();
-    $galeri_items = [];
-}
+    try {
+        $stmt = $pdo->query("SELECT * FROM galeri ORDER BY tanggal_upload DESC");
+        $galeri_items = $stmt->fetchAll();
+    } catch(PDOException $e) {
+        $error = "Error: " . $e->getMessage();
+        $galeri_items = [];
+    }
 
-$username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Maria Savira';
+    $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Maria Savira';
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -31,58 +31,36 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Maria Savira
 <body>
     <div id="sidebar"></div>
 
-    <div class="main-content">
+    <main class="content" id="content">
         <!-- Header -->
-        <div class="header">
-            <h1>Galeri</h1>
-            <div class="user-info">
-                <span class="user-name"><?php echo htmlspecialchars($username); ?></span>
-                <div class="user-avatar">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
-                </div>
-            </div>
-        </div>
-
-        <?php if(isset($_SESSION['success_message'])): ?>
-            <div class="alert alert-success">
-                <span>✓</span>
-                <span><?php echo $_SESSION['success_message']; unset($_SESSION['success_message']); ?></span>
-            </div>
-        <?php endif; ?>
-
-        <?php if(isset($_SESSION['error_message'])): ?>
-            <div class="alert alert-error">
-                <span>✗</span>
-                <span><?php echo $_SESSION['error_message']; unset($_SESSION['error_message']); ?></span>
-            </div>
-        <?php endif; ?>
+        <div class="header" id="header"></div>
 
         <!-- Controls -->
-        <div class="controls">
-            <div class="left-controls">
+        <div class="top-controls">
+            <div class="left-tools">
+                <button class="btn btn-secondary" onclick="selectAll()">Pilih Semua</button>
+                
                 <button class="btn btn-primary" onclick="window.location.href='tambah_galeri.php'">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M8 3.33334V12.6667M3.33333 8H12.6667" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                     </svg>
                     Tambah
                 </button>
-                <button class="btn btn-secondary" onclick="selectAll()">Pilih Semua</button>
             </div>
-            <div class="right-controls">
+
+            <div class="right-tools">
                 <div class="edit-toggle">
-                    <label for="editToggle">edit</label>
+                    <label for="editToggle">Edit</label>
                     <label class="toggle-switch">
                         <input type="checkbox" id="editToggle" onchange="toggleEditMode()">
                         <span class="slider"></span>
                     </label>
                 </div>
-                <div class="pagination-info">
+                <div class="pagination">
                     <span id="pageInfo">1 of 1</span>
                     <div class="pagination-nav">
-                        <button class="pagination-btn" onclick="prevPage()">&lt;</button>
-                        <button class="pagination-btn" onclick="nextPage()">&gt;</button>
+                        <button class="page-link prev" onclick="prevPage()">&lt;</button>
+                        <button class="page-link next" onclick="nextPage()">&gt;</button>
                     </div>
                 </div>
             </div>
@@ -121,7 +99,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Maria Savira
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
     <script src="../../../Assets/Javascript/Admin/Sidebar.js"></script>
     <script src="../../../Assets/Javascript/Admin/galeri.js"></script>

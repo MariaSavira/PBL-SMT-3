@@ -57,7 +57,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    
     const table = document.querySelector(".table-container");
 
     function closeAllActionMenus() {
@@ -69,7 +68,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (table) {
         table.addEventListener("click", function (e) {
 
-            
             const toggleBtn = e.target.closest(".action-toggle");
             if (toggleBtn) {
                 const cell = toggleBtn.closest(".action-cell");
@@ -83,7 +81,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 e.stopPropagation();
                 return;
             }
-
             
             const deleteBtn = e.target.closest(".action-delete");
             if (deleteBtn) {
@@ -107,7 +104,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    
     const deleteSelectionBtn = document.querySelector(".delete-selection");
 
     if (deleteSelectionBtn) {

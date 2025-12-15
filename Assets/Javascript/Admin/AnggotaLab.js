@@ -1,5 +1,3 @@
-
-
 document.addEventListener("DOMContentLoaded", function () {
     
     const toggle = document.querySelector(".filter-toggle");

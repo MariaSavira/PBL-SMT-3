@@ -253,7 +253,7 @@
             const hours = String(date.getHours()).padStart(2, '0');
             const minutes = String(date.getMinutes()).padStart(2, '0');
             
-            return `${month} ${day}, ${year} | ${hours}:${minutes} WIB`;
+            return ${month} ${day}, ${year} | ${hours}:${minutes} WIB;
         }
 
         // Fungsi format tanggal pendek untuk pengumuman
@@ -265,7 +265,7 @@
             const month = bulan[date.getMonth()];
             const year = date.getFullYear();
             
-            return `${month} ${day}, ${year}`;
+            return ${month} ${day}, ${year};
         }
 
         // Fungsi truncate text
@@ -281,7 +281,7 @@
             const container = document.getElementById('pengumuman-list');
             
             try {
-                const response = await fetch('../Admin/CRUD/Pengumuman_Lab/proses_pengumuman.php?action=get_data');
+                const response = await fetch('/PBL-SMT-3/Admin/CRUD/Pengumuman_Lab/proses_pengumuman.php?action=get_data');
                 const result = await response.json();
                 
                 container.innerHTML = '';
@@ -327,7 +327,7 @@
                     
                     // Redirect ke halaman detail jika diklik
                     item.onclick = () => {
-                    window.location.href = `isi_pengumuman.php?id=${pengumuman.id_pengumuman}`;
+                    window.location.href = isi_pengumuman.php?id=${pengumuman.id_pengumuman};
                     };
                     
                     // Truncate isi untuk preview
@@ -364,7 +364,7 @@
             const container = document.getElementById('highlight-berita');
             
             try {
-                const response = await fetch('../Admin/CRUD/Berita_Lab/api_berita.php?limit=1');
+                const response = await fetch('/PBL-SMT-3/Admin/CRUD/Berita_Lab/api_berita.php?limit=1');
                 const result = await response.json();
                 
                 if (!result.success || result.data.length === 0) {
@@ -379,7 +379,7 @@
                 
                 const berita = result.data[0];
                 const gambarUrl = berita.gambar 
-                    ? `../Assets/Image/Galeri-Berita/${berita.gambar}` 
+                    ? ../Assets/Image/Galeri-Berita/${berita.gambar} 
                     : '../Assets/Image/Galeri-Berita/default.jpg';
                 
                 container.innerHTML = `
@@ -409,7 +409,7 @@
             const container = document.getElementById('berita-list');
             
             try {
-                const response = await fetch('../Admin/CRUD/Berita_Lab/api_berita.php');
+                const response = await fetch('/PBL-SMT-3/Admin/CRUD/Berita_Lab/api_berita.php');
                 const result = await response.json();
                 
                 container.innerHTML = '';
@@ -442,7 +442,7 @@
                 
                 beritaToShow.forEach(berita => {
                     const gambarUrl = berita.gambar 
-                        ? `../Assets/Image/Galeri-Berita/${berita.gambar}` 
+                        ? ../Assets/Image/Galeri-Berita/${berita.gambar} 
                         : '../Assets/Image/Galeri-Berita/default.jpg';
                     
                     // PENTING: Gunakan nama_author jika ada, jika tidak ada gunakan 'Admin' sebagai fallback
@@ -451,7 +451,7 @@
                     const card = document.createElement('div');
                     card.className = 'berita-card';
                     card.style.cursor = 'pointer';
-                    card.onclick = () => window.location.href = `isi_berita.php?id=${berita.id_berita}`;
+                    card.onclick = () => window.location.href = isi_berita.php?id=${berita.id_berita};
                     
                     card.innerHTML = `
                         <div class="img" style="background-image: url('${gambarUrl}');"></div>

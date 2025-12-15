@@ -394,6 +394,21 @@ body {
 }
 
 /* ================== STAT CARDS ================== */
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    gap: 16px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-right: 26px;
+}
+
 .stats-row {
     display: grid;
     grid-template-columns: repeat(3, 346px);
