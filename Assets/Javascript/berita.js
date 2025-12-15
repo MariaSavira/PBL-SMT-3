@@ -1,6 +1,6 @@
 async function loadBerita(tag = null, tahun = null) {
   try {
-    let url = '../Assets/Php/api_berita.php?action=list';
+    let url = '/PBL-SMT-3/Admin/CRUD/Berita_Lab/api_berita.php?action=list';
 
     if (tag) {
       url += '&tag=' + encodeURIComponent(tag);

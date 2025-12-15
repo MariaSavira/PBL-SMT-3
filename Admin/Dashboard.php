@@ -120,6 +120,8 @@ try {
     <link rel="stylesheet" href="../Assets/Css/Admin/Sidebar.css">
     <link rel="stylesheet" href="../Assets/Css/Admin/Header.css">
 
+    <link rel="icon" type="images/x-icon"
+        href="../../../Assets/Image/Logo/Logo Without Text.png" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
@@ -219,61 +221,6 @@ try {
                 </div>
             </div>
 
-
-            <!-- <header class="topbar">
-                <div class="topbar-left">
-                    <div class="greeting">
-                        <h1>Halo, Maria Savira</h1>
-                        <p>Ini adalah rekapan dari lab business analytics</p>
-                    </div>
-                    <img src="../Assets/Image/Logo/Maskot.png" class="header-logo">
-                </div>
-
-                <div class="topbar-right">
-                    <div class="topbar-icons">
-
-                        <div class="notif-wrapper">
-                            <button class="icon-circle" id="notifToggle">
-                                <i class="fa-regular fa-bell"></i>
-                                <?php if ($jumlahNotifBaru > 0): ?>
-                                    <span class="notif-badge"><?= $jumlahNotifBaru ?></span>
-                                <?php endif; ?>
-                            </button>
-
-                            <div class="notif-dropdown" id="notifMenu">
-                                <div class="notif-header">
-                                    <span>Notifications</span>
-                                    <span class="notif-total"><?= count($notifAjuan) ?></span>
-                                </div>
-
-                                <div class="notif-list">
-                                    <?php if (empty($notifAjuan)): ?>
-                                        <p class="empty-text">Belum ada ajuan pending.</p>
-                                    <?php else: ?>
-                                        <?php foreach ($notifAjuan as $n): ?>
-                                            <div class="notif-item unread">
-                                                <div class="notif-icon">
-                                                    <i class="fa-regular fa-envelope"></i>
-                                                </div>
-                                                <div class="notif-content">
-                                                    <p class="notif-title">
-                                                        <?= htmlspecialchars($n['nama_peminjam']) ?>
-                                                        <span class="notif-link"><?= htmlspecialchars($n['keperluan']) ?></span>
-                                                    </p>
-                                                    <p class="notif-time">
-                                                        <?= date('d M Y', strtotime($n['tanggal_pengajuan'])) ?>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </header> -->
-
             <section class="stats-row">
                 <article class="stat-card">
                     <h4>Total Artikel</h4>
@@ -307,20 +254,20 @@ try {
 
                         <?php else: ?>
                             <?php
+                            // kita pakai kolom deskripsi sebagai list keahlian, dipisah koma
                             $tags = [];
                             if (!empty($anggotaTerbaru['deskripsi'])) {
                                 $tags = array_filter(array_map('trim', explode(',', $anggotaTerbaru['deskripsi'])));
                             }
 
+                            // path foto, kalau di DB cuma nama file, bisa tambahkan folder di depan
                             $fotoUrl = '';
                             if (!empty($anggotaTerbaru['foto'])) {
                                 $fotoUrl = '../Assets/Image/Anggota/' . $anggotaTerbaru['foto'];
                             }
                             ?>
-
                             <div class="member-card" data-id="<?= htmlspecialchars($anggotaTerbaru['id_anggota']) ?>">
                                 <div class="member-info">
-
                                     <div class="member-avatar">
                                         <?php if ($fotoUrl): ?>
                                             <img src="<?= htmlspecialchars($fotoUrl) ?>"
@@ -342,25 +289,25 @@ try {
                                             <?php endif; ?>
                                         </div>
                                     </div>
-
                                 </div>
 
                                 <div class="member-actions">
+                                <!-- HAPUS ANGGOTA -->
                                     <a class="btn-icon btn-delete"
-                                        href="HapusAnggota.php?id=<?= urlencode($anggotaTerbaru['id_anggota']) ?>"
-                                        onclick="return confirm('Yakin ingin menghapus anggota ini?');"
-                                        title="Hapus anggota">
+                                    href="CRUD/AnggotaLab/DeleteAnggota.php?id=<?= urlencode($anggotaTerbaru['id_anggota']) ?>"
+                                    onclick="return confirm('Yakin ingin menghapus anggota ini?');"
+                                    title="Hapus anggota">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>
 
+                                    <!-- EDIT ANGGOTA -->
                                     <a class="btn-icon btn-edit"
-                                        href="EditAnggota.php?id=<?= urlencode($anggotaTerbaru['id_anggota']) ?>"
-                                        title="Edit anggota">
+                                    href="CRUD/AnggotaLab/EditAnggota.php?id=<?= urlencode($anggotaTerbaru['id_anggota']) ?>"
+                                    title="Edit anggota">
                                         <i class="fa-solid fa-pen"></i>
                                     </a>
                                 </div>
                             </div>
-
                         <?php endif; ?>
                     </div>
                 </div>
@@ -375,19 +322,21 @@ try {
                         <h3 class="card-title-center">Ajuan Terbaru</h3>
 
                         <?php
-                        $ajuanPending = [];
                         try {
-                            $sql = "
-                                SELECT id_peminjaman, nama_peminjam, keperluan AS nama_kegiatan,
-                                    tanggal_pengajuan, status
-                                FROM peminjaman_lab
-                                WHERE status = 'pending'
-                                ORDER BY tanggal_pengajuan DESC, id_peminjaman DESC
-                            ";
+                            $sqlPending = "
+                            SELECT 
+                                id_peminjaman,
+                                nama_peminjam,
+                                keperluan AS nama_kegiatan,
+                                tanggal_pengajuan,
+                                status
+                            FROM peminjaman_lab
+                            WHERE status = 'pending'
+                            ORDER BY tanggal_pengajuan DESC, id_peminjaman DESC;
+                        ";
 
-                            $res = q($sql);
-
-                            while ($row = pg_fetch_assoc($res)) {
+                            $resultPending = q($sqlPending);
+                            while ($row = pg_fetch_assoc($resultPending)) {
                                 $ajuanPending[] = $row;
                             }
                         } catch (Throwable $e) {
@@ -396,17 +345,47 @@ try {
                         ?>
 
                         <?php if (empty($ajuanPending)): ?>
-                            <p class="empty-text">Belum ada ajuan pending.</p>
-
+                            <p class="empty-text" style="font-size:14px;color:#6b7280;margin-top:8px;">
+                                Belum ada ajuan peminjaman berstatus pending.
+                            </p>
                         <?php else: ?>
-                            <div style="max-height:350px; overflow-y:auto; padding-right:8px;">
-                                <?php foreach ($ajuanPending as $a): ?>
-                                    <div class="ajuan-item">
-                                        <h4><?= htmlspecialchars($a['nama_peminjam']) ?></h4>
-                                        <p><?= htmlspecialchars($a['nama_kegiatan']) ?></p>
-                                        <small><?= date('d M Y', strtotime($a['tanggal_pengajuan'])) ?></small>
+
+                            <p style="font-size:13px;color:#6b7280;margin:8px 0 6px 0;">
+                                Ajuan peminjaman terbaru yang perlu ditinjau:
+                            </p>
+
+                            <!-- AREA SCROLL -->
+                            <div style="overflow-y:auto; padding-right:6px; max-height:340px;">
+
+                                <?php foreach ($ajuanPending as $ajuan): ?>
+                                    <div class="ajuan-latest"
+                                        style="margin-top:8px; padding-top:6px; border-top:1px solid #eef2ff;">
+
+                                        <p style="font-size:15px;font-weight:600;margin-bottom:2px;">
+                                            <?= htmlspecialchars($ajuan['nama_peminjam']) ?>
+                                        </p>
+
+                                        <p style="font-size:13px;color:#4b5563;margin-bottom:6px;">
+                                            <?= htmlspecialchars($ajuan['nama_kegiatan'] ?? '-') ?>
+                                        </p>
+
+                                        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#6b7280;">
+                                            <span><?= date('d M Y', strtotime($ajuan['tanggal_pengajuan'])) ?></span>
+
+                                            <span style="
+                                            padding:2px 8px;
+                                            border-radius:999px;
+                                            background:#fef3c7;
+                                            color:#92400e;
+                                            font-weight:500;
+                                        ">
+                                                <?= htmlspecialchars($ajuan['status']) ?>
+                                            </span>
+                                        </div>
+
                                     </div>
                                 <?php endforeach; ?>
+
                             </div>
                         <?php endif; ?>
 
@@ -427,17 +406,19 @@ try {
 
                             <div class="card pengumuman-card">
                                 <?php if (empty($pengumumanTerbaru)): ?>
-                                    <p class="empty-text">Belum ada pengumuman terbaru.</p>
-
+                                    <p class="empty-text" style="font-size:14px;color:#6b7280;">
+                                        Belum ada pengumuman terbaru.
+                                    </p>
                                 <?php else: ?>
                                     <?php foreach ($pengumumanTerbaru as $p): ?>
                                         <div style="margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid #eef2ff;">
-                                            <p class="pengumuman-text">
+                                            <p style="font-size:13px;color:#111827;margin-bottom:4px;">
                                                 <?= nl2br(htmlspecialchars($p['isi'])) ?>
                                             </p>
-
-                                            <div class="pengumuman-meta">
-                                                <span><?= date('d M Y', strtotime($p['tanggal_terbit'])) ?></span>
+                                            <div style="font-size:11px;color:#6b7280;display:flex;gap:8px;flex-wrap:wrap;">
+                                                <span>
+                                                    <?= date('d M Y', strtotime($p['tanggal_terbit'])) ?>
+                                                </span>
                                                 <?php if (!empty($p['uploader'])): ?>
                                                     <span>• Oleh <?= htmlspecialchars($p['uploader']) ?></span>
                                                 <?php endif; ?>

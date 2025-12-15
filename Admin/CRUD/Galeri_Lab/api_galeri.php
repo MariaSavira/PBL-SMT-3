@@ -2,7 +2,6 @@
     header('Content-Type: application/json');
     header('Access-Control-Allow-Origin: *'); // Allow dari folder User
 
-    require_once __DIR__ . '../../../Cek_Autentikasi.php';
     require_once 'config.php';
 
     try {
