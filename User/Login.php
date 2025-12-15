@@ -54,7 +54,7 @@ if (isset($_SESSION['id_anggota'])) {
                     </div>
 
                     <div class="forgot">
-                        <a href="#">Lupa Password?</a>
+                        <a href="#">&nbsp;</a>
                     </div>
 
                     <button type="submit" class="btn-login">Masuk</button>

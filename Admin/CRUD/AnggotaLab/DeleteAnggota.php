@@ -41,7 +41,9 @@
         $message = 'Gagal menghapus: ' . $e->getMessage();
     }
 
-    header('Location: IndexAnggota.php?status=' . urlencode($status) . '&message=' . urlencode($message));
-    exit;
+    $redirect = $_SERVER['HTTP_REFERER'] ?? '/PBL-SMT-3/Admin/Dashboard.php';
+    $sep = (strpos($redirect, '?') !== false) ? '&' : '?';
 
+    header('Location: ' . $redirect . $sep . 'status=' . urlencode($status) . '&message=' . urlencode($message));
+    exit;
 ?>
