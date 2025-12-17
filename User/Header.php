@@ -13,7 +13,7 @@
 
         <nav class="menu" style="white-space: nowrap">
             <span>
-                <a href="TentangKami.html">Tentang Kami
+                <a href="TentangKami.php">Tentang Kami
                     <!-- <i id="tentang-kami-chevron-down" class="fa-solid fa-chevron-down"></i> -->
                 </a>
             </span>

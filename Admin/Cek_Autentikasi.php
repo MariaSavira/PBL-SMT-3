@@ -17,7 +17,7 @@ if ($isAdminPage) {
 if ($isUserPage) {
     if (!empty($_SESSION['id_anggota'])) {
         
-        header('Location: /PBL-SMT-3/Admin/IndexAnggota.php'); 
+        header('Location: /PBL-SMT-3/Admin/Dashboard.php'); 
         exit;
     }
 }

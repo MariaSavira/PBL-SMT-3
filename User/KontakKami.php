@@ -22,7 +22,7 @@
 <body>
     <div id="header"></div>
 
-    <!-- HEADING -->
+    
     <div class="heading">
         <h1>Kontak Kami</h1>
         <p>Jika memiliki pertanyaan atau ingin berkomunikasi dengan kami,
@@ -32,54 +32,81 @@
     <div class="container">
         <div class="card">
 
+            
             <div class="left">
                 <h2>Hubungi Kami</h2>
                 <p>Silakan tinggalkan pesan atau pertanyaan Anda melalui
                     formulir di bawah ini.</p>
 
-                <label for="nama">Nama Lengkap</label>
-                <input id="nama" type="text" placeholder="Masukkan nama lengkap Anda">
+                
+                <form action="../kirim.php" method="POST" enctype="multipart/form-data">
 
-                <label for="instansi">Instansi</label>
-                <input id="instansi" type="text" placeholder="Instansi">
+                    <label for="nama">Nama Lengkap</label>
+                    <input
+                        id="nama"
+                        name="nama"
+                        type="text"
+                        placeholder="Masukkan nama lengkap Anda"
+                        required>
 
-                <label for="alasan">Alasan</label>
-                <select id="alasan">
-                    <option selected disabled>-- Pilih Alasan --</option>
-                    <option>Informasi</option>
-                    <option>Pendaftaran</option>
-                    <option>Kerja Sama</option>
-                    <option>Lainnya</option>
-                </select>
+                    <label for="instansi">Instansi</label>
+                    <input
+                        id="instansi"
+                        name="instansi"
+                        type="text"
+                        placeholder="Instansi">
 
-                <label for="pesan">Isi Pesan</label>
-                <textarea id="pesan" placeholder="Tuliskan pesan atau pertanyaan Anda di sini"></textarea>
+                    <label for="alasan">Alasan</label>
+                    <select id="alasan" name="alasan" required>
+                        <option selected disabled>-- Pilih Alasan --</option>
+                        <option value="Informasi">Informasi</option>
+                        <option value="Pendaftaran">Pendaftaran</option>
+                        <option value="Kerja Sama">Kerja Sama</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
 
-                <label for="fileInput">Upload Dokumen</label>
-                <button type="button" class="upload-btn" id="uploadTrigger">
-                    <i class="fa-solid fa-upload"></i>
-                    <span>Upload File</span>
-                </button>
+                    <label for="pesan">Isi Pesan</label>
+                    <textarea
+                        id="pesan"
+                        name="pesan"
+                        placeholder="Tuliskan pesan atau pertanyaan Anda di sini"
+                        required></textarea>
 
-                <input type="file" id="fileInput" accept="application/pdf" hidden>
-                <p class="upload-help">Format file: PDF • Maksimal 5 MB</p>
+                    <label for="fileInput">Upload Dokumen</label>
+                    <button type="button" class="upload-btn" id="uploadTrigger">
+                        <i class="fa-solid fa-upload"></i>
+                        <span>Upload File</span>
+                    </button>
 
-                <div id="filePreview" class="file-card" style="display:none;">
-                    <div class="file-left">
-                        <div class="file-icon">
-                            <i class="fa-solid fa-file-pdf"></i>
+                    
+                    <input
+                        type="file"
+                        id="fileInput"
+                        name="dokumen"
+                        accept="application/pdf"
+                        hidden>
+
+                    <p class="upload-help">Format file: PDF • Maksimal 5 MB</p>
+
+                    <div id="filePreview" class="file-card" style="display:none;">
+                        <div class="file-left">
+                            <div class="file-icon">
+                                <i class="fa-solid fa-file-pdf"></i>
+                            </div>
+                            <div class="file-text">
+                                <div class="file-name" id="fileName"></div>
+                                <div class="file-size" id="fileSize"></div>
+                            </div>
                         </div>
-                        <div class="file-text">
-                            <div class="file-name" id="fileName"></div>
-                            <div class="file-size" id="fileSize"></div>
-                        </div>
+                        <button type="button" class="file-link" id="fileViewBtn">Lihat</button>
                     </div>
-                    <button type="button" class="file-link" id="fileViewBtn">Lihat</button>
-                </div>
 
-                <button type="button" class="btn" id="btnKirim">Kirim Pesan</button>
-            </div>
+                    
+                    <button type="submit" class="btn" id="btn-kirim">Kirim Pesan</button>
+                </form>
+            </div> 
 
+            
             <div class="right">
                 <h2>Informasi Kontak</h2>
                 <p class="sub">Kami menyediakan beberapa opsi kontak untuk
@@ -90,7 +117,7 @@
                         <div class="icon"><i class="fa-brands fa-whatsapp"></i></div>
                         <div>
                             <div class="item-title">WhatsApp</div>
-                            <div class="item-desc">lorem ipsum</div>
+                            <div class="item-desc">+6285730666454</div>
                         </div>
                     </div>
 
@@ -98,7 +125,7 @@
                         <div class="icon"><i class="fa-solid fa-envelope"></i></div>
                         <div>
                             <div class="item-title">Alamat Email</div>
-                            <div class="item-desc">lorem ipsum</div>
+                            <div class="item-desc">jti@polienema.ac.id</div>
                         </div>
                     </div>
 
@@ -127,10 +154,12 @@
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.5304465643894!2d112.6145444!3d-7.9440069!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd629dfd58aaf95%3A0xe72a182dfd18e01c!2sGedung%20Teknik%20Sipil%2C%20Teknik%20Informatika%20%26%20Magister%20Terapan%2C%20POLITEKNIK%20NEGERI%20MALANG!5e0!3m2!1sid!2sid!4v1763884713528!5m2!1sid!2sid"
                         loading="lazy" allowfullscreen></iframe>
                 </div>
-            </div>
-        </div>
-    </div>
+            </div> 
 
+        </div> 
+    </div> 
+
+    
     <div id="notification" class="notification" style="display:none;">
         <div class="notification-content">
             <div class="notification-icon" id="notification-icon"></div>
@@ -153,12 +182,6 @@
             const fileNameEl  = document.getElementById('fileName');
             const fileSizeEl  = document.getElementById('fileSize');
             const fileViewBtn = document.getElementById('fileViewBtn');
-            const kirimBtn    = document.getElementById('btnKirim');
-
-            const namaInput     = document.getElementById('nama');
-            const instansiInput = document.getElementById('instansi');
-            const alasanSelect  = document.getElementById('alasan');
-            const pesanTextarea = document.getElementById('pesan');
 
             const notification       = document.getElementById('notification');
             const notifIconContainer = document.getElementById('notification-icon');
@@ -173,26 +196,58 @@
 
             let currentFileUrl = null;
 
+        
+            function showNotification(isSuccess, customMessage) {
+                notification.classList.remove('success', 'error');
+
+                if (isSuccess) {
+                    notification.classList.add('success');
+                    notifTitleEl.textContent   = 'Success';
+                    notifMessageEl.textContent = customMessage || 'Pesan Anda telah berhasil terkirim!';
+                    notifIconContainer.innerHTML = '<i class="fa-regular fa-circle-check"></i>';
+                } else {
+                    notification.classList.add('error');
+                    notifTitleEl.textContent   = 'Error';
+                    notifMessageEl.textContent = customMessage || 'Terjadi kesalahan. Silakan coba lagi.';
+                    notifIconContainer.innerHTML = '<i class="fa-regular fa-circle-xmark"></i>';
+                }
+
+                notification.style.display = 'block';
+                overlay.style.display      = 'block';
+
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                    overlay.style.display      = 'none';
+                }, 5000);
+            }
+
+            
             fileInput.addEventListener('change', function () {
                 const file = this.files[0];
                 if (!file) return;
 
+                
                 if (file.type !== 'application/pdf') {
-                    alert('Hanya file PDF yang diperbolehkan.');
+                    showNotification(false, 'Hanya file PDF yang diperbolehkan.');
                     this.value = '';
+                    filePreview.style.display = 'none';
                     return;
                 }
 
+                
                 if (file.size > 5 * 1024 * 1024) {
-                    alert('Ukuran file maksimal 5 MB.');
+                    showNotification(false, 'Ukuran file maksimal 5 MB.');
                     this.value = '';
+                    filePreview.style.display = 'none';
                     return;
                 }
 
+                
                 fileNameEl.textContent = file.name;
                 const sizeMB = file.size / (1024 * 1024);
                 fileSizeEl.textContent = sizeMB.toFixed(1) + ' MB';
 
+                
                 if (currentFileUrl) {
                     URL.revokeObjectURL(currentFileUrl);
                 }
@@ -205,60 +260,23 @@
                 filePreview.style.display = 'flex';
             });
 
-            function showNotification(isSuccess) {
-                notification.classList.remove('success', 'error');
-
-                if (isSuccess) {
-                    notification.classList.add('success');
-                    notifTitleEl.textContent   = 'Success';
-                    notifMessageEl.textContent = 'Pesan Anda telah berhasil terkirim!';
-                    notifIconContainer.innerHTML = '<i class="fa-regular fa-circle-check"></i>';
-                } else {
-                    notification.classList.add('error');
-                    notifTitleEl.textContent   = 'Error';
-                    notifMessageEl.textContent = 'Terjadi kesalahan. Silakan coba lagi.';
-                    notifIconContainer.innerHTML = '<i class="fa-regular fa-circle-xmark"></i>';
-                }
-
-                notification.style.display = 'block';
-                overlay.style.display = 'block';
-
-                setTimeout(() => {
-                    notification.style.display = 'none';
-                    overlay.style.display = 'none';
-                }, 5000);
-            }
-
+            
             closeBtn.addEventListener('click', function () {
                 notification.style.display = 'none';
-                overlay.style.display = 'none';
+                overlay.style.display      = 'none';
             });
 
-            kirimBtn.addEventListener('click', function (e) {
-                e.preventDefault();
+            
+            const params = new URLSearchParams(window.location.search);
+            const status = params.get('status');
 
-                const nama     = namaInput.value.trim();
-                const instansi = instansiInput.value.trim();
-                const alasan   = alasanSelect.value;
-                const pesan    = pesanTextarea.value.trim();
-                const file     = fileInput.files[0];
-
-                const isFormValid =
-                    nama !== '' &&
-                    instansi !== '' &&
-                    alasan !== '' &&
-                    alasan !== '-- Pilih Alasan --' &&
-                    pesan !== '' &&
-                    !!file;
-
-                if (!isFormValid) {
-                    
-                    showNotification(false);
-                    return;
-                }
+            if (status === 'success') {
                 showNotification(true);
-
-            });
+            } else if (status === 'error') {
+                showNotification(false, 'Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.');
+            } else if (status === 'validation_error') {
+                showNotification(false, 'Data yang dikirim belum lengkap atau tidak valid.');
+            }
         });
     </script>
 

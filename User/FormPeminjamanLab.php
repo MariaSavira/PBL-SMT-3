@@ -79,7 +79,7 @@
 
         </div>
 
-        <!-- NOTIFICATION -->
+        
         <div id="notification" class="notification" style="display:none;">
             <div class="notification-content">
 

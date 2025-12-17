@@ -47,9 +47,10 @@ if (password_verify($password, $hash)) {
     $_SESSION['foto'] = $user['foto'];
     $_SESSION['jabatan'] = $user['jabatan'];
 
-    header('Location: ' . $base_url .  '/../Admin/CRUD/AnggotaLab/IndexAnggota.php');
+    header("Location: " . $base_url . "/../Admin/Dashboard.php?status=success&msg=" . urlencode("Login berhasil!"));
     exit;
+
 } else {
-    header('Location: login.php?error=' . urlencode('Username atau password salah.'));
+    header('Location: Login.php?error=' . urlencode('Username atau password salah.'));
     exit;
 }

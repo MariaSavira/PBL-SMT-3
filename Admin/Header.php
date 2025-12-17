@@ -32,7 +32,7 @@
                     <i class="fa-regular fa-user"></i>
                     <span>Lihat Profil</span>
                 </a>
-                <a href="../../Logout.php" class="profile-menu-item">
+                <a href="/PBL-SMT-3/Admin/Logout.php" class="profile-menu-item">
                     <i class="fa-solid fa-right-from-bracket"></i>
                     <span>Logout</span>
                 </a>

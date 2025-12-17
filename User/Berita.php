@@ -2,198 +2,568 @@
 <html lang="id">
 
 <?php
-    require_once __DIR__ . '/../Admin/Cek_Autentikasi.php';
+    require_once __DIR__ . '../../Admin/Cek_Autentikasi.php';
 ?>
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../Assets/Css/berita.css" />
-      <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />  
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-      rel="stylesheet"
-    />
-            <link rel="icon" type="image/x-icon" href="../Assets/Image/Logo/Logo Without Text.png" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-    />
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="../Assets/Image/Logo/Logo Without Text.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <title>Berita Laboratorium</title>
-</head>
-<body>
-    
-    <!-- NAVBAR (from JS) -->
-    <div id="header"></div>
- 
-    <!-- HERO -->
-    <!-- <section class="hero">
-        <img src="../Assets/Image/Galeri-Berita/Heading.png" alt="Hero">
-        <div class="hero-overlay"></div>
-    <h1 style="font-size: 32px;">Berita Laboratorium</h1>
-    <p style="font-size: 16px;">
-        Ikuti perkembangan terbaru seputar kegiatan laboratorium, pengumuman penting, 
-        dan agenda riset yang sedang berjalan. Halaman ini menjadi pusat informasi bagi 
-        anggota, mitra, dan publik yang ingin mengetahui tren dan dinamika analisis 
-        bisnis berbasis data.
-    </p>
-    </section>
-     -->
+    <style>
+    .skeleton {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+        border-radius: 8px;
+    }
 
+    @keyframes loading {
+        0% {
+            background-position: 200% 0;
+        }
+
+        100% {
+            background-position: -200% 0;
+        }
+    }
+
+    .skeleton-img {
+        height: 200px;
+        width: 100%;
+        margin-bottom: 12px;
+    }
+
+    .skeleton-text {
+        height: 16px;
+        margin-bottom: 10px;
+    }
+
+    .skeleton-text.short {
+        width: 60%;
+    }
+
+    
+    .skeleton-highlight {
+        height: 400px;
+        border-radius: 16px;
+    }
+
+    
+    .skeleton-pengumuman {
+        display: flex;
+        gap: 15px;
+        padding: 20px;
+        margin-bottom: 15px;
+    }
+
+    .skeleton-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        flex-shrink: 0;
+    }
+
+    .skeleton-content {
+        flex: 1;
+    }
+
+    
+    .error-state {
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 30px;
+        border-radius: 12px;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .error-state i {
+        font-size: 48px;
+        margin-bottom: 15px;
+    }
+
+    
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #94a3b8;
+    }
+
+    .empty-state i {
+        font-size: 64px;
+        margin-bottom: 20px;
+        opacity: 0.5;
+    }
+
+    
+    .pengumuman-item {
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .pengumuman-item:hover {
+        transform: translateX(5px);
+    }
+
+    
+    .author {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: #64748b;
+        margin-top: 8px;
+    }
+
+    .author i {
+        font-size: 12px;
+    }
+    </style>
+</head>
+
+<body>
+
+    
+    <div id="header"></div>
+
+    
     <div class="heading">
         <h1>Berita Laboratorium</h1>
         <p style="margin-top: 16px; color: #fff;">
-            Ikuti perkembangan terbaru seputar kegiatan laboratorium, pengumuman penting, 
-            dan agenda riset yang sedang<br> berjalan. Halaman ini menjadi pusat informasi bagi 
-            anggota, mitra, dan publik yang ingin mengetahui tren dan dinamika<br> analisis 
+            Ikuti perkembangan terbaru seputar kegiatan laboratorium, pengumuman penting,
+            dan agenda riset yang sedang<br> berjalan. Halaman ini menjadi pusat informasi bagi
+            anggota, mitra, dan publik yang ingin mengetahui tren dan dinamika<br> analisis
             bisnis berbasis data.
         </p>
     </div>
 
-    <!-- HIGHLIGHT BERITA -->
+    
     <section class="highlight-floating">
-           <div class="highlight-wrapper">
-        <div class="highlight-card">
-            <img src="../Assets/Image/Galeri-Berita/highlightberita1.jpeg" class="highlight-img" />
-
-            <div class="highlight-text">
-                <h2>
-                    Jurusan Teknologi Informasi Politeknik Negeri Malang berhasil meraih juara 2 umum pada 
-                    Kompetensi Mahasiswa Informatika Politeknik Nasional (KMIPN) 2025 yang berlangsung 
-                    pada tanggal 13 – 16 Oktober 2025 di Politeknik Negeri Padang dengan perolehan 
-                    1 emas, 1 perak dan 1 perunggu.
-                </h2>
-
-                <a href="../User/Isi_berita.html" class="btn-primary">Baca Selengkapnya</a>
+        <div class="highlight-wrapper">
+            <div class="highlight-card" id="highlight-berita">
+                
+                <div class="skeleton skeleton-highlight"></div>
             </div>
         </div>
     </section>
-<!-- SECTION BAWAH WRAPPER -->
-<section class="content-wrapper">
 
-    <!-- PENGUMUMAN -->
-     <div class="pengumuman-wrapper">
-    <h3 class="judul-pengumuman">Pengumuman</h3>
+    
+    <section class="content-wrapper">
 
-    <div class="pengumuman">
+        
+        <div class="pengumuman-wrapper">
+            <h3 class="judul-pengumuman">Pengumuman</h3>
 
-        <div class="pengumuman-item">
-            <div class="icon">
-                <img src="../Assets/Image/Galeri-Berita/icon1.svg" alt="icon">
-            </div>
-            <div>
-                <h4>Pengumuman Persyaratan Bantuan UKT / SPP Tahun 2025</h4>
-                <p class="tanggal2">November 10, 2025</p>
-            </div>
-        </div>
-
-        <div class="pengumuman-item">
-            <div class="icon">
-                <img src="../Assets/Image/Galeri-Berita/icon2.svg" alt="icon">
-            </div>
-            <div>
-                <h4>BEASISWA UNGGULAN BAGI MASYARAKAT BERPRESTASI DAN PENYANDANG DISABILITAS 2025</h4>
-                <p class="tanggal">November 10, 2025</p>
-            </div>
-        </div>
-
-        <div class="pengumuman-item">
-            <div class="icon">
-                <img src="../Assets/Image/Galeri-Berita/icon3.svg" alt="icon">
-            </div>
-            <div>
-                <h4>Batas Pendaftaran dan Pelaksanaan Ujian Skripsi Tahap III Tahun Ajaran 2024/2025</h4>
-                <p class="tanggal">November 10, 2025</p>
-            </div>
-        </div>
-</div>
-    </div>
-
-    <!-- BERITA TERKINI -->
-    <div class="berita-terkini">
-        <div class="berita-terkini-header">
-            <h3>Berita Terkini</h3>
-            <div class="filter-wrapper">
-    <div class="filter-select">
-        <select>
-            <option>Tag</option>
-            <option>Tag 1</option>
-            <option>Tag 2</option>
-            <option>Tag 3</option>
-        </select>
-    </div>
-
-    <div class="filter-select">
-        <select>
-            <option>Tahun</option>
-            <option>2023</option>
-            <option>2024</option>
-            <option>2025</option>
-        </select>
-    </div>
-</div>
-
-        </div>
-
-        <!-- LIST BERITA -->
-    <div class="berita-card">
-    <div class="img" style="background-image: url('../Assets/Image/Galeri-Berita/berita1.jpg');"></div>
-            <div class="text">
-                <p class="tanggal">November 13, 2025 | 15:00 WIB</p>
-                <h4>Jurusan Teknologi Informasi Politeknik Negeri Malang melaksanakan kegiatan dengan tema “AI Ready ASEAN untuk Siswa”</h4>
-                <p>Jurusan Teknologi Informasi Politeknik Negeri Malang melaksanakan kegiatan “AI Ready ASEAN untuk Siswa” pada Selasa,</p>
-                <span class="author">Surya Dua Artha Simanjuntak</span>
+            <div class="pengumuman" id="pengumuman-list">
+                
+                <div class="skeleton-pengumuman">
+                    <div class="skeleton skeleton-icon"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text short"></div>
+                    </div>
+                </div>
+                <div class="skeleton-pengumuman">
+                    <div class="skeleton skeleton-icon"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text short"></div>
+                    </div>
+                </div>
+                <div class="skeleton-pengumuman">
+                    <div class="skeleton skeleton-icon"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text short"></div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="berita-card">
-            <div class="img" style="background-image: url('../Assets/Image/Galeri-Berita/berita2.png');"></div>
-            <div class="text">
-                <p class="tanggal">November 13, 2025 | 15:00 WIB</p>
-                <h4>Jurusan Teknologi Informasi Politeknik Negeri Malang menerima kunjungan dari SMA Negeri 3 Kota Malang</h4>
-                <p>Jurusan Teknologi Informasi Politeknik Negeri Malang menerima kunjungan dari SMA Negeri 3 Kota Malang dalam</p>
-                <span class="author">Surya Dua Artha Simanjuntak</span>
+        
+        <div class="berita-terkini">
+            <div class="berita-terkini-header">
+                <h3>Berita Terkini</h3>
+                <div class="filter-wrapper">
+                    <div class="filter-select">
+                        <select id="filterTag">
+                            <option value="">Semua Tag</option>
+                            <option value="prestasi">Prestasi</option>
+                            <option value="kegiatan">Kegiatan</option>
+                            <option value="kunjungan">Kunjungan</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-select">
+                        <select id="filterTahun">
+                            <option value="">Semua Tahun</option>
+                            <option value="2025">2025</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div id="berita-list">
+                
+                <div class="berita-card">
+                    <div class="skeleton skeleton-img"></div>
+                    <div class="text">
+                        <div class="skeleton skeleton-text short"></div>
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text short"></div>
+                    </div>
+                </div>
+                <div class="berita-card">
+                    <div class="skeleton skeleton-img"></div>
+                    <div class="text">
+                        <div class="skeleton skeleton-text short"></div>
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text short"></div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="berita-card">
-            <div class="img" style="background-image: url('../Assets/Image/Galeri-Berita/berita3.png');"></div>
-            <div class="text">
-                <p class="tanggal">November 13, 2025 | 15:00 WIB</p>
-                <h4>Politeknik Negeri Malang Tampilkan Inovasi Digital di Indonesia Creative Cities Network (ICCN) 2025</h4>
-                <p>Politeknik Negeri Malang (POLINEMA) melalui Jurusan Teknologi Informasi kembali menorehkan prestasi</p>
-                <span class="author">Surya Dua Artha Simanjuntak</span>
+    </section>
+
+    <div id="footer"></div>
+    <script src="../Assets/Javascript/HeaderFooter.js"></script>
+
+    <script>
+    const pengumumanIcons = [
+        '../Assets/Image/Galeri-Berita/icon1.svg',
+        '../Assets/Image/Galeri-Berita/icon1.svg',
+        '../Assets/Image/Galeri-Berita/icon1.svg'
+    ];
+
+    function formatTanggal(dateString) {
+        const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+        ];
+        const date = new Date(dateString);
+        const day = date.getDate();
+        const month = bulan[date.getMonth()];
+        const year = date.getFullYear();
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+
+        return `${month} ${day}, ${year} | ${hours}:${minutes} WIB`;
+    }
+
+    function formatTanggalPendek(dateString) {
+        const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+        ];
+        const date = new Date(dateString);
+        const day = date.getDate();
+        const month = bulan[date.getMonth()];
+        const year = date.getFullYear();
+
+        return `${month} ${day}, ${year}`;
+    }
+
+    function truncateText(text, maxLength) {
+        if (!text) return '';
+        const stripped = text.replace(/<[^>]*>/g, '');
+        if (stripped.length <= maxLength) return stripped;
+        return stripped.substr(0, maxLength) + '...';
+    }
+
+    async function loadPengumuman() {
+        const container = document.getElementById('pengumuman-list');
+
+        try {
+            const response = await fetch('../Admin/CRUD/Pengumuman_Lab/proses_pengumuman.php?action=get_data');
+            const result = await response.json();
+
+            container.innerHTML = '';
+
+            if (!result.success) {
+                container.innerHTML = `
+                <div class="error-state">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>${result.message || 'Gagal memuat pengumuman'}</p>
+                </div>
+            `;
+                return;
+            }
+
+            
+            const pengumumanAktif = result.data.filter(item => item.status === 'Aktif');
+
+            
+            pengumumanAktif.sort((a, b) => new Date(b.tanggal_terbit) - new Date(a.tanggal_terbit));
+
+            
+            const pengumumanTerbaru = pengumumanAktif.slice(0, 3);
+
+            if (pengumumanTerbaru.length === 0) {
+                container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-bell"></i>
+                    <h4>Belum Ada Pengumuman</h4>
+                    <p>Belum ada pengumuman yang dipublikasikan</p>
+                </div>
+            `;
+                return;
+            }
+
+            pengumumanTerbaru.forEach((pengumuman, index) => {
+                const iconIndex = index % pengumumanIcons.length;
+                const iconUrl = pengumumanIcons[iconIndex];
+
+                const item = document.createElement('div');
+                item.className = 'pengumuman-item';
+                item.style.cursor = 'pointer';
+
+                item.onclick = () => {
+                    window.location.href = `isi_pengumuman.php?id=${pengumuman.id_pengumuman}`;
+                };
+
+                const isiPreview = pengumuman.isi.length > 100 ?
+                    pengumuman.isi.substring(0, 100) + '...' :
+                    pengumuman.isi;
+
+                item.innerHTML = `
+                <div class="icon">
+                    <img src="${iconUrl}" alt="icon" onerror="this.src='../Assets/Image/Galeri-Berita/icon1.svg'">
+                </div>
+                <div>
+                    <h4>${isiPreview}</h4>
+                    <p class="tanggal2">${formatTanggalPendek(pengumuman.tanggal_terbit)}</p>
+                </div>
+            `;
+
+                container.appendChild(item);
+            });
+
+        } catch (error) {
+            console.error('Error loading pengumuman:', error);
+            container.innerHTML = `
+            <div class="error-state">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Terjadi kesalahan saat memuat pengumuman</p>
             </div>
-        </div>
+        `;
+        }
+    }
 
-        <div class="berita-card">
-           <div class="img" style="background-image: url('../Assets/Image/Galeri-Berita/berita4.png');"></div>
-            <div class="text">
-                <p class="tanggal">November 13, 2025 | 15:00 WIB</p>
-                <h4>Kolaborasi Jurusan Teknologi Informasi Politeknik Negeri Malang dan MGMP Informatika Kab Malang dalam Pengembangan Kompetensi Guru di Era Revolusi Industri 4.0</h4>
-                <p>Perkembangan dunia digital dan revolusi industri 4.0 menuntut Indonesia untuk memperkuat keterampilan berpikir kritis</p>
-                <span class="author">Surya Dua Artha Simanjuntak</span>
+    
+    async function loadHighlightBerita() {
+        const container = document.getElementById('highlight-berita');
+
+        try {
+            const response = await fetch('../Admin/CRUD/Berita_Lab/api_berita.php?limit=1');
+            const result = await response.json();
+
+            if (!result.success || result.data.length === 0) {
+                container.innerHTML = `
+                <div class="error-state">
+                    <i class="fas fa-newspaper"></i>
+                    <p>Belum ada berita highlight tersedia</p>
+                </div>
+            `;
+                return;
+            }
+
+            const berita = result.data[0];
+            const gambarUrl = berita.gambar ?
+                `../Assets/Image/Galeri-Berita/${berita.gambar}` :
+                '../Assets/Image/Galeri-Berita/default.jpg';
+
+            container.innerHTML = `
+            <img src="${gambarUrl}" 
+                 class="highlight-img" 
+                 alt="${berita.judul}"
+                 onerror="this.src='../Assets/Image/Galeri-Berita/default.jpg'" />
+            <div class="highlight-text">
+                <h2>${berita.judul}</h2>
+                <a href="isi_berita.php?id=${berita.id_berita}" class="btn-primary">Baca Selengkapnya</a>
             </div>
-        </div>
+        `;
 
-        <div class="berita-card">
-            <div class="img" style="background-image: url('../Assets/Image/Galeri-Berita/berita5.png');"></div>
-            <div class="text">
-                <p class="tanggal">November 13, 2025 | 15:00 WIB</p>
-                <h4>Jurusan Teknologi Informasi Politeknik Negeri Malang melaksanakan kegiatan Yudisium Mid Semester Ganjil Tahun Akademik 2025/2026.</h4>
-                <p>Jurusan Teknologi Informasi Politeknik Negeri Malang melaksanakan kegiatan Yudisium Mid Semester Ganjil</p>
-                <span class="author">Surya Dua Artha Simanjuntak</span>
+        } catch (error) {
+            console.error('Error loading highlight:', error);
+            container.innerHTML = `
+            <div class="error-state">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Gagal memuat berita highlight</p>
             </div>
-        </div>
+        `;
+        }
+    }
 
-    </div>
+    
+    async function loadBeritaTerkini(filterTag = '', filterTahun = '') {
+        const container = document.getElementById('berita-list');
 
-</section>
+        try {
+            
+            container.innerHTML = `
+            <div class="berita-card">
+                <div class="skeleton skeleton-img"></div>
+                <div class="text">
+                    <div class="skeleton skeleton-text short"></div>
+                    <div class="skeleton skeleton-text"></div>
+                    <div class="skeleton skeleton-text"></div>
+                    <div class="skeleton skeleton-text short"></div>
+                </div>
+            </div>
+        `;
 
-<div id="footer"></div>
-<script src="../Assets/Javascript/HeaderFooter.js"></script>
-  </body>
+            const response = await fetch('../Admin/CRUD/Berita_Lab/api_berita.php');
+            const result = await response.json();
+
+            container.innerHTML = '';
+
+            if (!result.success) {
+                container.innerHTML = `
+                <div class="error-state">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>${result.message || 'Gagal memuat berita'}</p>
+                </div>
+            `;
+                return;
+            }
+
+            let beritaList = result.data;
+
+            if (beritaList.length === 0) {
+                container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-newspaper"></i>
+                    <h4>Belum Ada Berita</h4>
+                    <p>Belum ada berita yang dipublikasikan</p>
+                </div>
+            `;
+                return;
+            }
+
+            
+            beritaList = beritaList.slice(1);
+
+            
+            if (filterTag) {
+                beritaList = beritaList.filter(berita => {
+                    
+                    return berita.tag && berita.tag.toLowerCase() === filterTag.toLowerCase();
+                });
+            }
+
+            
+            if (filterTahun) {
+                beritaList = beritaList.filter(berita => {
+                    const tahunBerita = new Date(berita.tanggal).getFullYear().toString();
+                    return tahunBerita === filterTahun;
+                });
+            }
+
+            
+            if (beritaList.length === 0) {
+                let pesanFilter = '';
+
+                if (filterTag && filterTahun) {
+                    pesanFilter = `Tidak ada berita dengan tag "${filterTag}" pada tahun ${filterTahun}`;
+                } else if (filterTag) {
+                    pesanFilter = `Tidak ada berita dengan tag "${filterTag}"`;
+                } else if (filterTahun) {
+                    pesanFilter = `Tidak ada berita pada tahun ${filterTahun}`;
+                }
+
+                container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-search"></i>
+                    <h4>Berita Tidak Ditemukan</h4>
+                    <p>${pesanFilter}</p>
+                    <button onclick="resetFilter()" class="btn-primary" style="margin-top: 15px;">
+                        Reset Filter
+                    </button>
+                </div>
+            `;
+                return;
+            }
+
+            
+            beritaList.forEach(berita => {
+                const gambarUrl = berita.gambar ?
+                    `../Assets/Image/Galeri-Berita/${berita.gambar}` :
+                    '../Assets/Image/Galeri-Berita/default.jpg';
+
+                const authorName = berita.nama_author || berita.uploaded_by || 'Admin';
+
+                const card = document.createElement('div');
+                card.className = 'berita-card';
+                card.style.cursor = 'pointer';
+                card.onclick = () => window.location.href = `isi_berita.php?id=${berita.id_berita}`;
+
+                card.innerHTML = `
+                <div class="img" style="background-image: url('${gambarUrl}');"></div>
+                <div class="text">
+                    <p class="tanggal">${formatTanggal(berita.tanggal)}</p>
+                    <h4>${berita.judul}</h4>
+                    <p>${truncateText(berita.isi, 120)}</p>
+                    <span class="author">
+                        <i class="fas fa-user"></i>
+                        ${authorName}
+                    </span>
+                </div>
+            `;
+
+                container.appendChild(card);
+            });
+
+        } catch (error) {
+            console.error('Error loading berita:', error);
+            container.innerHTML = `
+            <div class="error-state">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Terjadi kesalahan saat memuat berita</p>
+            </div>
+        `;
+        }
+    }
+
+    
+    function resetFilter() {
+        document.getElementById('filterTag').value = '';
+        document.getElementById('filterTahun').value = '';
+        loadBeritaTerkini();
+    }
+
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        loadPengumuman();
+        loadHighlightBerita();
+        loadBeritaTerkini();
+
+        
+        document.getElementById('filterTag')?.addEventListener('change', function() {
+            const selectedTag = this.value;
+            const selectedTahun = document.getElementById('filterTahun').value;
+            loadBeritaTerkini(selectedTag, selectedTahun);
+        });
+
+        
+        document.getElementById('filterTahun')?.addEventListener('change', function() {
+            const selectedTahun = this.value;
+            const selectedTag = document.getElementById('filterTag').value;
+            loadBeritaTerkini(selectedTag, selectedTahun);
+        });
+    });
+    </script>
+</body>
+
 </html>

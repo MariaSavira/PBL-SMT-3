@@ -1,12 +1,12 @@
 <?php
-session_start();
+    session_start();
 
-$base_url = dirname($_SERVER['PHP_SELF']);
+    $base_url = dirname($_SERVER['PHP_SELF']);
 
-if (isset($_SESSION['id_anggota'])) {
-    header('Location: ' . $base_url . '/../Admin/CRUD/AnggotaLab/IndexAnggota.php');
-    exit;
-}
+    if (isset($_SESSION['id_anggota'])) {
+        header('Location: ' . $base_url . '/../Admin/Dashboard.php');
+        exit;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -54,7 +54,7 @@ if (isset($_SESSION['id_anggota'])) {
                     </div>
 
                     <div class="forgot">
-                        <a href="#">Lupa Password?</a>
+                        <a href="#">&nbsp;</a>
                     </div>
 
                     <button type="submit" class="btn-login">Masuk</button>
@@ -62,7 +62,7 @@ if (isset($_SESSION['id_anggota'])) {
             </div>
         </div>
         <div id="footer"></div>
-
+    
         <script src="../Assets/Javascript/HeaderFooter.js"></script>
     </body>
 </html>

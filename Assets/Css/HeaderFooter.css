@@ -251,6 +251,11 @@ nav.menu .dropdown > a::after {
     content: none !important;
 }
 
+a {
+    text-decoration: none;
+    color: #fff;
+}
+
 /* HAPUS baris ini dari css kamu:
 nav.menu .dropdown:hover .dropdown-content {
     display: block !important;

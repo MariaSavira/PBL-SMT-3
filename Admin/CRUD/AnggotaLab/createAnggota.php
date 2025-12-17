@@ -4,6 +4,7 @@
 
     $status  = '';
     $message = '';
+    $redirectTo = 'IndexAnggota.php';
 
     $nama       = '';
     $username   = '';
@@ -29,6 +30,25 @@
         $konfirmasi= $_POST['konfirmasi_password'] ?? '';
         $deskripsi = trim($_POST['deskripsi'] ?? '');
         $keahlianDipilih = $_POST['keahlian'] ?? [];
+
+    $linkLabel = $_POST['link_label'] ?? [];
+    $linkUrl   = $_POST['link_url']   ?? [];
+
+    $links = [];
+    
+    foreach ($linkUrl as $idx => $urlRaw) {
+        $url   = trim($urlRaw);
+        $label = trim($linkLabel[$idx] ?? '');
+
+        if ($url === '') {
+            continue;
+        }
+
+        $links[] = [
+            'label' => $label !== '' ? $label : 'Link',
+            'url'   => $url,
+        ];
+    }
 
         if ($nama === '') {
             $err = 'Nama wajib diisi.';
@@ -83,12 +103,13 @@
             }
 
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+            $jsonLinks = json_encode($links, JSON_UNESCAPED_SLASHES);
 
             try {
                 $resInsert = qparams(
                     'INSERT INTO public.anggotalab
-                        (nama, username, jabatan, password_hash, deskripsi, foto, status)
-                    VALUES ($1, $2, $3, $4, $5, $6, $7)
+                        (nama, username, jabatan, password_hash, deskripsi, foto, "status", link)
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8::jsonb)
                     RETURNING id_anggota',
                     [
                         $nama,
@@ -97,7 +118,8 @@
                         $passwordHash,
                         $deskripsi,
                         $namaFileFinal,
-                        true
+                        true,
+                        $jsonLinks
                     ]
                 );
 
@@ -108,7 +130,7 @@
                     foreach ($keahlianDipilih as $idK) {
                         if ($idK === '') continue;
                         qparams(
-                            'INSERT INTO public.anggota_bidangkeahlian (id_anggota, id_keahlian)
+                            'INSERT INTO public.anggota_keahlian (id_anggota, id_keahlian)
                             VALUES ($1, $2)',
                             [$idBaru, (int)$idK]
                         );
@@ -143,6 +165,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
+    <link rel="icon" type="images/x-icon"
+        href="../../../Assets/Image/Logo/Logo Without Text.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="../../../Assets/Css/Admin/FormAnggotaLab.css">
 </head>
@@ -234,9 +258,9 @@
                                     <button type="button" class="dropdown-item" data-value="Kepala Lab">Kepala Lab</button>
                                     <button type="button" class="dropdown-item" data-value="Peneliti">Peneliti</button>
                                     <button type="button" class="dropdown-item" data-value="Staff">Staff</button>
-                                </div>
+                            </div>
 
-                                <!-- nilai yang beneran dikirim ke PHP -->
+                                
                                 <input type="hidden" name="jabatan" id="jabatan_hidden" value="">
                             </div>
                         </div>
@@ -295,6 +319,38 @@
                                 class="field-input"
                                 placeholder="Tuliskan deskripsi singkat tentang anggota"><?= htmlspecialchars($deskripsi) ?></textarea>
                         </div>
+
+                        <div class="field-group">
+                            <label>Link Profil (opsional)</label>
+                            <small class="field-hint">
+                                Tambahkan tautan profil seperti Sinta, Google Scholar, Scopus, dsb.
+                            </small>
+
+                            <div id="links-wrapper" class="links-wrapper">
+                                <div class="link-row">
+                                    <input
+                                        type="text"
+                                        name="link_label[]"
+                                        class="field-input link-label"
+                                        placeholder="Nama platform (mis. Sinta, Scholar)"
+                                    >
+                                    <input
+                                        type="url"
+                                        name="link_url[]"
+                                        class="field-input link-url"
+                                        placeholder="https://contoh.com/profil-anda"
+                                    >
+
+                                    <button type="button" class="btn-remove-link">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn-add-link" id="btnTambahLink">
+                                + Tambah link
+                            </button>
+                        </div>
                     </div>
 
                     <div class="form-actions">
@@ -328,6 +384,7 @@
     <script>
         window.profileStatus  = <?= json_encode($status  ?? '') ?>;
         window.profileMessage = <?= json_encode($message ?? '') ?>;
+        window.profileRedirectUrl  = <?= json_encode($redirectTo) ?>;
     </script>
     <script src="../../../Assets/Javascript/Admin/Profile.js"></script>
     <script src="../../../Assets/Javascript/Admin/FormAnggotaLab.js"></script>

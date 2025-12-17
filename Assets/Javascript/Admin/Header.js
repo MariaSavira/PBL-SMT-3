@@ -20,8 +20,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     
     const headerEl = await loadComponent(
         "header",
-        "../../../Admin/Header.php",
-        "../../../Assets/Css/Admin/Header.css"
+        "/PBL-SMT-3/Admin/Header.php",
+        "/PBL-SMT-3/Assets/Css/Admin/Header.css"
     );
 
     const dropdown = document.getElementById("profileDropdown");
@@ -51,4 +51,28 @@ document.addEventListener("DOMContentLoaded", async function () {
             headerTitle.style.visibility = ""; 
         }
     }
+
+    let titleText = "Laboratorium Business Analytics";
+
+    if (currentPath.includes("/anggotalab/")) {
+        titleText = "Anggota Laboratorium";
+    } else if (currentPath.includes("/publikasi/")) {
+        titleText = "Publikasi Laboratorium";
+    } else if (currentPath.includes("/risetlab/")) {
+        titleText = "Riset Laboratorium";
+    } else if (currentPath.includes("/galeri_lab/")) {
+        titleText = "Galeri Laboratorium";
+    } else if (currentPath.includes("/berita_lab/")) {
+        titleText = "Berita Laboratorium";
+    } else if (currentPath.includes("/karya/")) {
+        titleText = "Karya Laboratorium";
+    } else if (currentPath.includes("/peminjamanlab/")) {
+        titleText = "Peminjaman Laboratorium";
+    } else if (currentPath.includes("/pengumuman_lab/")) {
+        titleText = "Pengumuman Laboratorium";
+    } else if (currentPath.endsWith("/dashboard.php")) {
+        titleText = "Dashboard";
+    }
+
+    headerTitle.textContent = titleText;
 });
