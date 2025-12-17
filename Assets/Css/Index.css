@@ -1,15 +1,15 @@
 @media (max-width: 1360px) {
-        body {
-            zoom: 100%;
-        }
+    body {
+        zoom: 100%;
     }
+}
 
 body {
     padding: 0;
     margin: 0;
     font-family: "Poppins", sans-serif;
     overflow-x: hidden;
-    background-color:  #e8f0ff;
+    background-color: #e8f0ff;
 }
 
 header.navbar {
@@ -70,13 +70,14 @@ header.navbar {
     z-index: -1;
 }
 
-.cta-container{
+.cta-container {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto 0 auto;
     display: flex;
     justify-content: flex-end;
 }
+
 .cta-btn {
     display: inline-block;
     padding: 15px 28px;
@@ -98,25 +99,25 @@ header.navbar {
 .profil-lab {
     width: 100%;
     background: #f5f7fa;
-    padding: 60px 0; 
+    padding: 60px 0;
     zoom: 0.8;
 }
 
 .profil-container {
-    width: 78%; 
+    width: 78%;
     margin: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 40px; 
+    gap: 40px;
 }
 
 .profil-image img {
     width: 100%;
-    height: 360px; 
+    height: 360px;
     object-fit: cover;
     border-radius: 12px;
-    box-shadow: 0px 4px 15px rgba(0,0,0,0.08);
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 .profil-text {
@@ -124,21 +125,21 @@ header.navbar {
 }
 
 .profil-text h2 {
-    font-size: 28px; 
+    font-size: 28px;
     color: #0c2f66;
     font-weight: 600;
-    margin-bottom: 16px; 
+    margin-bottom: 16px;
 }
 
 .profil-text p {
-    font-size: 16px; 
+    font-size: 16px;
     color: #333;
     line-height: 1.6;
-    margin-bottom: 28px; 
+    margin-bottom: 28px;
 }
 
 .btn-profil {
-   display: inline-block;
+    display: inline-block;
     padding: 12px 28px;
     background: #1E5AA8;
     color: white;
@@ -155,22 +156,22 @@ header.navbar {
 
 .visi-misi-section {
     background-color: #e8f0ff;
-    padding: 60px 0 0 0; 
+    padding: 60px 0 0 0;
     zoom: 0.9;
 }
 
 .vm-container {
-    max-width: 1000px; 
+    max-width: 1000px;
     margin: auto;
     display: flex;
     justify-content: space-between;
-    gap: 25px; 
+    gap: 25px;
 }
 
 .vm-card {
     background: #ffffff;
-    padding: 28px 32px; 
-    border-radius: 16px; 
+    padding: 28px 32px;
+    border-radius: 16px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     width: 48%;
     text-align: center;
@@ -183,19 +184,19 @@ header.navbar {
 }
 
 .vm-icon {
-    width: 55px; 
+    width: 55px;
     margin-bottom: 12px;
 }
 
 .vm-title {
-    font-size: 22px; 
+    font-size: 22px;
     font-weight: 600;
     color: #325da9;
-    margin-bottom: 12px; 
+    margin-bottom: 12px;
 }
 
 .vm-text {
-    font-size: 15px; 
+    font-size: 15px;
     line-height: 1.55;
     color: #333;
 }
@@ -204,12 +205,12 @@ header.navbar {
     text-align: left;
     margin-top: 6px;
     padding-left: 18px;
-    font-size: 15px; 
+    font-size: 15px;
     line-height: 1.55;
 }
 
 .fokus-riset-section {
-    background-color:  #e8f0ff;
+    background-color: #e8f0ff;
     padding: 60px 90px;
     zoom: 0.9;
 }
@@ -232,9 +233,9 @@ header.navbar {
 
 .fokus-card {
     background: #ffffff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
     border-radius: 12px;
-    padding: 12px 22px;        
+    padding: 12px 22px;
     font-family: "Poppins", sans-serif;
     font-weight: 500;
     font-size: 15px;
@@ -243,7 +244,7 @@ header.navbar {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    white-space: nowrap;       
+    white-space: nowrap;
     transition: 0.3s ease;
 }
 
@@ -289,6 +290,11 @@ header.navbar {
     line-height: 1.35;
     margin: 15px 0;
     font-weight: 600;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* jumlah baris */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .meta-utama {
@@ -319,14 +325,14 @@ header.navbar {
     background: white;
     border-radius: 12px;
     padding: 10px;
-    transition: 0.3s ease; 
+    transition: 0.3s ease;
     /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
 }
 
 .berita-item:hover {
     transform: translateY(-3px);
     /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); */
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);    
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
 .berita-utama {
@@ -362,6 +368,10 @@ header.navbar {
     margin: 0 0 4px;
     line-height: 1.35;
     font-weight: 600;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .item-author {
@@ -372,14 +382,14 @@ header.navbar {
     color: #777;
     margin-top: 8px;
     flex-wrap: nowrap;
-    
+
 }
 
 
 /* Galeri */
 .galeri-section {
     width: 100%;
-    background:  #e8f0ff; 
+    background: #e8f0ff;
     padding: 40px 0 -60px;
 }
 
@@ -394,6 +404,7 @@ header.navbar {
 .gallery-img:hover {
     transform: scale(1.04);
 }
+
 /* PARTNERSHIP */
 .partnership-section {
     width: 100%;
@@ -405,7 +416,7 @@ header.navbar {
 }
 
 .partnership-container {
-    max-width: 1200px; 
+    max-width: 1200px;
     width: 88%;
     margin: auto;
     display: flex;
@@ -447,4 +458,3 @@ header.navbar {
         opacity: 1;
     }
 }
-

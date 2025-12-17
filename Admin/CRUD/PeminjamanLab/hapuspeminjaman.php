@@ -1,21 +1,18 @@
 <?php
-// Gunakan koneksi PostgreSQL yang sama seperti file utama
-$conn = pg_connect("host=localhost port=5432 dbname=lab_ba user=postgres password=29082006");
+$conn = pg_connect("host=localhost port=5432 dbname=lab_ba user=postgres password=12345");
 
 if (!$conn) {
     echo "Koneksi database gagal!";
     exit;
 }
 
-// Baca data POST
 if (!isset($_POST['ids']) || empty($_POST['ids'])) {
     echo "Tidak ada data yang dipilih";
     exit;
 }
 
-$ids = $_POST['ids']; // Benar
+$ids = $_POST['ids']; 
 
-// Buat placeholder $1, $2, $3 ...
 $placeholders = [];
 $params = [];
 
@@ -24,7 +21,6 @@ foreach ($ids as $i => $id) {
     $params[] = $id;
 }
 
-// Query delete
 $sql = "DELETE FROM peminjaman_lab WHERE id_peminjaman IN (" . implode(",", $placeholders) . ")";
 
 $result = pg_query_params($conn, $sql, $params);

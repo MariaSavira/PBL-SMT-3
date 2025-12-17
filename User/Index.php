@@ -44,7 +44,7 @@ $stmtRiset = $db->prepare("
     ORDER BY id_riset ASC
 ");
 $stmtRiset->execute();
-$fokusRisetRows = $stmtRiset->fetchAll(); 
+$fokusRisetRows = $stmtRiset->fetchAll();
 
 ?>
 
@@ -95,7 +95,7 @@ $fokusRisetRows = $stmtRiset->fetchAll();
                     keunggulan, dan
                     informasi penting lainnya.
                 </p>
-                <a href="Anggota.php" class="btn-profil">Cari Tahu Lebih
+                <a href="TentangKami.php" class="btn-profil">Cari Tahu Lebih
                     Lanjut</a>
             </div>
         </div>
@@ -134,114 +134,112 @@ $fokusRisetRows = $stmtRiset->fetchAll();
     </section>
 
     <div class="fokus-riset-section">
-    <h2 class="judul-fokus">Fokus Riset</h2>
+        <h2 class="judul-fokus">Fokus Riset</h2>
 
-    <div class="fokus-row">
-        <?php foreach (array_slice($fokusRisetRows, 0, 5) as $row): ?>
-            <div class="fokus-card"><?= htmlspecialchars($row['nama_bidang_riset']) ?></div>
-        <?php endforeach; ?>
-    </div>
-
-    <div class="fokus-row">
-        <?php foreach (array_slice($fokusRisetRows, 5) as $row): ?>
-            <div class="fokus-card row2"><?= htmlspecialchars($row['nama_bidang_riset']) ?></div>
-        <?php endforeach; ?>
-    </div>
-
-    <div class="cta-container" style="margin-bottom: 0px">
-        <a href="Riset.php" class="cta-btn">Lihat lebih banyak</a>
-    </div>
-</div>
-
-
-<section class="news-section py-5">
-  <div class="container-l px-5">
-    <div class="news-container">
-      <h3 class="section-title">Berita Terbaru</h3>
-
-      <div class="news-flex">
-        <div class="berita-utama">
-          <?php if ($beritaUtama): ?>
-  <a href="Isi_berita.php?id=<?= urlencode($beritaUtama['id_berita']) ?>" style="text-decoration:none; color:inherit;">
-    <img
-      src="/PBL-SMT-3/Assets/Image/Galeri-Berita/<?= htmlspecialchars($beritaUtama['gambar']) ?>"
-      class="big-news-img"
-      alt="big news"
-    >
-    <h4 class="judul-utama">
-      <?= htmlspecialchars($beritaUtama['judul']) ?>
-    </h4>
-  </a>
-
-  <div class="meta-utama">
-    <span><?= date('d F Y', strtotime($beritaUtama['tanggal'])) ?></span>
-    <span>•</span>
-    <i class="fa-solid fa-user"></i>
-    <span><span><?= htmlspecialchars($beritaUtama['author_username'] ?? '-') ?></span></span>
-  </div>
-
-  <p class="deskripsi-utama">
-    <?= htmlspecialchars(mb_substr(strip_tags($beritaUtama['isi']), 0, 140)) ?>...
-  </p>
-<?php endif; ?>
-
+        <div class="fokus-row">
+            <?php foreach (array_slice($fokusRisetRows, 0, 5) as $row): ?>
+                <div class="fokus-card"><?= htmlspecialchars($row['nama_bidang_riset']) ?></div>
+            <?php endforeach; ?>
         </div>
 
-<div class="berita-list">
-  <?php foreach ($beritaKecil as $item): ?>
-    <a href="Isi_berita.php?id=<?= urlencode($item['id_berita']) ?>" style="text-decoration:none; color:inherit;">
-      <div class="berita-item">
-        <img
-          src="../Assets/Image/Galeri-Berita/<?= htmlspecialchars($item['gambar']) ?>"
-          class="thumb"
-          alt
-        >
-        <div>
-          <div class="item-date"><?= date('F d, Y', strtotime($item['tanggal'])) ?> | 15:00 WIB</div>
-          <h6 class="item-title">
-            <?= htmlspecialchars($item['judul']) ?>
-          </h6>
-          <div class="item-author">
-            <i class="fa-solid fa-user"></i>
-            <span><?= htmlspecialchars($item['author_username'] ?? '-') ?></span>
-          </div>
-        </div>
-      </div>
-    </a>
-  <?php endforeach; ?>
-</div>
-
-      </div>
-
-      <div class="cta-container" style="margin-bottom: 100px">
-        <a href="Berita.php" class="cta-btn">Lihat lebih banyak</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Galeri -->
-<section class="galeri-section py-5">
-    <div class="container-fluid p-0">
-        <h3 class="fw-bold text-center mb-4 section-title">Galeri</h3>
-
-        <div class="gallery-wrapper d-flex justify-content-center gap-4"
-             style="padding: 0 0 40px 0 !important;">
-
-           <?php foreach ($galeriList as $g): ?>
-    <img
-        src="<?= htmlspecialchars('/PBL-SMT-3/Assets/Image/Galeri-Berita/' . $g['file_path']) ?>"
-        class="gallery-img"
-        alt="<?= htmlspecialchars($g['judul']) ?>">
-<?php endforeach; ?>
-
+        <div class="fokus-row">
+            <?php foreach (array_slice($fokusRisetRows, 5) as $row): ?>
+                <div class="fokus-card row2"><?= htmlspecialchars($row['nama_bidang_riset']) ?></div>
+            <?php endforeach; ?>
         </div>
 
-        <div class="cta-container" style="margin-bottom: 100px">
-            <a href="Galeri.php" class="cta-btn">Lihat lebih banyak</a>
+        <div class="cta-container" style="margin-bottom: 0px">
+            <a href="Riset.php" class="cta-btn">Lihat lebih banyak</a>
         </div>
     </div>
-</section>
+
+
+    <section class="news-section py-5">
+        <div class="container-l px-5">
+            <div class="news-container">
+                <h3 class="section-title">Berita Terbaru</h3>
+
+                <div class="news-flex">
+                    <div class="berita-utama">
+                        <?php if ($beritaUtama): ?>
+                            <a href="Isi_berita.php?id=<?= urlencode($beritaUtama['id_berita']) ?>" style="text-decoration:none; color:inherit;">
+                                <img
+                                    src="/PBL-SMT-3/Assets/Image/Galeri-Berita/<?= htmlspecialchars($beritaUtama['gambar']) ?>"
+                                    class="big-news-img"
+                                    alt="big news">
+                                <h4 class="judul-utama">
+                                    <?= htmlspecialchars($beritaUtama['judul']) ?>
+                                </h4>
+                            </a>
+
+                            <div class="meta-utama">
+                                <span><?= date('d F Y', strtotime($beritaUtama['tanggal'])) ?></span>
+                                <span>•</span>
+                                <i class="fa-solid fa-user"></i>
+                                <span><span><?= htmlspecialchars($beritaUtama['author_username'] ?? '-') ?></span></span>
+                            </div>
+
+                            <p class="deskripsi-utama">
+                                <?= htmlspecialchars(mb_substr(strip_tags($beritaUtama['isi']), 0, 140)) ?>...
+                            </p>
+                        <?php endif; ?>
+
+                    </div>
+
+                    <div class="berita-list">
+                        <?php foreach ($beritaKecil as $item): ?>
+                            <a href="Isi_berita.php?id=<?= urlencode($item['id_berita']) ?>" style="text-decoration:none; color:inherit;">
+                                <div class="berita-item">
+                                    <img
+                                        src="../Assets/Image/Galeri-Berita/<?= htmlspecialchars($item['gambar']) ?>"
+                                        class="thumb"
+                                        alt>
+                                    <div>
+                                        <div class="item-date"><?= date('F d, Y', strtotime($item['tanggal'])) ?> | 15:00 WIB</div>
+                                        <h6 class="item-title">
+                                            <?= htmlspecialchars($item['judul']) ?>
+                                        </h6>
+                                        <div class="item-author">
+                                            <i class="fa-solid fa-user"></i>
+                                            <span><?= htmlspecialchars($item['author_username'] ?? '-') ?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+
+                </div>
+
+                <div class="cta-container" style="margin-bottom: 100px">
+                    <a href="Berita.php" class="cta-btn">Lihat lebih banyak</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galeri -->
+    <section class="galeri-section py-5">
+        <div class="container-fluid p-0">
+            <h3 class="fw-bold text-center mb-4 section-title">Galeri</h3>
+
+            <div class="gallery-wrapper d-flex justify-content-center gap-4"
+                style="padding: 0 0 40px 0 !important;">
+
+                <?php foreach ($galeriList as $g): ?>
+                    <img
+                        src="<?= htmlspecialchars('/PBL-SMT-3/Assets/Image/Galeri-Berita/' . $g['file_path']) ?>"
+                        class="gallery-img"
+                        alt="<?= htmlspecialchars($g['judul']) ?>">
+                <?php endforeach; ?>
+
+            </div>
+
+            <div class="cta-container">
+                <a href="Galeri.php" class="cta-btn">Lihat lebih banyak</a>
+            </div>
+        </div>
+    </section>
 
     <section class="partnership-section">
         <div class="partnership-container">

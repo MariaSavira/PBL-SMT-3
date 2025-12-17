@@ -13,11 +13,9 @@
         die("Koneksi database gagal: " . $e->getMessage());
     }
 
-    // Debug mode
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
     
-    // Fungsi helper untuk upload gambar
     function uploadGambar($file, $folder ='../../../Assets/Image/Galeri-Berita/') {
         if (!file_exists($folder)) {
             mkdir($folder, 0777, true);
@@ -31,11 +29,10 @@
             return ['success' => false, 'message' => 'Format file tidak diizinkan'];
         }
         
-        if ($file['size'] > 5000000) { // 5MB
+        if ($file['size'] > 5000000) { 
             return ['success' => false, 'message' => 'Ukuran file terlalu besar (max 5MB)'];
         }
         
-        // Validasi apakah file adalah gambar
         $check = getimagesize($file['tmp_name']);
         if ($check === false) {
             return ['success' => false, 'message' => 'File bukan gambar yang valid'];
@@ -51,7 +48,6 @@
         return ['success' => false, 'message' => 'Gagal upload file'];
     }
 
-    // Fungsi untuk hapus file gambar
     function hapusGambar($filename, $folder = '../../../Assets/Image/Galeri-Berita/') {
         $filepath = $folder . $filename;
         if (file_exists($filepath)) {

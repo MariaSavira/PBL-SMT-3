@@ -4,6 +4,7 @@
 
     $status  = '';
     $message = '';
+    $redirectTo = 'IndexAnggota.php';
 
     $id_anggota = isset($_GET['id']) ? (int) $_GET['id'] : 0;
     if ($id_anggota <= 0) {
@@ -487,6 +488,7 @@
         <script>
             window.profileStatus  = <?= json_encode($status  ?? '') ?>;
             window.profileMessage = <?= json_encode($message ?? '') ?>;
+            window.profileRedirectUrl  = <?= json_encode($redirectTo) ?>;
         </script>
         <script src="../../../Assets/Javascript/Admin/Profile.js"></script>
         <script src="../../../Assets/Javascript/Admin/FormAnggotaLab.js"></script>

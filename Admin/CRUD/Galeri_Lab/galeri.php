@@ -32,10 +32,9 @@
     <div id="sidebar"></div>
 
     <main class="content" id="content">
-        <!-- Header -->
+        
         <div class="header" id="header"></div>
 
-        <!-- Controls -->
         <div class="top-controls">
             <div class="left-tools">
                 <button class="btn btn-secondary" onclick="selectAll()">Pilih Semua</button>
@@ -65,8 +64,7 @@
                 </div>
             </div>
         </div>
-
-        <!-- Gallery Grid -->
+        
         <div class="gallery-grid" id="galleryGrid">
             <?php foreach($galeri_items as $item): ?>
             <div class="gallery-item" data-id="<?php echo $item['id_galeri']; ?>">
@@ -78,8 +76,7 @@
             </div>
             <?php endforeach; ?>
         </div>
-
-        <!-- Delete Notification -->
+        
         <div class="delete-notification" id="deleteNotification">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" fill="#ef4444"/>
@@ -88,7 +85,6 @@
             <button class="btn-delete" onclick="confirmDelete()">Hapus data yang dipilih</button>
         </div>
 
-        <!-- Delete Confirmation Modal -->
         <div class="modal" id="deleteModal">
             <div class="modal-content">
                 <h3>Hapus data yang dipilih?</h3>

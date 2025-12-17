@@ -1,15 +1,9 @@
 (() => {
   "use strict";
 
-  // =========================
-  // Helpers
-  // =========================
   function qs(sel, root = document) { return root.querySelector(sel); }
   function qsa(sel, root = document) { return Array.from(root.querySelectorAll(sel)); }
 
-  // =========================
-  // NOTIFICATION (Profile.js style)
-  // =========================
   function initNotification() {
     const notifEl = document.getElementById("notification");
     const notifIconEl = document.getElementById("notification-icon");
@@ -62,9 +56,9 @@
     }
   }
 
-  // =========================
-  // DROPDOWN ACTION (⋮)
-  // =========================
+  
+  
+  
   function toggleMenu(event, id) {
     event.stopPropagation();
 
@@ -76,9 +70,9 @@
     if (!isOpen) menu.classList.add("show");
   }
 
-  // =========================
-  // FILTER DROPDOWN (STATUS)
-  // =========================
+  
+  
+  
   function initFilterDropdown() {
     const filterToggle = qs(".filter-toggle");
     const filterMenu = qs(".filter-menu");
@@ -96,9 +90,9 @@
     });
   }
 
-  // =========================
-  // SORT DROPDOWN
-  // =========================
+  
+  
+  
   function initSortDropdown() {
     const sortBtn = document.getElementById("sort-btn");
     const sortMenu = document.getElementById("sort-menu");
@@ -124,9 +118,9 @@
     });
   }
 
-  // =========================
-  // CLEAR FILTER
-  // =========================
+  
+  
+  
   function initClearFilter() {
     const clearBtn = document.getElementById("clearFilterBtn");
     if (!clearBtn) return;
@@ -143,9 +137,9 @@
     });
   }
 
-  // =========================
-  // TOAST (bulk selection)
-  // =========================
+  
+  
+  
   function updateToast() {
     const checkedBoxes = qsa("tbody .checkbox:checked");
     const toast = document.getElementById("deleteToast");
@@ -185,18 +179,18 @@
     });
   }
 
-  // =========================
-  // DELETE (SIMPLE confirm)
-  // =========================
+  
+  
+  
   function confirmDelete(id, judul) {
-    // tutup menu ⋮ biar rapi
+    
     qsa(".action-menu").forEach(m => m.classList.remove("show"));
 
     const ok = window.confirm(`Apakah Anda yakin ingin menghapus berita "${judul}"?\nTindakan ini tidak dapat dibatalkan.`);
     if (!ok) return false;
 
     window.location.href = "hapus_berita.php?id=" + encodeURIComponent(id);
-    return false; // penting biar gak nge-trigger apa2 lagi
+    return false; 
   }
 
   function confirmBulkDelete() {
@@ -227,12 +221,12 @@
     return false;
   }
 
-  // (opsional) biar gak error kalau HTML lama masih manggil
+  
   function closeDeleteModal() { return false; }
 
-  // =========================
-  // SEARCH debounce (auto submit)
-  // =========================
+  
+  
+  
   function initSearchDebounce() {
     let searchTimeout;
     const searchInput = qs('input[name="search"]');
@@ -244,9 +238,9 @@
     }
   }
 
-  // =========================
-  // Image preview (form tambah/edit)
-  // =========================
+  
+  
+  
   function previewImage(input) {
     const preview = document.getElementById("imagePreview");
     const uploadArea = document.getElementById("uploadArea");
@@ -264,7 +258,7 @@
       return;
     }
 
-    // FIX: 5MB
+    
     if (file.size > 5 * 1024 * 1024) {
       alert("Ukuran file terlalu besar. Maksimal 5MB.");
       input.value = "";
@@ -284,18 +278,18 @@
     reader.readAsDataURL(file);
   }
 
-  // =========================
-  // Close action menus when click outside
-  // =========================
+  
+  
+  
   function initGlobalCloseMenus() {
     document.addEventListener("click", function () {
       qsa(".action-menu").forEach(m => m.classList.remove("show"));
     });
   }
 
-  // =========================
-  // Boot
-  // =========================
+  
+  
+  
   document.addEventListener("DOMContentLoaded", function () {
     initNotification();
     initFilterDropdown();
@@ -306,13 +300,13 @@
     initGlobalCloseMenus();
   });
 
-  // =========================
-  // Expose global untuk inline onclick
-  // =========================
+  
+  
+  
   window.toggleMenu = toggleMenu;
-  window.confirmDelete = confirmDelete;             // SINGLE
-  window.confirmBulkDelete = confirmBulkDelete;     // BULK
-  window.closeDeleteModal = closeDeleteModal;       // compat
+  window.confirmDelete = confirmDelete;             
+  window.confirmBulkDelete = confirmBulkDelete;     
+  window.closeDeleteModal = closeDeleteModal;       
   window.previewImage = previewImage;
 
 })();

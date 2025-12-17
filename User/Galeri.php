@@ -21,10 +21,10 @@ require_once __DIR__ . '/../Admin/Cek_Autentikasi.php';
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
-  <!-- CSS terpisah -->
+  
   <link rel="stylesheet" href="../Assets/Css/galeri.css" />
 
-  <!-- Additional CSS untuk loading & modal -->
+  
   <style>
     /* Loading State */
     .loading-wrapper {
@@ -278,7 +278,7 @@ require_once __DIR__ . '/../Admin/Cek_Autentikasi.php';
 <body>
   <div id="header"></div>
 
-  <!-- HERO HEADING -->
+  
   <section class="heading">
     <h1>Galeri Laboratorium</h1>
     <p>
@@ -287,19 +287,19 @@ require_once __DIR__ . '/../Admin/Cek_Autentikasi.php';
     </p>
   </section>
 
-  <!-- Loading State -->
+  
   <div id="loadingState" class="loading-wrapper">
     <div class="spinner"></div>
     <p class="loading-text">Memuat galeri...</p>
   </div>
 
-  <!-- Error State -->
+  
   <div id="errorState" class="error-wrapper" style="display: none;">
     <i class="fas fa-exclamation-triangle" style="font-size: 24px; margin-bottom: 10px;"></i>
     <p>Gagal memuat galeri. Silakan refresh halaman.</p>
   </div>
 
-  <!-- Empty State -->
+  
   <div id="emptyState" class="empty-wrapper" style="display: none;">
     <div class="empty-icon">
       <i class="fas fa-images"></i>
@@ -308,14 +308,14 @@ require_once __DIR__ . '/../Admin/Cek_Autentikasi.php';
     <p>Galeri akan ditampilkan setelah admin menambahkan konten</p>
   </div>
 
-  <!-- GALLERY (akan diisi dinamis dari API) -->
+  
   <div class="gallery-wrapper" id="galleryWrapper" style="display: none;">
     <div class="gallery-row" id="galleryRow">
-      <!-- Images akan diisi oleh JavaScript -->
+      
     </div>
   </div>
 
-  <!-- Modal Detail -->
+  
   <div id="galleryModal" class="modal-overlay">
     <div class="modal-content-box">
       <button class="modal-close-btn" onclick="closeModal()">&times;</button>
@@ -338,28 +338,17 @@ require_once __DIR__ . '/../Admin/Cek_Autentikasi.php';
 
   <script src="../Assets/Javascript/HeaderFooter.js"></script>
 
-  <!-- Gallery API Script -->
+  
   <script>
-    // ========================================
-    // KONFIGURASI API
-    // ========================================
-    // SESUAIKAN PATH INI dengan struktur folder Anda!
     const API_URL = '../Admin/CRUD/Galeri_Lab/api_galeri.php';
 
-    // Class variants untuk masonry layout (sesuai CSS Anda)
     const cardClasses = ['card-385', 'card-338', 'card-496', 'card-438', 'card-239'];
 
-    // ========================================
-    // LOAD GALLERY ON PAGE LOAD
-    // ========================================
     document.addEventListener('DOMContentLoaded', function() {
       console.log('Loading gallery from API...');
       loadGallery();
     });
 
-    // ========================================
-    // LOAD GALLERY FROM API
-    // ========================================
     async function loadGallery() {
       const loadingState = document.getElementById('loadingState');
       const errorState = document.getElementById('errorState');
@@ -378,7 +367,6 @@ require_once __DIR__ . '/../Admin/Cek_Autentikasi.php';
         const data = await response.json();
         console.log('API Response:', data);
 
-        // Hide loading
         loadingState.style.display = 'none';
 
         if (!data.success) {
@@ -386,30 +374,25 @@ require_once __DIR__ . '/../Admin/Cek_Autentikasi.php';
         }
 
         if (data.data.length === 0) {
-          // Show empty state
+
           emptyState.style.display = 'block';
           return;
         }
 
-        // Clear existing content
         galleryRow.innerHTML = '';
 
-        // Render gallery items dengan masonry layout
         data.data.forEach((item, index) => {
           const img = document.createElement('img');
           img.src = item.image;
           img.alt = item.judul;
 
-          // Rotate through card classes untuk varied layout
           const cardClass = cardClasses[index % cardClasses.length];
           img.className = `gallery-img ${cardClass}`;
 
-          // Error handling untuk gambar
           img.onerror = function() {
             this.src = 'https://via.placeholder.com/400x300?text=Image+Not+Found';
           };
 
-          // Click handler untuk modal
           img.onclick = function() {
             openModal(item);
           };
@@ -417,10 +400,8 @@ require_once __DIR__ . '/../Admin/Cek_Autentikasi.php';
           galleryRow.appendChild(img);
         });
 
-        // Show gallery wrapper
         galleryWrapper.style.display = 'block';
 
-        // Store data globally untuk modal
         window.galleryData = data.data;
 
         console.log('Gallery loaded successfully!', data.data.length, 'items');
@@ -437,9 +418,6 @@ require_once __DIR__ . '/../Admin/Cek_Autentikasi.php';
       }
     }
 
-    // ========================================
-    // OPEN MODAL WITH DETAILS
-    // ========================================
     function openModal(item) {
       const modal = document.getElementById('galleryModal');
       const modalImage = document.getElementById('modalImage');
@@ -458,24 +436,16 @@ require_once __DIR__ . '/../Admin/Cek_Autentikasi.php';
 
       modal.classList.add('show');
 
-      // Prevent body scroll when modal open
       document.body.style.overflow = 'hidden';
     }
 
-    // ========================================
-    // CLOSE MODAL
-    // ========================================
     function closeModal() {
       const modal = document.getElementById('galleryModal');
       modal.classList.remove('show');
 
-      // Restore body scroll
       document.body.style.overflow = '';
     }
 
-    // ========================================
-    // CLOSE MODAL ON OUTSIDE CLICK
-    // ========================================
     window.addEventListener('click', function(e) {
       const modal = document.getElementById('galleryModal');
       if (e.target === modal) {
@@ -483,20 +453,12 @@ require_once __DIR__ . '/../Admin/Cek_Autentikasi.php';
       }
     });
 
-    // ========================================
-    // CLOSE MODAL ON ESC KEY
-    // ========================================
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
         closeModal();
       }
     });
 
-    // ========================================
-    // UTILITY FUNCTIONS
-    // ========================================
-
-    // Get initials from name for avatar
     function getInitials(name) {
       if (!name) return '??';
       return name
@@ -507,18 +469,11 @@ require_once __DIR__ . '/../Admin/Cek_Autentikasi.php';
         .substring(0, 2);
     }
 
-    // Escape HTML to prevent XSS
     function escapeHtml(text) {
       const div = document.createElement('div');
       div.textContent = text;
       return div.innerHTML;
     }
-
-    // ========================================
-    // AUTO REFRESH (Optional - every 30 seconds)
-    // ========================================
-    // Uncomment baris di bawah jika ingin auto refresh
-    // setInterval(loadGallery, 30000);
   </script>
 </body>
 

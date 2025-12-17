@@ -2,15 +2,13 @@
     require_once __DIR__ . '../../../Cek_Autentikasi.php';
     require __DIR__ . '../../../Koneksi/KoneksiSasa.php';
 
-    $limit = 6; // harus sama dengan rowsPerPage di JS
+    $limit = 6;
     $page  = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     if ($page < 1) $page = 1;
 
-    // AMBIL SEMUA DATA (tanpa LIMIT/OFFSET, paging dihandle JS)
     $res  = q('SELECT id_riset, nama_bidang_riset FROM bidangriset ORDER BY id_riset ASC');
     $rows = pg_fetch_all($res) ?: [];
 
-    // HITUNG TOTAL DATA & TOTAL HALAMAN
     $totalData  = count($rows);
     $totalPages = max(1, (int)ceil($totalData / $limit));
 
@@ -58,7 +56,7 @@
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <input type="text" placeholder="Cari">
-                <!-- <span class="result-count"><?= $totalData ?> hasil</span> -->
+                
             </div>
 
             <div class="right-actions">
@@ -78,7 +76,7 @@
         </div>
 
         <div class="table-container">
-            <!-- FORM BESAR UNTUK BULK DELETE -->
+            
             <form id="formRiset" method="post" action="DeleteRiset.php">
                 <table>
                     <thead>
@@ -122,8 +120,7 @@
                                                 <i class="fa-solid fa-pen"></i>
                                                 <span>Edit</span>
                                             </a>
-
-                                            <!-- HAPUS SATUAN: pakai GET ?id=... -->
+                                            
                                             <a href="DeleteRiset.php?id=<?= $row['id_riset'] ?>"
                                                class="action-item action-delete"
                                                onclick="return confirm('Yakin ingin menghapus riset ini?');">
@@ -141,7 +138,7 @@
         </div>
 
         <div class="table-footer">
-            <!-- BULK DELETE: submit formRiset -->
+            
             <button
                 type="submit"
                 form="formRiset"
@@ -158,19 +155,16 @@
 
                 echo "<a href='" . htmlspecialchars(build_query(['page' => $prevPage])) . "' class='page-link prev'>&laquo; Sebelumnya</a>";
 
-                // Page 1 + dots
                 if ($page > 3) {
                     echo "<a href='" . htmlspecialchars(build_query(['page' => 1])) . "' class='page-link'>1</a>";
                     echo "<span class='dots'>...</span>";
                 }
 
-                // current-1, current, current+1
                 for ($i = max(1, $page - 1); $i <= min($totalPages, $page + 1); $i++) {
                     $activeClass = ($i == $page) ? "active" : "";
                     echo "<a href='" . htmlspecialchars(build_query(['page' => $i])) . "' class='page-link {$activeClass}'>{$i}</a>";
                 }
 
-                // last page + dots
                 if ($page < $totalPages - 2) {
                     echo "<span class='dots'>...</span>";
                     echo "<a href='" . htmlspecialchars(build_query(['page' => $totalPages])) . "' class='page-link'>{$totalPages}</a>";

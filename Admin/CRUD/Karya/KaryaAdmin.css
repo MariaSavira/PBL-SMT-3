@@ -1,4 +1,4 @@
-/* RESET & FONT */
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -12,7 +12,6 @@ body {
     color: #111827;
 }
 
-/* ========== SIDEBAR (sementara sederhana) ========== */
 .sidebar {
     width: 260px;
     background: #e5f0ff;
@@ -46,7 +45,6 @@ body {
     color: #657287;
 }
 
-/* ========== MAIN LAYOUT ========== */
 .main {
     flex: 1;
     padding: 24px 40px 40px 32px;

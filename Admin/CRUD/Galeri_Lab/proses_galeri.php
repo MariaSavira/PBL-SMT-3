@@ -2,45 +2,37 @@
     require_once __DIR__ . '../../../Cek_Autentikasi.php';
     require_once 'config.php';
 
-    // Set upload directory
     $upload_dir = '../../../Assets/Image/Galeri-Berita/';
 
-    // Create directory if not exists
     if (!file_exists($upload_dir)) {
         mkdir($upload_dir, 0777, true);
     }
 
-    // Function to handle file upload
     function uploadFile($file, $upload_dir) {
         $errors = [];
         $allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-        $max_size = 5 * 1024 * 1024; // 5MB
+        $max_size = 5 * 1024 * 1024;
 
-        // Check if file is uploaded
         if ($file['error'] !== UPLOAD_ERR_OK) {
             $errors[] = "Error upload file. Kode error: " . $file['error'];
             return ['success' => false, 'errors' => $errors];
         }
 
-        // Validate file type
         $file_type = mime_content_type($file['tmp_name']);
         if (!in_array($file_type, $allowed_types)) {
             $errors[] = "Tipe file tidak diizinkan. Hanya JPG, PNG, dan GIF yang diperbolehkan.";
             return ['success' => false, 'errors' => $errors];
         }
 
-        // Validate file size
         if ($file['size'] > $max_size) {
             $errors[] = "Ukuran file terlalu besar. Maksimal 5MB.";
             return ['success' => false, 'errors' => $errors];
         }
 
-        // Generate unique filename
         $file_extension = pathinfo($file['name'], PATHINFO_EXTENSION);
         $new_filename = uniqid() . '_' . time() . '.' . $file_extension;
         $target_path = $upload_dir . $new_filename;
 
-        // Upload file
         if (move_uploaded_file($file['tmp_name'], $target_path)) {
             return ['success' => true, 'filename' => $new_filename];
         } else {
@@ -49,7 +41,6 @@
         }
     }
 
-    // Function to delete file
     function deleteFile($filename, $upload_dir) {
         $file_path = $upload_dir . $filename;
         if (file_exists($file_path)) {
@@ -58,31 +49,26 @@
         return true;
     }
 
-    // Handle different actions
     $action = isset($_POST['action']) ? $_POST['action'] : '';
 
     try {
         switch ($action) {
             case 'tambah':
-                // Validate required fields
                 if (empty($_POST['judul']) || empty($_POST['deskripsi']) || 
                     empty($_POST['tanggal_upload']) || empty($_POST['uploaded_by'])) {
                     throw new Exception("Semua field wajib diisi!");
                 }
 
-                // Validate file upload
                 if (!isset($_FILES['file']) || $_FILES['file']['error'] === UPLOAD_ERR_NO_FILE) {
                     throw new Exception("File gambar wajib diupload!");
                 }
 
-                // Upload file
                 $upload_result = uploadFile($_FILES['file'], $upload_dir);
                 
                 if (!$upload_result['success']) {
                     throw new Exception(implode(", ", $upload_result['errors']));
                 }
 
-                // Insert to database
                 $stmt = $pdo->prepare("
                     INSERT INTO galeri (judul, deskripsi, file_path, tipe_media, tanggal_upload, uploaded_by, id_berita) 
                     VALUES (?, ?, ?, ?, ?, ?, NULL)
@@ -102,7 +88,6 @@
                 exit;
 
             case 'edit':
-                // Validate required fields
                 if (empty($_POST['id_galeri']) || empty($_POST['judul']) || 
                     empty($_POST['deskripsi']) || empty($_POST['tanggal_upload']) || 
                     empty($_POST['uploaded_by'])) {
@@ -111,7 +96,7 @@
 
                 $id_galeri = intval($_POST['id_galeri']);
                 $old_file_path = $_POST['old_file_path'];
-                $new_filename = $old_file_path; // Keep old filename by default
+                $new_filename = $old_file_path;
 
                 // Check if new file is uploaded
                 if (isset($_FILES['file']) && $_FILES['file']['error'] !== UPLOAD_ERR_NO_FILE) {

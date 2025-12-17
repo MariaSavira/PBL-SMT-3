@@ -17,6 +17,15 @@ body {
     display: flex;
 }
 
+.deskripsi-ellipsis {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* ganti 3 kalau mau */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    max-width: 400px;
+    line-height: 1.5;
+}
+
 .content {
     /* flex: 1;
     padding: 24px 32px 40px 32px; */

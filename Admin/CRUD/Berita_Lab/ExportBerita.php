@@ -1,30 +1,23 @@
 <?php
-// ExportBerita.php
 require_once __DIR__ . '../../../Cek_Autentikasi.php';
-require_once 'config.php'; // harus ada $pdo
+require_once 'config.php'; 
 
-// Nama file download
 $filename = "export_berita_" . date('Ymd_His') . ".csv";
 
-// Header download CSV
 header('Content-Type: text/csv; charset=UTF-8');
 header('Content-Disposition: attachment; filename="' . $filename . '"');
 header('Pragma: no-cache');
 header('Expires: 0');
 
-// Output stream
 $out = fopen('php://output', 'w');
 if (!$out) {
     exit('Gagal membuat file export.');
 }
 
-// UTF-8 BOM biar Excel Windows ga aneh (huruf Indonesia aman)
 fwrite($out, "\xEF\xBB\xBF");
 
-// Excel Indonesia biasanya lebih aman pakai delimiter ;
 $delimiter = ';';
 
-// Header kolom
 fputcsv($out, [
     'ID',
     'Judul',
@@ -37,7 +30,6 @@ fputcsv($out, [
 ], $delimiter);
 
 try {
-    // Join ke anggotalab untuk ambil nama uploader
     $sql = "
         SELECT
             b.id_berita,
@@ -58,11 +50,9 @@ try {
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     foreach ($rows as $r) {
-        // Rapikan isi biar ga bikin CSV rusak
         $isi = (string)($r['isi'] ?? '');
         $isi = preg_replace("/\r\n|\r|\n/", " ", $isi);
 
-        // FIX UTAMA: tanggal pakai ISO YYYY-MM-DD (paling aman buat Excel)
         $tanggal = '';
         if (!empty($r['tanggal'])) {
             $tanggal = date('Y-m-d', strtotime($r['tanggal']));
@@ -83,7 +73,7 @@ try {
     fclose($out);
     exit;
 } catch (Throwable $e) {
-    // kalau error, hentikan output CSV dengan pesan plain
+
     fclose($out);
     http_response_code(500);
     echo "Gagal export: " . $e->getMessage();

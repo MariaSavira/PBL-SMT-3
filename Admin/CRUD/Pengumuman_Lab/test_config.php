@@ -1,5 +1,5 @@
 <?php
-require_once 'config.php';
+require_once '/config.php';
 
 echo "<h2>Testing Database Connection</h2>";
 
@@ -7,13 +7,11 @@ try {
     $conn = getDBConnection();
     echo "<p style='color: green;'>✓ Koneksi database berhasil!</p>";
     
-    // Test query
     $stmt = $conn->query("SELECT COUNT(*) as total FROM pengumuman");
     $result = $stmt->fetch();
     
     echo "<p>Total pengumuman: " . $result['total'] . "</p>";
     
-    // Test select
     $stmt = $conn->query("SELECT * FROM pengumuman LIMIT 5");
     $pengumuman = $stmt->fetchAll();
     

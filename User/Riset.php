@@ -1,7 +1,6 @@
 <?php
 require __DIR__ . '/../Admin/Koneksi/KoneksiSasa.php';
 
-// Ambil data bidang riset dari database
 $res  = q('SELECT id_riset, nama_bidang_riset FROM bidangriset ORDER BY id_riset ASC');
 $rows = pg_fetch_all($res) ?: [];
 $totalRisetAktif = is_array($rows) ? count($rows) : 0;
@@ -70,7 +69,7 @@ $totalRisetAktif = is_array($rows) ? count($rows) : 0;
 
     <div id="footer"></div>
 
-        <!-- <div class="section-title">Bidang Riset Utama</div>
+        <div class="section-title">Bidang Riset Utama</div>
 
         <div class="tag-list">
             <div class="tag">Anomaly Detection</div>
@@ -103,7 +102,7 @@ $totalRisetAktif = is_array($rows) ? count($rows) : 0;
         </div>
 
         <a href="Publikasi.html" class="cta-btn">Lihat Publikasi</a>
-        <div id="footer"></div> -->
+        <div id="footer"></div>
 
         <script src="../Assets/Javascript/HeaderFooter.js"></script>
     </body>

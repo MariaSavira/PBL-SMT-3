@@ -1,12 +1,10 @@
 <?php
-// Config Database PostgreSQL
 define('DB_HOST', 'localhost');
 define('DB_PORT', '5432');
 define('DB_NAME', 'lab_ba');
 define('DB_USER', 'postgres');
 define('DB_PASS', '12345');
 
-// Koneksi Database
 function getDBConnection() {
     try {
         $dsn = "pgsql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME;
@@ -19,7 +17,6 @@ function getDBConnection() {
     }
 }
 
-// Fungsi untuk format tanggal Indonesia
 function formatTanggalIndo($tanggal) {
     $bulan = array(
         1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
@@ -30,7 +27,6 @@ function formatTanggalIndo($tanggal) {
     return $split[2] . ' ' . $bulan[(int)$split[1]] . ' ' . $split[0];
 }
 
-// Fungsi untuk sanitasi input
 function sanitizeInput($data) {
     $data = trim($data);
     $data = stripslashes($data);
@@ -38,7 +34,6 @@ function sanitizeInput($data) {
     return $data;
 }
 
-// Fungsi untuk get logged in user
 function getLoggedInUser() {
     if (isset($_SESSION['username'])) {
         return $_SESSION['username'];
@@ -50,7 +45,6 @@ function getLoggedInUser() {
     return 'Admin';
 }
 
-// Session start
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }

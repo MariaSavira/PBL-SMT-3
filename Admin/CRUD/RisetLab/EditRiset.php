@@ -16,7 +16,6 @@
         die("<h2 style='color:red;'>ID riset tidak ditemukan.</h2>");
     }
 
-    // Ambil data awal
     try {
         $res = qparams("SELECT id_riset, nama_bidang_riset FROM bidangriset WHERE id_riset=$1", [$id]);
         $data = pg_fetch_assoc($res);
@@ -28,7 +27,6 @@
         die("<h2 style='color:red;'>Data riset tidak ditemukan.</h2>");
     }
 
-    // Jika submit
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nama = trim($_POST['namaRiset'] ?? '');
 

@@ -1,11 +1,10 @@
 <?php
     header('Content-Type: application/json');
-    header('Access-Control-Allow-Origin: *'); // Allow dari folder User
+    header('Access-Control-Allow-Origin: *');
 
     require_once 'config.php';
 
     try {
-        // Ambil semua data galeri
         $stmt = $pdo->query("
             SELECT 
                 id_galeri,

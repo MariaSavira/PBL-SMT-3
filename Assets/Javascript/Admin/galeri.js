@@ -1,25 +1,19 @@
-// galeri.js - Gallery JavaScript Functions (FIXED VERSION - No Duplicate Variables)
-
-// Wrap everything in IIFE to avoid global scope conflicts
 (function() {
     'use strict';
     
-    // Global variables (scoped to this file only)
     let editMode = false;
     let selectedItems = [];
     let currentPage = 1;
     let itemsPerPage = 9;
     let allItems = [];
-
-    // Initialize when page loads
+    
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('Galeri.js loaded'); // Debug
+        console.log('Galeri.js loaded'); 
         initializeGallery();
         updatePagination();
         setupGalleryItemHandlers();
     });
 
-    // Initialize gallery
     function initializeGallery() {
         const galleryGrid = document.getElementById('galleryGrid');
         if (!galleryGrid) {
@@ -28,24 +22,23 @@
         }
         
         allItems = Array.from(galleryGrid.querySelectorAll('.gallery-item'));
-        console.log('Gallery items found:', allItems.length); // Debug
+        console.log('Gallery items found:', allItems.length); 
         
-        // Show first page
+        
         showPage(1);
     }
-
-    // Setup click handlers for gallery items
+    
     function setupGalleryItemHandlers() {
         const galleryItems = document.querySelectorAll('.gallery-item');
-        console.log('Setting up handlers for', galleryItems.length, 'items'); // Debug
+        console.log('Setting up handlers for', galleryItems.length, 'items'); 
         
         galleryItems.forEach(item => {
-            // Main item click
+            
             item.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 
-                console.log('Item clicked, edit mode:', editMode); // Debug
+                console.log('Item clicked, edit mode:', editMode); 
                 
                 if (editMode) {
                     const id = parseInt(this.dataset.id);
@@ -53,7 +46,7 @@
                 }
             });
             
-            // Checkbox click
+            
             const checkbox = item.querySelector('.select-checkbox');
             if (checkbox) {
                 checkbox.addEventListener('click', function(e) {
@@ -67,24 +60,24 @@
         });
     }
 
-    // Toggle edit mode
+    
     window.toggleEditMode = function() {
         const toggleInput = document.getElementById('editToggle');
         editMode = toggleInput.checked;
         
-        console.log('Toggle clicked! Edit mode now:', editMode); // Debug
+        console.log('Toggle clicked! Edit mode now:', editMode); 
         
         if (editMode) {
             document.body.classList.add('edit-mode-active');
-            console.log('Edit mode ACTIVATED - checkboxes should show'); // Debug
+            console.log('Edit mode ACTIVATED - checkboxes should show'); 
         } else {
             document.body.classList.remove('edit-mode-active');
             clearAllSelections();
-            console.log('Edit mode DEACTIVATED'); // Debug
+            console.log('Edit mode DEACTIVATED'); 
         }
     };
 
-    // Toggle item selection
+    
     function toggleItemSelection(id) {
         const item = document.querySelector(`.gallery-item[data-id="${id}"]`);
         
@@ -94,12 +87,12 @@
         }
         
         if (item.classList.contains('selected')) {
-            // Deselect
+            
             item.classList.remove('selected');
             selectedItems = selectedItems.filter(itemId => itemId !== id);
             console.log('Deselected item:', id, 'Total selected:', selectedItems.length);
         } else {
-            // Select
+            
             item.classList.add('selected');
             if (!selectedItems.includes(id)) {
                 selectedItems.push(id);
@@ -110,29 +103,43 @@
         updateDeleteNotification();
     }
 
-    // Select all items
+    
     window.selectAll = function() {
         if (!editMode) {
             alert('Aktifkan mode edit terlebih dahulu!');
             return;
         }
-        
+
         const visibleItems = getVisibleItems();
-        selectedItems = [];
+        if (visibleItems.length === 0) return;
+
         
-        visibleItems.forEach(item => {
-            const id = parseInt(item.dataset.id);
-            item.classList.add('selected');
-            if (!selectedItems.includes(id)) {
-                selectedItems.push(id);
-            }
-        });
-        
-        console.log('Selected all items:', selectedItems); // Debug
+        const allVisibleSelected = visibleItems.every(item =>
+            item.classList.contains('selected')
+        );
+
+        if (allVisibleSelected) {
+            
+            visibleItems.forEach(item => {
+                const id = parseInt(item.dataset.id);
+                item.classList.remove('selected');
+                selectedItems = selectedItems.filter(itemId => itemId !== id);
+            });
+            console.log('Deselected all visible items');
+        } else {
+            
+            visibleItems.forEach(item => {
+                const id = parseInt(item.dataset.id);
+                item.classList.add('selected');
+                if (!selectedItems.includes(id)) selectedItems.push(id);
+            });
+            console.log('Selected all visible items:', selectedItems);
+        }
+
         updateDeleteNotification();
     };
 
-    // Clear all selections
+    
     function clearAllSelections() {
         selectedItems = [];
         document.querySelectorAll('.gallery-item').forEach(item => {
@@ -141,7 +148,7 @@
         updateDeleteNotification();
     }
 
-    // Update delete notification
+    
     function updateDeleteNotification() {
         const notification = document.getElementById('deleteNotification');
         const countSpan = document.getElementById('deleteCount');
@@ -154,14 +161,14 @@
         if (selectedItems.length > 0) {
             countSpan.textContent = `${selectedItems.length} item dipilih`;
             notification.classList.add('show');
-            console.log('Delete notification shown:', selectedItems.length, 'items'); // Debug
+            console.log('Delete notification shown:', selectedItems.length, 'items'); 
         } else {
             notification.classList.remove('show');
-            console.log('Delete notification hidden'); // Debug
+            console.log('Delete notification hidden'); 
         }
     }
 
-    // Confirm delete
+    
     window.confirmDelete = function() {
         if (selectedItems.length === 0) return;
         
@@ -171,7 +178,7 @@
         }
     };
 
-    // Close modal
+    
     window.closeModal = function() {
         const modal = document.getElementById('deleteModal');
         if (modal) {
@@ -179,17 +186,17 @@
         }
     };
 
-    // Delete selected items
+    
     window.deleteSelected = function() {
         if (selectedItems.length === 0) return;
         
-        // Show loading state
+        
         const confirmBtn = document.querySelector('.btn-confirm');
         const originalText = confirmBtn.textContent;
         confirmBtn.textContent = 'Menghapus...';
         confirmBtn.disabled = true;
         
-        // Send delete request
+        
         fetch('proses_galeri.php', {
             method: 'POST',
             headers: {
@@ -201,7 +208,7 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Remove deleted items from DOM
+                
                 selectedItems.forEach(id => {
                     const item = document.querySelector(`.gallery-item[data-id="${id}"]`);
                     if (item) {
@@ -209,22 +216,22 @@
                     }
                 });
                 
-                // Update allItems array
+                
                 allItems = Array.from(document.querySelectorAll('.gallery-item'));
                 
-                // Clear selections
+                
                 selectedItems = [];
                 
-                // Close modal
+                
                 window.closeModal();
                 
-                // Update pagination
+                
                 updatePagination();
                 
-                // Show success message
+                
                 showAlert('success', data.message);
                 
-                // Reload page after short delay
+                
                 setTimeout(() => {
                     window.location.reload();
                 }, 1500);
@@ -242,7 +249,7 @@
         });
     };
 
-    // Show alert message
+    
     function showAlert(type, message) {
         const alertDiv = document.createElement('div');
         alertDiv.className = `alert alert-${type}`;
@@ -255,13 +262,13 @@
         const controls = document.querySelector('.controls');
         mainContent.insertBefore(alertDiv, controls);
         
-        // Auto remove after 5 seconds
+        
         setTimeout(() => {
             alertDiv.remove();
         }, 5000);
     }
 
-    // Pagination functions
+    
     function getVisibleItems() {
         const start = (currentPage - 1) * itemsPerPage;
         const end = start + itemsPerPage;
@@ -271,12 +278,12 @@
     function showPage(page) {
         currentPage = page;
         
-        // Hide all items
+        
         allItems.forEach(item => {
             item.style.display = 'none';
         });
         
-        // Show current page items
+        
         const visibleItems = getVisibleItems();
         visibleItems.forEach(item => {
             item.style.display = 'block';
@@ -293,7 +300,7 @@
             pageInfo.textContent = `${currentPage} of ${totalPages}`;
         }
         
-        // Update button states
+        
         const prevBtn = document.querySelector('.pagination-btn:first-child');
         const nextBtn = document.querySelector('.pagination-btn:last-child');
         
@@ -319,7 +326,7 @@
         }
     };
 
-    // Handle clicks outside modal to close it
+    
     window.addEventListener('click', function(event) {
         const modal = document.getElementById('deleteModal');
         if (event.target === modal) {
@@ -327,7 +334,7 @@
         }
     });
 
-    // Handle sidebar toggle
+    
     document.addEventListener('sidebarToggled', function(e) {
         const mainContent = document.querySelector('.main-content');
         if (e.detail.isOpen) {

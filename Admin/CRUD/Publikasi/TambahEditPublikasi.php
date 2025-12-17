@@ -4,16 +4,13 @@
 
     $conn = get_pg_connection();
 
-    // ---------- STATUS UNTUK NOTIF ----------
     $status      = '';
     $message     = '';
     $redirectTo  = 'IndexPublikasi.php';
 
-    // ---------- MODE EDIT / TAMBAH ----------
     $id       = isset($_GET['id']) ? (int)$_GET['id'] : 0;
     $editMode = $id > 0;
 
-    // ---------- NILAI DEFAULT ----------
     $id_publikasi   = "";
     $judul          = "";
     $jenis          = "Buku";
@@ -22,10 +19,9 @@
     $tanggal_terbit = "";
     $author         = "";
     $id_riset       = "";
-    $statusPublik   = "Aktif";   // label untuk UI
+    $statusPublik   = "Aktif";  
     $error_message  = "";
 
-    // ---------- OPTIONS BIDANG RISET ----------
     $riset_options = [];
     $res_riset = pg_query($conn, "SELECT id_riset, nama_bidang_riset FROM bidangriset ORDER BY nama_bidang_riset");
 
@@ -35,7 +31,6 @@
         }
     }
 
-    // ---------- LOAD DATA SAAT EDIT ----------
     if ($editMode) {
         $sql = "
             SELECT judul, jenis, abstrak, link, tanggal_terbit, author, id_riset, status 
@@ -54,7 +49,6 @@
             $link           = $row['link'];
             $tanggal_terbit = $row['tanggal_terbit'];
 
-            // author dalam DB disimpan JSON
             $author_raw = $row['author'];
             if ($author_raw) {
                 $decoded = json_decode($author_raw, true);
@@ -69,7 +63,6 @@
         }
     }
 
-    // ---------- HANDLE SUBMIT ----------
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $judul_input    = trim($_POST['judul'] ?? '');
@@ -79,9 +72,8 @@
         $tanggal_input  = $_POST['tanggal_terbit'] ?? null;
         $author_input   = trim($_POST['author'] ?? '');
         $id_riset_input = (int)($_POST['id_riset'] ?? 0);
-        $status_input   = "Aktif";   // sementara status dikunci Aktif
+        $status_input   = "Aktif";  
 
-        // simpan balik ke variabel form (biar sticky)
         $judul          = $judul_input;
         $jenis          = $jenis_input;
         $abstrak        = $abstrak_input;
@@ -91,7 +83,6 @@
         $id_riset       = $id_riset_input;
         $statusPublik   = $status_input;
 
-        // -------- VALIDASI WAJIB DIISI --------
         $missing = [];
 
         if ($judul_input === "")      $missing[] = "Judul";
@@ -105,14 +96,11 @@
             $message       = $error_message;
 
         } else {
-            // ubah author ke JSON array
             $author_json = json_encode(array_map("trim", explode(",", $author_input)));
 
-            // mapping status ke boolean
             $status_db = ($status_input === "Aktif" ? 't' : 'f');
 
             if ($editMode) {
-                // -------- UPDATE --------
                 $sql = "
                     UPDATE publikasi SET
                         judul          = $1,
@@ -239,7 +227,7 @@
                     </p>
 
                     <div class="form-grid">
-                        <!-- JUDUL -->
+                        
                         <div class="field-group">
                             <label for="judul">Judul <span class="required">*</span></label>
                             <input
@@ -251,7 +239,6 @@
                                 placeholder="Masukkan judul publikasi">
                         </div>
 
-                        <!-- JENIS PUBLIKASI -->
                         <div class="field-group">
                             <label for="jenis">Jenis Publikasi <span class="required">*</span></label>
 
@@ -274,8 +261,7 @@
                                 <input type="hidden" name="jenis" id="jenis_hidden" value="<?= htmlspecialchars($jenis) ?>">
                             </div>
                         </div>
-
-                        <!-- PENULIS -->
+                        
                         <div class="field-group">
                             <label for="author">Penulis <span class="required">*</span></label>
                             <input
@@ -287,8 +273,7 @@
                                 placeholder="Masukkan nama penulis">
                             <small class="helper-text">Pisahkan dengan koma jika lebih dari satu penulis</small>
                         </div>
-
-                        <!-- ABSTRAK -->
+                        
                         <div class="field-group">
                             <label for="abstrak">Abstrak</label>
                             <textarea
@@ -297,8 +282,7 @@
                                 rows="4"
                                 placeholder="Masukkan abstrak publikasi"><?= htmlspecialchars($abstrak) ?></textarea>
                         </div>
-
-                        <!-- LINK PUBLIKASI -->
+                        
                         <div class="field-group">
                             <label for="link">Link Publikasi</label>
                             <input
@@ -308,8 +292,7 @@
                                 placeholder="https://contoh.com/publikasi"
                                 value="<?= htmlspecialchars($link) ?>">
                         </div>
-
-                        <!-- TANGGAL TERBIT -->
+                        
                         <div class="field-group">
                             <label for="tanggal_terbit">Tanggal Terbit</label>
                             <input
@@ -318,8 +301,7 @@
                                 class="field-input"
                                 value="<?= htmlspecialchars($tanggal_terbit) ?>">
                         </div>
-
-                        <!-- BIDANG RISET -->
+                        
                         <div class="field-group">
                             <label for="id_riset">Bidang Riset <span class="required">*</span></label>
 
@@ -363,8 +345,7 @@
             </form>
         </section>
     </main>
-
-    <!-- NOTIFIKASI POPUP (SAMA SEPERTI FORM RISET/PROFILE) -->
+    
     <div id="notification" class="notification" style="display:none;">
         <div class="notification-content">
             <div class="notification-icon" id="notification-icon"></div>

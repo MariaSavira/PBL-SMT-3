@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 type="url"
                 name="link_url[]"
                 class="field-input link-url"
-                placeholder="https://contoh.com/profil-anda"
+                placeholder="https:
             >
 
             <button type="button" class="btn-remove-link">

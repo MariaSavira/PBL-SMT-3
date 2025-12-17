@@ -1,6 +1,3 @@
-// Assets/Javascript/KontakKami.js
-
-// Navbar scroll
 window.addEventListener("scroll", function () {
     const navbar = document.getElementById("navbar");
     if (!navbar) return;
@@ -35,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let currentFileUrl = null;
 
-    /* ========= FUNGSI NOTIFIKASI ========= */
     function showNotification(isSuccess, customMessage) {
         if (!notification) return;
 
@@ -61,29 +57,25 @@ document.addEventListener('DOMContentLoaded', function () {
             overlay.style.display      = 'none';
         }, 5000);
     }
-
-    /* ========= CLOSE NOTIF ========= */
+    
     if (closeBtn) {
         closeBtn.addEventListener('click', function () {
             notification.style.display = 'none';
             overlay.style.display      = 'none';
         });
     }
-
-    /* ========= TRIGGER INPUT FILE ========= */
+    
     if (uploadBtn && fileInput) {
         uploadBtn.addEventListener('click', function () {
             fileInput.click();
         });
     }
-
-    /* ========= PREVIEW & VALIDASI FILE ========= */
+    
     if (fileInput) {
         fileInput.addEventListener('change', function () {
             const file = this.files[0];
             if (!file) return;
 
-            // tipe harus PDF
             if (file.type !== 'application/pdf') {
                 showNotification(false, 'Hanya file PDF yang diperbolehkan.');
                 this.value = '';
@@ -91,15 +83,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // maksimal 5 MB
             if (file.size > 5 * 1024 * 1024) {
                 showNotification(false, 'Ukuran file maksimal 5 MB.');
                 this.value = '';
                 filePreview.style.display = 'none';
                 return;
             }
-
-            // tampilkan preview
+            
             fileNameEl.textContent = file.name;
             const sizeMB = file.size / (1024 * 1024);
             fileSizeEl.textContent = sizeMB.toFixed(1) + ' MB';
@@ -119,7 +109,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    /* ========= VALIDASI KETIKA KIRIM (FRONTEND) ========= */
     if (kirimBtn) {
         kirimBtn.addEventListener('click', function (e) {
             e.preventDefault();
@@ -153,11 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (currentFileUrl) {
                 URL.revokeObjectURL(currentFileUrl);
                 currentFileUrl = null;
-            }
-
-            // kalau nanti mau submit beneran:
-            // const form = kirimBtn.closest('form');
-            // if (form) form.submit();
+            } 
         });
     }
 });

@@ -1,20 +1,16 @@
 <?php
-// admin/api_berita.php
     header('Content-Type: application/json; charset=utf-8');
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Methods: GET');
     header('Access-Control-Allow-Headers: Content-Type');
 
-    // require_once __DIR__ . '../../../Cek_Autentikasi.php';
     require_once 'config.php';
 
     try {
-        // Ambil parameter
         $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
         
         if ($id > 0) {
-            // Ambil satu berita by ID dengan JOIN ke anggota_lab
             $stmt = $pdo->prepare("
                 SELECT b.*, a.nama as nama_author 
                 FROM berita b
@@ -25,7 +21,7 @@
             $berita = $stmt->fetch();
             
             if ($berita) {
-                // Format tanggal
+
                 $berita['tanggal_formatted'] = date('d F Y, H:i', strtotime($berita['tanggal']));
                 echo json_encode([
                     'success' => true,
@@ -38,7 +34,6 @@
                 ]);
             }
         } else {
-            // Ambil semua berita yang dipublish dengan JOIN ke anggota_lab
             $query = "
                 SELECT b.*, a.nama as nama_author 
                 FROM berita b
@@ -54,7 +49,6 @@
             $stmt = $pdo->query($query);
             $berita_list = $stmt->fetchAll();
             
-            // Format tanggal untuk setiap berita
             foreach ($berita_list as &$berita) {
                 $berita['tanggal_formatted'] = date('d F Y, H:i', strtotime($berita['tanggal']));
             }

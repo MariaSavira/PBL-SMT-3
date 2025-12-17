@@ -1,34 +1,62 @@
 <?php
 require_once __DIR__ . '../../Admin/Cek_Autentikasi.php';
 require_once __DIR__ . '../../Admin/Koneksi/KoneksiSasa.php';
-// default foto kalau kosong
-function foto_url(?string $foto): string {
-    $foto = trim((string)$foto);
-    if ($foto === '') {
-        return '../Assets/Image/AnggotaLab/profile1.png';
-    }
-    // kalau kamu simpan nama file saja di DB, arahkan ke folder ini:
-    // return "../Assets/Image/AnggotaLab/" . $foto;
 
-    // kalau di DB sudah path relatif/URL, langsung pakai:
-    return $foto;
+function foto_url(?string $foto): string
+{
+    $foto = trim((string)$foto);
+
+    if ($foto === '') {
+        return "../Assets/Image/AnggotaLab/No-Picture.jpg";
+    }
+
+    return "../Assets/Image/AnggotaLab/" . $foto;
 }
 
-// ============ AMBIL DATA DARI MATERIALIZED VIEW ============
-// hanya yang aktif
+function parse_keahlian($raw): array
+{
+    $raw = trim((string)$raw);
+    if ($raw === '') return [];
+
+    if ($raw[0] === '{' && substr($raw, -1) === '}') {
+        $inside = trim($raw, "{} \t\n\r\0\x0B");
+        if ($inside === '') return [];
+
+        $parts = explode(',', $inside);
+        $out = [];
+        foreach ($parts as $p) {
+            $p = trim($p);
+            $p = trim($p, "\"' ");
+            if ($p !== '') $out[] = $p;
+        }
+        return $out;
+    }
+
+    return [$raw];
+}
+
 $sql = "
-    SELECT id_anggota, nama, keahlian, jabatan, foto, status
-    FROM public.mv_anggota_keahlian
-    WHERE status = TRUE
+    SELECT 
+        mv.id_anggota,
+        mv.nama,
+        mv.keahlian,
+        mv.jabatan,
+        mv.foto,
+        mv.status,
+        a.deskripsi,
+        a.link
+    FROM public.mv_anggota_keahlian mv
+    JOIN public.anggotalab a ON a.id_anggota = mv.id_anggota
+    WHERE mv.status = TRUE
     ORDER BY
-      CASE WHEN lower(jabatan) LIKE '%kepala%' THEN 0 ELSE 1 END,
-      nama ASC
+      CASE WHEN lower(mv.jabatan) LIKE '%kepala%' THEN 0 ELSE 1 END,
+      mv.nama ASC
 ";
 
-$res = q($sql); // kalau kamu gak punya q(), bilang ya, aku sesuaikan
+
+$res = q($sql);
 $anggota = [];
 
-// grouping per id_anggota
 while ($row = pg_fetch_assoc($res)) {
     $id = (int)$row['id_anggota'];
 
@@ -39,17 +67,20 @@ while ($row = pg_fetch_assoc($res)) {
             'jabatan'    => $row['jabatan'] ?? '',
             'foto'       => $row['foto'] ?? '',
             'status'     => (bool)$row['status'],
+            'deskripsi'  => $row['deskripsi'] ?? '',
+            'link'       => $row['link'] ?? null, // jsonb
             'keahlian'   => [],
         ];
     }
 
-    $k = trim((string)($row['keahlian'] ?? ''));
-    if ($k !== '' && !in_array($k, $anggota[$id]['keahlian'], true)) {
-        $anggota[$id]['keahlian'][] = $k;
+    $raw = $row['keahlian'] ?? '';
+    foreach (parse_keahlian($raw) as $tag) {
+        if (!in_array($tag, $anggota[$id]['keahlian'], true)) {
+            $anggota[$id]['keahlian'][] = $tag;
+        }
     }
 }
 
-// pisahkan Kepala Lab vs peneliti
 $kepalaLab = null;
 $peneliti  = [];
 
@@ -61,13 +92,13 @@ foreach ($anggota as $a) {
     }
 }
 
-// fallback kalau gak ada yang “kepala”
 if ($kepalaLab === null && count($peneliti) > 0) {
     $kepalaLab = array_shift($peneliti);
 }
 ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -97,50 +128,56 @@ if ($kepalaLab === null && count($peneliti) > 0) {
 
     <div class="anggota-wrapper">
 
-        <!-- ===== KEPALA LAB (DINAMIS) ===== -->
+        
         <?php if ($kepalaLab): ?>
-            <div class="kepala-lab-card">
+            <div class="kepala-lab-card kepala-card-clickable" data-href="DetailAnggota.php?id=<?= (int)$kepalaLab['id_anggota'] ?>">
+
                 <div class="kepala-lab-photo">
                     <img src="<?= htmlspecialchars(foto_url($kepalaLab['foto'])) ?>" alt="Kepala Laboratorium">
-                    <div class="kepala-lab-badge">
-                        <?= htmlspecialchars($kepalaLab['jabatan'] ?: 'Kepala Laboratorium') ?>
+                    <div class="kepala-lab-badge">Kepala Laboratorium</div>
+                </div>
+
+                <div class="kepala-lab-info">
+                    <h2 class="kepala-lab-name"><?= htmlspecialchars($kepalaLab['nama']) ?></h2>
+
+                    <p class="kepala-lab-desc">
+                        <?= htmlspecialchars(trim($kepalaLab['deskripsi'] ?? '') ?: 'Anggota Laboratorium dengan fokus pada pengembangan riset dan kegiatan akademik.') ?>
+                    </p>
+
+                    <hr>
+
+                    <div class="kepala-lab-socmed">
+                        <a href="#" target="_blank" rel="noopener" aria-label="Google Scholar">
+                            <i class="fa-brands fa-google-scholar"></i> </a>
+
+                        <a href="#" target="_blank" rel="noopener" aria-label="LinkedIn">
+                            <i class="fa-brands fa-linkedin-in"></i> </a>
+
+                        <a href="#" target="_blank" rel="noopener" aria-label="ResearchGate">
+                            <i class="fa-brands fa-researchgate"></i> </a>
+
+                        <a href="#" target="_blank" rel="noopener" aria-label="Website">
+                            <i class="fa-solid fa-globe"></i> </a>
+                    </div>
+
+                    <h3 class="kepala-lab-subtitle">Bidang Keahlian</h3>
+                    <div class="kepala-lab-tags">
+                        <?php foreach (($kepalaLab['keahlian'] ?? []) as $tag): ?>
+                            <span class="anggota-tag"><?= htmlspecialchars($tag) ?></span>
+                        <?php endforeach; ?>
                     </div>
                 </div>
 
-                <a href="DetailAnggota.php?id=<?= (int)$kepalaLab['id_anggota'] ?>" style="text-decoration:none;">
-                    <div class="kepala-lab-info">
-                        <h2 class="kepala-lab-name"><?= htmlspecialchars($kepalaLab['nama']) ?></h2>
+                
+                <a class="card-overlay-link"
+                    href="DetailAnggota.php?id=<?= (int)$kepalaLab['id_anggota'] ?>"
+                    aria-label="Buka detail kepala laboratorium"></a>
 
-                        <!-- kalau kamu punya deskripsi di tabel lain, nanti kita sambungkan -->
-                        <p class="kepala-lab-desc">
-                            Anggota Laboratorium dengan fokus pada pengembangan riset dan kegiatan akademik.
-                        </p>
-
-                        <hr>
-
-                        <div class="kepala-lab-socmed">
-                            <a href="#" aria-label="Google Scholar"><i class="fa-solid fa-graduation-cap"></i></a>
-                            <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-                            <a href="#" aria-label="ResearchGate"><i class="fa-brands fa-researchgate"></i></a>
-                            <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                        </div>
-
-                        <h3 class="kepala-lab-subtitle">Bidang Keahlian</h3>
-                        <div class="kepala-lab-tags">
-                            <?php if (!empty($kepalaLab['keahlian'])): ?>
-                                <?php foreach ($kepalaLab['keahlian'] as $tag): ?>
-                                    <span class="anggota-tag"><?= htmlspecialchars($tag) ?></span>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <span class="anggota-tag">-</span>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </a>
             </div>
         <?php endif; ?>
 
-        <!-- ===== PARA PENELITI (DINAMIS) ===== -->
+
+        
         <div class="section-title anggota-section-title">Para Peneliti</div>
 
         <div class="peneliti-grid">
@@ -170,6 +207,19 @@ if ($kepalaLab === null && count($peneliti) > 0) {
     </div>
 
     <div id="footer"></div>
+    <script>
+        document.addEventListener("click", (e) => {
+            const card = e.target.closest(".kepala-card-clickable");
+            if (!card) return;
+
+            if (e.target.closest(".kepala-lab-socmed a")) return;
+
+            const href = card.getAttribute("data-href");
+            if (href) window.location.href = href;
+        });
+    </script>
+
     <script src="../Assets/Javascript/HeaderFooter.js"></script>
 </body>
+
 </html>

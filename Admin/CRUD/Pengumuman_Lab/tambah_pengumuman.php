@@ -1,429 +1,266 @@
+<?php
+require_once __DIR__ . '../../../Cek_Autentikasi.php';
+require_once __DIR__ . '../../../Koneksi/KoneksiSasa.php';
+
+$id       = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$editMode = $id > 0;
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Pengumuman</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title><?= $editMode ? "Edit Pengumuman" : "Tambah Pengumuman"; ?></title>
+
+    
+    <link rel="stylesheet" href="/PBL-SMT-3/Assets/Css/Admin/FormPublikasi.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
+        rel="stylesheet"
+    >
+    <link rel="icon" type="images/x-icon" href="../../../Assets/Image/Logo/Logo Without Text.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
-            background: #f5f7fa;
-        }
-
-        .main-container {
-            margin-left: 80px;
-            padding: 20px;
-            transition: margin-left 0.3s ease;
-            max-width: 1200px;
-        }
-
-        .main-container.sidebar-open {
-            margin-left: 280px;
-        }
-
-        .header-back {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .btn-back {
-            width: 45px;
-            height: 45px;
-            background: white;
-            border: none;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            transition: all 0.3s;
-        }
-
-        .btn-back:hover {
-            background: #f1f5f9;
-        }
-
-        .header-back h1 {
-            font-size: 28px;
-            color: #1e293b;
-            font-weight: 600;
-        }
-
-        .form-container {
-            background: white;
-            padding: 35px;
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 500;
-            color: #334155;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 14px;
-            transition: all 0.3s;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #3b82f6;
-            background: #f8fafc;
-        }
-
-        .form-group textarea {
-            min-height: 200px;
-            resize: vertical;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .upload-area {
-            border: 2px dashed #cbd5e1;
-            border-radius: 10px;
-            padding: 40px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: #f8fafc;
-        }
-
-        .upload-area:hover {
-            border-color: #3b82f6;
-            background: #eff6ff;
-        }
-
-        .upload-area.dragover {
-            border-color: #3b82f6;
-            background: #dbeafe;
-        }
-
-        .upload-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 15px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            color: #94a3b8;
-        }
-
-        .upload-text h3 {
-            color: #1e293b;
-            font-size: 16px;
-            margin-bottom: 8px;
-        }
-
-        .upload-text p {
-            color: #94a3b8;
-            font-size: 13px;
-        }
-
-        .file-input {
-            display: none;
-        }
-
-        .preview-container {
-            margin-top: 20px;
-            display: none;
-        }
-
-        .preview-image {
-            width: 100%;
-            max-height: 400px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-
-        .btn-remove-image {
-            width: 100%;
-            padding: 10px;
-            background: #fee2e2;
-            color: #dc2626;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .btn-remove-image:hover {
-            background: #fecaca;
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 15px;
-            justify-content: flex-end;
-            margin-top: 30px;
-            padding-top: 25px;
-            border-top: 2px solid #f1f5f9;
-        }
-
-        .btn {
-            padding: 14px 35px;
-            border: none;
-            border-radius: 10px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .btn-cancel {
-            background: #f1f5f9;
-            color: #475569;
-        }
-
-        .btn-cancel:hover {
-            background: #e2e8f0;
-        }
-
-        .btn-submit {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white;
-        }
-
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
-        }
-
-        .btn-submit:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .error-message {
-            color: #dc2626;
-            font-size: 12px;
-            margin-top: 5px;
-            display: none;
-        }
-
-        .error-message.show {
-            display: block;
-        }
-
-        .input-error {
-            border-color: #dc2626 !important;
-        }
-
-        /* Loading overlay */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-        }
-
-        .loading-overlay.active {
-            display: flex;
-        }
-
-        .loading-content {
-            background: white;
-            padding: 30px 50px;
-            border-radius: 15px;
-            text-align: center;
-        }
-
-        .spinner {
-            border: 4px solid #f3f4f6;
-            border-top: 4px solid #3b82f6;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 768px) {
-            .main-container {
-                margin-left: 0;
-                padding: 15px;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .form-actions {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-        }
+        .field-input.textarea-isi { min-height: 180px; resize: vertical; }
+        .helper-text { display:block; margin-top:6px; font-size:12px; opacity:.75; }
+        .required { color: #dc2626; }
+        .is-loading { opacity: .7; pointer-events: none; }
     </style>
 </head>
+
 <body>
     <div id="sidebar"></div>
 
-    <div class="main-container" id="mainContainer">
-        <div class="header-back">
-            <button class="btn-back" onclick="window.location.href='pengumuman.php'">
-                <i class="fas fa-arrow-left"></i>
+    <main class="content" id="content">
+        <div id="header"></div>
+
+        <div class="content-header page-header">
+            <a href="pengumuman.php">
+                <button type="button" class="btn-back">
+                    <i class="fa-solid fa-chevron-left"></i>
+                    Kembali
+                </button>
+            </a>
+
+            <h1 class="page-title"><?= $editMode ? "Edit Pengumuman" : "Tambah Pengumuman"; ?></h1>
+            <div></div>
+        </div>
+
+        <section class="profile-layout">
+            <form class="profile-form" id="pengumumanForm" autocomplete="off">
+                <div class="form-card">
+                    <h2 class="form-title">Data Pengumuman</h2>
+                    <p class="form-subtitle">
+                        Lengkapi informasi pengumuman berikut.
+                    </p>
+
+                    <div class="form-grid">
+                        
+                        <div class="field-group">
+                            <label for="tanggal_terbit">Tanggal Terbit <span class="required">*</span></label>
+                            <input
+                                type="date"
+                                id="tanggal_terbit"
+                                name="tanggal_terbit"
+                                class="field-input"
+                                required
+                            >
+                            <small class="helper-text">Pilih tanggal pengumuman diterbitkan.</small>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="status">Status</label>
+                            <input
+                                type="text"
+                                id="status"
+                                name="status"
+                                class="field-input"
+                                value="Aktif"
+                                readonly
+                            >
+                        </div>
+
+                        <div class="field-group" style="grid-column: 1 / -1;">
+                            <label for="isi">Isi Pengumuman <span class="required">*</span></label>
+                            <textarea
+                                id="isi"
+                                name="isi"
+                                class="field-input textarea-isi"
+                                placeholder="Tulis isi pengumuman..."
+                                required
+                            ></textarea>
+                            <small class="helper-text">Tulis ringkas, jelas, dan mudah dipahami.</small>
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="id_pengumuman" name="id_pengumuman" value="<?= $editMode ? $id : '' ?>">
+                    <input type="hidden" id="action" name="action" value="<?= $editMode ? 'edit' : 'tambah' ?>">
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary btn-save" id="submitBtn">
+                            <?= $editMode ? 'Simpan Perubahan' : 'Simpan Pengumuman' ?>
+                            <i class="fa-solid fa-check"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </main>
+    
+    <div id="notification" class="notification" style="display:none;">
+        <div class="notification-content">
+            <div class="notification-icon" id="notification-icon"></div>
+            <div class="notification-text">
+                <div class="notification-title" id="notification-title"></div>
+                <div class="notification-message" id="notification-message"></div>
+            </div>
+            <button id="closeNotification" class="close-btn" type="button">
+                <i class="fa-solid fa-xmark"></i>
             </button>
-            <h1>Tambah Pengumuman</h1>
-        </div>
-
-        <form id="pengumumanForm" class="form-container" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="tanggal_terbit">Tanggal Terbit <span style="color: #dc2626;">*</span></label>
-                <input type="date" id="tanggal_terbit" name="tanggal_terbit" required>
-                <span class="error-message" id="tanggalError">Tanggal terbit harus diisi</span>
-            </div>
-
-            <div class="form-group">
-                <label for="isi">Isi Pengumuman <span style="color: #dc2626;">*</span></label>
-                <textarea id="isi" name="isi" placeholder="Masukkan Isi Pengumuman" required></textarea>
-                <span class="error-message" id="isiError">Isi pengumuman harus diisi</span>
-            </div>
-
-            <input type="hidden" name="status" value="Aktif">
-
-            <div class="form-actions">
-                <button type="button" class="btn btn-cancel" onclick="window.location.href='pengumuman.php'">
-                    <i class="fas fa-times"></i> Batal
-                </button>
-                <button type="submit" class="btn btn-submit" id="submitBtn">
-                    <i class="fas fa-save"></i> Simpan Perubahan
-                </button>
-            </div>
-        </form>
-    </div>
-
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-content">
-            <div class="spinner"></div>
-            <p>Menyimpan data...</p>
         </div>
     </div>
+    <div id="overlay" class="overlay" style="display:none;"></div>
 
     <script src="../../../Assets/Javascript/Admin/Sidebar.js"></script>
+    <script src="../../../Assets/Javascript/Admin/Header.js"></script>
+
     <script>
-        // Form Validation
-        function validateForm() {
-            let isValid = true;
-            
-            // Clear previous errors
-            document.querySelectorAll('.error-message').forEach(el => el.classList.remove('show'));
-            document.querySelectorAll('input, textarea').forEach(el => el.classList.remove('input-error'));
-            
-            // Validate Tanggal
-            const tanggal = document.getElementById('tanggal_terbit');
-            if (!tanggal.value) {
-                document.getElementById('tanggalError').classList.add('show');
-                tanggal.classList.add('input-error');
-                isValid = false;
-            }
-            
-            // Validate Isi
-            const isi = document.getElementById('isi');
-            if (!isi.value.trim()) {
-                document.getElementById('isiError').classList.add('show');
-                isi.classList.add('input-error');
-                isValid = false;
-            }
-            
-            return isValid;
+        function showNotif(type, title, message) {
+            const notif   = document.getElementById('notification');
+            const overlay = document.getElementById('overlay');
+
+            const iconEl  = document.getElementById('notification-icon');
+            const titleEl = document.getElementById('notification-title');
+            const msgEl   = document.getElementById('notification-message');
+
+            const okIcon  = '<i class="fa-solid fa-circle-check"></i>';
+            const errIcon = '<i class="fa-solid fa-triangle-exclamation"></i>';
+
+            iconEl.innerHTML  = (type === 'success') ? okIcon : errIcon;
+            titleEl.textContent = title || (type === 'success' ? 'Berhasil' : 'Gagal');
+            msgEl.textContent   = message || '';
+
+            notif.style.display = 'block';
+            overlay.style.display = 'block';
+
+            notif.classList.remove('success', 'error');
+            notif.classList.add(type === 'success' ? 'success' : 'error');
         }
 
-        // Form Submit
-        document.getElementById('pengumumanForm').addEventListener('submit', async function(e) {
+        function closeNotif() {
+            document.getElementById('notification').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        document.getElementById('closeNotification').addEventListener('click', closeNotif);
+        document.getElementById('overlay').addEventListener('click', closeNotif);
+
+        async function fetchJsonSafe(url, options) {
+            const res = await fetch(url, options);
+            const text = await res.text();
+
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                throw new Error("Response bukan JSON. Kemungkinan proses_pengumuman.php error/echo HTML. Cuplikan: " + text.slice(0, 200));
+            }
+        }
+
+        const editMode = <?= $editMode ? 'true' : 'false' ?>;
+        const editId   = <?= (int)$id ?>;
+
+        async function loadEditData() {
+            if (!editMode) return;
+
+            try {
+                const data = await fetchJsonSafe(`proses_pengumuman.php?action=get_data&id=${editId}`, {
+                    method: 'GET'
+                });
+
+                if (!data.success) {
+                    showNotif('error', 'Gagal', data.message || 'Data tidak ditemukan');
+                    return;
+                }
+
+                const row = data.data || {};
+                document.getElementById('tanggal_terbit').value = (row.tanggal_terbit || '').slice(0,10);
+                document.getElementById('isi').value = row.isi || '';
+                document.getElementById('status').value = row.status || 'Aktif';
+
+            } catch (err) {
+                showNotif('error', 'Error', err.message);
+            }
+        }
+
+        function setDefaultDateToday() {
+            const el = document.getElementById('tanggal_terbit');
+            if (!el.value) {
+                const d = new Date();
+                const yyyy = d.getFullYear();
+                const mm = String(d.getMonth()+1).padStart(2,'0');
+                const dd = String(d.getDate()).padStart(2,'0');
+                el.value = `${yyyy}-${mm}-${dd}`;
+            }
+        }
+
+        document.getElementById('pengumumanForm').addEventListener('submit', async function(e){
             e.preventDefault();
-            
-            if (!validateForm()) {
+
+            const tanggal = document.getElementById('tanggal_terbit').value;
+            const isi     = document.getElementById('isi').value.trim();
+
+            if (!tanggal) {
+                showNotif('error', 'Validasi', 'Tanggal terbit harus diisi.');
                 return;
             }
-            
-            const formData = new FormData(this);
-            formData.append('action', 'tambah');
-            
-            const loadingOverlay = document.getElementById('loadingOverlay');
+            if (!isi) {
+                showNotif('error', 'Validasi', 'Isi pengumuman harus diisi.');
+                return;
+            }
+
             const submitBtn = document.getElementById('submitBtn');
-            
-            loadingOverlay.classList.add('active');
+            const card = document.querySelector('.form-card');
             submitBtn.disabled = true;
-            
+            card.classList.add('is-loading');
+
             try {
-                const response = await fetch('proses_pengumuman.php', {
+                const formData = new FormData(this);
+                formData.set('action', editMode ? 'edit' : 'tambah');
+                if (editMode) formData.set('id_pengumuman', String(editId));
+
+                const result = await fetchJsonSafe('proses_pengumuman.php', {
                     method: 'POST',
                     body: formData
                 });
-                
-                const result = await response.json();
-                
+
                 if (result.success) {
-                    alert('Pengumuman berhasil ditambahkan!');
-                    window.location.href = 'pengumuman.php';
+                    showNotif('success', 'Berhasil', result.message || 'Data tersimpan.');
+                    setTimeout(() => {
+                        window.location.href = 'pengumuman.php';
+                    }, 900);
                 } else {
-                    alert('Error: ' + result.message);
+                    showNotif('error', 'Gagal', result.message || 'Terjadi kesalahan.');
                 }
-            } catch (error) {
-                alert('Terjadi kesalahan: ' + error.message);
+
+            } catch (err) {
+                showNotif('error', 'Error', err.message);
             } finally {
-                loadingOverlay.classList.remove('active');
                 submitBtn.disabled = false;
+                card.classList.remove('is-loading');
             }
         });
 
-        // Set default date to today
-        document.getElementById('tanggal_terbit').valueAsDate = new Date();
+        (async function init(){
+            if (editMode) {
+                await loadEditData();
+            } else {
+                setDefaultDateToday();
+            }
+        })();
     </script>
 </body>
 </html>

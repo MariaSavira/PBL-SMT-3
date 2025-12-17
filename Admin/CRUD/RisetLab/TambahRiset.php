@@ -1,5 +1,4 @@
 <?php
-    // sambung ke koneksi PostgreSQL
     require_once __DIR__ . '../../../Cek_Autentikasi.php';
     require __DIR__ . '../../../Koneksi/KoneksiSasa.php';
 
@@ -7,14 +6,12 @@
     $message     = '';
     $redirectTo  = 'IndexRiset.php';
 
-    $namaRiset   = '';      // biar tetap keisi di form
+    $namaRiset   = '';      
 
-    // kalau form disubmit
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $namaRiset = trim($_POST['namaRiset'] ?? '');
 
-        // validasi
         if ($namaRiset === '') {
             $status   = 'error';
             $message  = 'Nama riset tidak boleh kosong.';
@@ -24,10 +21,6 @@
                     'INSERT INTO bidangriset (nama_bidang_riset) VALUES ($1)',
                     [$namaRiset]
                 );
-
-                // kalau mau langsung redirect hard:
-                // header('Location: IndexRiset.php?status=created');
-                // exit;
 
                 $status  = 'success';
                 $message = 'Riset baru berhasil ditambahkan';
@@ -45,19 +38,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tambah Riset</title>
-
-    <!-- Poppins -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
         rel="stylesheet">
 
-    <!-- Font Awesome -->
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-    <!-- CSS sidebar & form tambah/edit -->
+    
     <link rel="icon" type="images/x-icon"
         href="../../../Assets/Image/Logo/Logo Without Text.png" />
     <link rel="stylesheet" href="../../../Assets/Css/Admin/Sidebar.css">
@@ -65,8 +55,7 @@
 </head>
 
 <body>
-
-    <!-- sidebar akan di-inject lewat JS -->
+    
     <div id="sidebar"></div>
 
     <main class="content" id="content">
@@ -115,8 +104,7 @@
         </section>
 
     </main>
-
-    <!-- NOTIFICATION OVERLAY -->
+    
     <div id="notification" class="notification" style="display:none;">
         <div class="notification-content">
             <div class="notification-icon" id="notification-icon"></div>

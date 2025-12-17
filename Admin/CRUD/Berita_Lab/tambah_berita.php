@@ -2,7 +2,6 @@
     require_once __DIR__ . '../../../Cek_Autentikasi.php';
     require_once 'config.php';
 
-
     $status  = $_SESSION['flash_status']  ?? '';
     $message = $_SESSION['flash_message'] ?? '';
     $redirectTo = $_SESSION['flash_redirect'] ?? '';
@@ -15,11 +14,9 @@
 
     $user_name = $_SESSION['username'] ?? '1';
 
-    // default status dari session (kalau ada) atau publish
     $defaultStatus = $_SESSION['form_data']['status'] ?? 'publish';
     $statusLabel   = ($defaultStatus === 'draft') ? 'Draft' : 'Publish';
 
-    // default tanggal
     $defaultTanggal = $_SESSION['form_data']['tanggal'] ?? date('Y-m-d');
 ?>
 
@@ -193,13 +190,11 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
-            // ====== tanggal default (jangan override kalau sudah dari session)
             const tanggalEl = document.getElementById('tanggal');
             if (tanggalEl && !tanggalEl.value) {
                 tanggalEl.valueAsDate = new Date();
             }
 
-            // ====== STATUS DROPDOWN -> hidden input
             document.querySelectorAll('.field-select').forEach(dropdown => {
                 const toggle = dropdown.querySelector('.dropdown-toggle');
                 const label = dropdown.querySelector('.dropdown-label');
@@ -233,7 +228,6 @@
                 });
             });
 
-            // ====== FILE PICKER (upload area)
             const uploadArea = document.getElementById('uploadArea');
             const inputFile = document.getElementById('gambar');
             const preview = document.getElementById('imagePreview');
@@ -281,7 +275,6 @@
                 });
             }
 
-            // ====== CHARACTER COUNTER
             const isiTextarea = document.getElementById('isi');
             if (isiTextarea) {
                 isiTextarea.addEventListener('input', function() {
@@ -299,7 +292,6 @@
                 });
             }
 
-            // ====== SUBMIT UI
             const form = document.getElementById('formBerita');
             const submitBtn = document.getElementById('submitBtn');
             if (form && submitBtn) {
@@ -311,7 +303,6 @@
 
         });
 
-        // (opsional) kalau kamu masih mau showAlert untuk dipakai nanti:
         function showAlert(message, type = 'error') {
             const existingAlerts = document.querySelectorAll('.alert');
             existingAlerts.forEach(a => a.remove());

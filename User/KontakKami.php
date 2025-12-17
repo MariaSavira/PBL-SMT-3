@@ -22,7 +22,7 @@
 <body>
     <div id="header"></div>
 
-    <!-- HEADING -->
+    
     <div class="heading">
         <h1>Kontak Kami</h1>
         <p>Jika memiliki pertanyaan atau ingin berkomunikasi dengan kami,
@@ -32,13 +32,13 @@
     <div class="container">
         <div class="card">
 
-            <!-- KIRI -->
+            
             <div class="left">
                 <h2>Hubungi Kami</h2>
                 <p>Silakan tinggalkan pesan atau pertanyaan Anda melalui
                     formulir di bawah ini.</p>
 
-                <!-- kirim.php ada di luar folder User, jadi pakai ../ -->
+                
                 <form action="../kirim.php" method="POST" enctype="multipart/form-data">
 
                     <label for="nama">Nama Lengkap</label>
@@ -78,7 +78,7 @@
                         <span>Upload File</span>
                     </button>
 
-                    <!-- FILE INPUT HARUS PUNYA NAME & ADA DI DALAM FORM -->
+                    
                     <input
                         type="file"
                         id="fileInput"
@@ -101,12 +101,12 @@
                         <button type="button" class="file-link" id="fileViewBtn">Lihat</button>
                     </div>
 
-                    <!-- BUTTON KIRIM -->
+                    
                     <button type="submit" class="btn" id="btn-kirim">Kirim Pesan</button>
                 </form>
-            </div> <!-- end .left -->
+            </div> 
 
-            <!-- KANAN -->
+            
             <div class="right">
                 <h2>Informasi Kontak</h2>
                 <p class="sub">Kami menyediakan beberapa opsi kontak untuk
@@ -154,12 +154,12 @@
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.5304465643894!2d112.6145444!3d-7.9440069!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd629dfd58aaf95%3A0xe72a182dfd18e01c!2sGedung%20Teknik%20Sipil%2C%20Teknik%20Informatika%20%26%20Magister%20Terapan%2C%20POLITEKNIK%20NEGERI%20MALANG!5e0!3m2!1sid!2sid!4v1763884713528!5m2!1sid!2sid"
                         loading="lazy" allowfullscreen></iframe>
                 </div>
-            </div> <!-- end .right -->
+            </div> 
 
-        </div> <!-- end .card -->
-    </div> <!-- end .container -->
+        </div> 
+    </div> 
 
-    <!-- NOTIFICATION -->
+    
     <div id="notification" class="notification" style="display:none;">
         <div class="notification-content">
             <div class="notification-icon" id="notification-icon"></div>
@@ -190,14 +190,13 @@
             const closeBtn           = document.getElementById('closeNotification');
             const overlay            = document.getElementById('overlay');
 
-            // Trigger file input
             uploadBtn.addEventListener('click', function () {
                 fileInput.click();
             });
 
             let currentFileUrl = null;
 
-            // Fungsi notifikasi (success / error)
+        
             function showNotification(isSuccess, customMessage) {
                 notification.classList.remove('success', 'error');
 
@@ -222,12 +221,12 @@
                 }, 5000);
             }
 
-            // Preview file PDF + validasi
+            
             fileInput.addEventListener('change', function () {
                 const file = this.files[0];
                 if (!file) return;
 
-                // Hanya PDF
+                
                 if (file.type !== 'application/pdf') {
                     showNotification(false, 'Hanya file PDF yang diperbolehkan.');
                     this.value = '';
@@ -235,7 +234,7 @@
                     return;
                 }
 
-                // Maksimal 5 MB
+                
                 if (file.size > 5 * 1024 * 1024) {
                     showNotification(false, 'Ukuran file maksimal 5 MB.');
                     this.value = '';
@@ -243,12 +242,12 @@
                     return;
                 }
 
-                // Tampilkan preview
+                
                 fileNameEl.textContent = file.name;
                 const sizeMB = file.size / (1024 * 1024);
                 fileSizeEl.textContent = sizeMB.toFixed(1) + ' MB';
 
-                // revoke URL lama kalau ada
+                
                 if (currentFileUrl) {
                     URL.revokeObjectURL(currentFileUrl);
                 }
@@ -261,13 +260,13 @@
                 filePreview.style.display = 'flex';
             });
 
-            // Tutup notif manual
+            
             closeBtn.addEventListener('click', function () {
                 notification.style.display = 'none';
                 overlay.style.display      = 'none';
             });
 
-            // BACA STATUS DARI URL (?status=...)
+            
             const params = new URLSearchParams(window.location.search);
             const status = params.get('status');
 

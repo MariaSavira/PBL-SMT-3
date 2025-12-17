@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // ================== TOMBOL TAMBAH ==================
+    
     const btnTambah = document.getElementById("btnTambah");
     if (btnTambah) {
         btnTambah.addEventListener("click", function () {
@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ================== ELEMENT UTAMA ==================
     const tbody         = document.querySelector(".table-container tbody");
     const searchInput   = document.querySelector(".search-box input");
     const resultCountEl = document.querySelector(".search-box .result-count");
@@ -19,16 +18,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const pagination    = document.querySelector(".pagination");
 
     if (!tbody) return;
-
-    // ================== STATE PAGINATION & FILTER ==================
-    const rowsPerPage = 6; // harus sama dengan PHP $limit
+    
+    const rowsPerPage = 6; 
     let currentPage   = 1;
     let sortState     = "default";
     let emptyRow      = null;
     let allRows       = [];
     let filteredRows  = [];
-
-    // set currentPage awal dari URL (?page=)
+    
     try {
         const urlPage = new URL(window.location.href).searchParams.get("page");
         const parsed  = parseInt(urlPage || "1", 10);
@@ -50,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     filteredRows = [...allRows];
 
-    // ================== FUNCTION HELPER ==================
+    
     function getTotalPages() {
         return Math.max(1, Math.ceil(filteredRows.length / rowsPerPage));
     }
@@ -187,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function () {
         applySearch();
     }
 
-    // ================== EVENT LISTENERS ==================
+    
     if (searchInput) {
         searchInput.addEventListener("input", applySearch);
     }
@@ -246,7 +243,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Pagination
     if (pagination) {
         pagination.addEventListener("click", function (e) {
             const link = e.target.closest(".page-link");
@@ -280,8 +276,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-
-    // Checkbox "check all"
+    
     const checkAll = document.getElementById("check-all");
     if (checkAll) {
         checkAll.addEventListener("change", function () {
@@ -291,8 +286,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
     }
-
-    // BULK DELETE: cek dulu ada yang kepilih
+    
     const btnDelete = document.getElementById("btnDelete");
     if (btnDelete) {
         btnDelete.addEventListener("click", function (e) {
@@ -312,7 +306,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ================== ACTION MENU (per-row) ==================
     const table = document.querySelector(".table-container");
 
     function closeAllActionMenus() {
@@ -345,12 +338,12 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ================== INIT AWAL ==================
+    
     updateResultCount();
     updateFilterUI();
     renderPage();
 
-    // (optional) kalau nanti kamu punya filter dropdown
+    
     const toggleFilter = document.querySelector(".filter-toggle");
     const filterMenu   = document.querySelector(".filter-menu");
 

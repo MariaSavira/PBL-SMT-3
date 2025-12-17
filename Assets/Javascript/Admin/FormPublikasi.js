@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const toggle = dropdown.querySelector('.dropdown-toggle');
     const label  = dropdown.querySelector('.dropdown-label');
     const menu   = dropdown.querySelector('.dropdown-menu');
-    const hidden = dropdown.querySelector('input[name="status"]');
+    const hidden = dropdown.querySelector('input[type="hidden"]');
     const placeholder = dropdown.dataset.placeholder || 'Pilih';
 
     toggle.addEventListener('click', e => {

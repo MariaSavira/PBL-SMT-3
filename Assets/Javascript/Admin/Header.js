@@ -68,6 +68,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         titleText = "Karya Laboratorium";
     } else if (currentPath.includes("/peminjamanlab/")) {
         titleText = "Peminjaman Laboratorium";
+    } else if (currentPath.includes("/pengumuman_lab/")) {
+        titleText = "Pengumuman Laboratorium";
     } else if (currentPath.endsWith("/dashboard.php")) {
         titleText = "Dashboard";
     }

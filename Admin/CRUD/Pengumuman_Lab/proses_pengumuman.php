@@ -1,8 +1,7 @@
 <?php
-require_once 'config.php';
+require_once __DIR__ . '/config.php';
 
 header('Content-Type: application/json');
-
 $action = $_POST['action'] ?? $_GET['action'] ?? '';
 
 try {
@@ -10,7 +9,6 @@ try {
     
     switch ($action) {
         case 'tambah':
-            // Validasi input
             if (empty($_POST['isi'])) {
                 throw new Exception('Isi pengumuman harus diisi');
             }
@@ -18,10 +16,8 @@ try {
                 throw new Exception('Tanggal terbit harus diisi');
             }
             
-            // Get logged in user
             $uploader = getLoggedInUser();
             
-            // Insert data
             $sql = "INSERT INTO pengumuman (isi, tanggal_terbit, uploader, status) 
                     VALUES (:isi, :tanggal_terbit, :uploader, :status)";
             
@@ -40,7 +36,6 @@ try {
             break;
             
         case 'edit':
-            // Validasi input
             if (empty($_POST['id_pengumuman'])) {
                 throw new Exception('ID pengumuman tidak ditemukan');
             }
@@ -48,7 +43,6 @@ try {
                 throw new Exception('Isi pengumuman harus diisi');
             }
             
-            // Update data
             $sql = "UPDATE pengumuman SET 
                     isi = :isi, 
                     tanggal_terbit = :tanggal_terbit, 
@@ -74,7 +68,6 @@ try {
                 throw new Exception('ID pengumuman tidak ditemukan');
             }
             
-            // Hapus data
             $stmt = $conn->prepare("DELETE FROM pengumuman WHERE id_pengumuman = :id");
             $stmt->execute([':id' => $_POST['id']]);
             
@@ -87,7 +80,6 @@ try {
         case 'get_data':
             $id = $_GET['id'] ?? null;
             if ($id) {
-                // Get single data
                 $stmt = $conn->prepare("SELECT * FROM pengumuman WHERE id_pengumuman = :id");
                 $stmt->execute([':id' => $id]);
                 $data = $stmt->fetch();
@@ -101,7 +93,6 @@ try {
                     throw new Exception('Data tidak ditemukan');
                 }
             } else {
-                // Get all data
                 $stmt = $conn->query("SELECT * FROM pengumuman ORDER BY tanggal_terbit DESC");
                 $data = $stmt->fetchAll();
                 
@@ -120,7 +111,6 @@ try {
             $ids = array_map('intval', $_POST['ids']);
             $placeholders = implode(',', array_fill(0, count($ids), '?'));
             
-            // Hapus data
             $stmt = $conn->prepare("DELETE FROM pengumuman WHERE id_pengumuman IN ($placeholders)");
             $stmt->execute($ids);
             

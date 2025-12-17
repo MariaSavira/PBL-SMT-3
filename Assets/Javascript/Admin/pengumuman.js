@@ -1,16 +1,14 @@
-// Global variables
+
 let isCheckMode = false;
 let selectedItems = [];
 let allData = [];
 let deleteId = null;
 let activeDropdown = null;
 
-// Load data on page load
 document.addEventListener('DOMContentLoaded', function() {
     loadPengumuman();
     checkSidebarState();
     
-    // Close dropdown when clicking outside
     document.addEventListener('click', function(e) {
         if (!e.target.closest('.btn-more') && !e.target.closest('.dropdown-menu')) {
             closeAllDropdowns();
@@ -18,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Check sidebar state
 function checkSidebarState() {
     const sidebar = document.getElementById('sidebar');
     const mainContainer = document.getElementById('mainContainer');
@@ -40,7 +37,6 @@ function checkSidebarState() {
     }
 }
 
-// Load Pengumuman
 async function loadPengumuman() {
     const tableBody = document.getElementById('tableBody');
     
@@ -74,7 +70,6 @@ async function loadPengumuman() {
     }
 }
 
-// Render table
 function renderTable(data) {
     const tableBody = document.getElementById('tableBody');
     document.getElementById('totalResult').textContent = data.length;
@@ -143,33 +138,32 @@ function renderTable(data) {
     tableBody.innerHTML = html;
 }
 
-// Toggle dropdown menu
 function toggleDropdown(event, id) {
     event.stopPropagation();
     
     const dropdown = document.getElementById(`dropdown-${id}`);
     const allDropdowns = document.querySelectorAll('.dropdown-menu');
     
-    // Close all other dropdowns
+    
     allDropdowns.forEach(d => {
         if (d.id !== `dropdown-${id}`) {
             d.classList.remove('active');
         }
     });
     
-    // Toggle current dropdown
+    
     dropdown.classList.toggle('active');
     activeDropdown = dropdown.classList.contains('active') ? dropdown : null;
 }
 
-// Close all dropdowns
+
 function closeAllDropdowns() {
     const allDropdowns = document.querySelectorAll('.dropdown-menu');
     allDropdowns.forEach(d => d.classList.remove('active'));
     activeDropdown = null;
 }
 
-// Truncate text helper
+
 function truncateText(text, maxLength) {
     if (!text) return '';
     const stripped = text.replace(/<[^>]*>/g, '');
@@ -177,7 +171,7 @@ function truncateText(text, maxLength) {
     return stripped.substr(0, maxLength) + '...';
 }
 
-// Format date
+
 function formatDate(dateString) {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, '0');
@@ -186,7 +180,7 @@ function formatDate(dateString) {
     return `${day}-${month}-${year}`;
 }
 
-// Toggle Check Mode
+
 function toggleCheckMode() {
     isCheckMode = !isCheckMode;
     selectedItems = [];
@@ -209,7 +203,7 @@ function toggleCheckMode() {
     updateSelectedCount();
 }
 
-// Handle checkbox change
+
 function handleCheckboxChange() {
     selectedItems = [];
     const checkboxes = document.querySelectorAll('.item-checkbox:checked');
@@ -217,12 +211,12 @@ function handleCheckboxChange() {
     updateSelectedCount();
 }
 
-// Update selected count
+
 function updateSelectedCount() {
     document.getElementById('selectedCount').textContent = selectedItems.length;
 }
 
-// Search table
+
 function searchTable() {
     const searchInput = document.getElementById('searchInput').value.toLowerCase();
     
@@ -235,26 +229,26 @@ function searchTable() {
     renderTable(filteredData);
 }
 
-// Edit Pengumuman
+
 function editPengumuman(id) {
     closeAllDropdowns();
     window.location.href = `edit_pengumuman.php?id=${id}`;
 }
 
-// Show delete modal
+
 function showDeleteModal(id) {
     closeAllDropdowns();
     deleteId = id;
     document.getElementById('deleteModal').classList.add('active');
 }
 
-// Close delete modal
+
 function closeDeleteModal() {
     deleteId = null;
     document.getElementById('deleteModal').classList.remove('active');
 }
 
-// Confirm delete
+
 async function confirmDelete() {
     if (!deleteId) return;
     
@@ -282,7 +276,7 @@ async function confirmDelete() {
     }
 }
 
-// Delete selected items
+
 async function deleteSelected() {
     if (selectedItems.length === 0) {
         showNotification('Pilih minimal satu item untuk dihapus', 'error');
@@ -317,7 +311,7 @@ async function deleteSelected() {
     }
 }
 
-// Show notification
+
 function showNotification(message, type = 'success') {
     const notification = document.createElement('div');
     notification.style.cssText = `
@@ -350,7 +344,7 @@ function showNotification(message, type = 'success') {
     }, 3000);
 }
 
-// Add CSS animations
+
 const style = document.createElement('style');
 style.textContent = `
     @keyframes slideIn {

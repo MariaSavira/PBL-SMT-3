@@ -36,6 +36,16 @@
         }
     }
 
+    if ($search !== '') {
+        $conditions[] = "(
+                LOWER(nama) ILIKE $" . $idx . "
+                OR LOWER(jabatan) ILIKE $" . $idx . "
+                OR keahlian::text ILIKE $" . $idx . "
+            )";
+        $params[] = '%' . strtolower($search) . '%';
+        $idx++;
+    }
+
     $whereSql = $conditions ? 'WHERE ' . implode(' AND ', $conditions) : '';
 
     switch ($sort) {
@@ -66,9 +76,9 @@
 
     if (isset($_GET['export']) && $_GET['export'] === '1') {
         $sqlExport = "SELECT id_anggota, nama, keahlian, jabatan, foto, status
-                        FROM mv_anggota_keahlian
-                        $whereSql
-                        $orderSql";
+                            FROM mv_anggota_keahlian
+                            $whereSql
+                            $orderSql";
 
         if ($params) {
             $resExport = qparams($sqlExport, $params);
@@ -99,8 +109,8 @@
 
     if ($params) {
         $sqlCount = "SELECT COUNT(*) AS total
-                        FROM mv_anggota_keahlian
-                        $whereSql";
+                            FROM mv_anggota_keahlian
+                            $whereSql";
         $resCount = qparams($sqlCount, $params);
     } else {
         $resCount = q("SELECT COUNT(*) AS total FROM mv_anggota_keahlian");
@@ -121,10 +131,10 @@
     $paramsWithPage[] = $offset;
 
     $sql = "SELECT *
-                FROM mv_anggota_keahlian
-                $whereSql
-                $orderSql
-                LIMIT $" . $idx . " OFFSET $" . ($idx + 1);
+                    FROM mv_anggota_keahlian
+                    $whereSql
+                    $orderSql
+                    LIMIT $" . $idx . " OFFSET $" . ($idx + 1);
 
     $res  = qparams($sql, $paramsWithPage);
     $rows = pg_fetch_all($res) ?: [];
@@ -144,6 +154,7 @@
 ?>
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -406,36 +417,33 @@
             </div>
 
             <div class="pagination">
-                <?php if ($totalPages > 1): ?>
+                <?php if ($page > 1): ?>
+                    <a href="<?= htmlspecialchars(build_query(['page' => $page - 1])) ?>" class="page-link prev">
+                        &laquo; Sebelumnya
+                    </a>
+                <?php endif; ?>
 
-                    <?php if ($page > 1): ?>
-                        <a href="?page=<?= $page - 1 ?>" class="page-link prev">
-                            &laquo; Sebelumnya
-                        </a>
-                    <?php endif; ?>
+                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                    <a href="<?= htmlspecialchars(build_query(['page' => $i])) ?>"
+                        class="page-link <?= ($i === $page) ? 'active' : '' ?>">
+                        <?= $i ?>
+                    </a>
+                <?php endfor; ?>
 
-                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                        <a href="?page=<?= $i ?>"
-                            class="page-link <?= ($i === $page) ? 'active' : '' ?>">
-                            <?= $i ?>
-                        </a>
-                    <?php endfor; ?>
-
-                    <?php if ($page < $totalPages): ?>
-                        <a href="?page=<?= $page + 1 ?>" class="page-link next">
-                            Berikutnya &raquo;
-                        </a>
-                    <?php endif; ?>
-
+                <?php if ($page < $totalPages): ?>
+                    <a href="<?= htmlspecialchars(build_query(['page' => $page + 1])) ?>" class="page-link next">
+                        Berikutnya &raquo;
+                    </a>
                 <?php endif; ?>
             </div>
         </div>
+        
     </main>
     <script src="../../../Assets/Javascript/Admin/Sidebar.js"></script>
     <script src="../../../Assets/Javascript/Admin/Header.js"></script>
 
     <script>
-        window.pageStatus  = <?= json_encode($_GET['status']  ?? '') ?>;
+        window.pageStatus = <?= json_encode($_GET['status']  ?? '') ?>;
         window.pageMessage = <?= json_encode($_GET['message'] ?? '') ?>;
     </script>
     <script src="../../../Assets/Javascript/Admin/AnggotaLab.js"></script>

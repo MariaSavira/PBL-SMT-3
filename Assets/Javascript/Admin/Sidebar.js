@@ -6,19 +6,12 @@ function loadCSS(url) {
     link.href = url;
     document.head.appendChild(link);
 }
-// document.querySelectorAll(".menu span").forEach(a => {
-//     if (a.getAttribute("href") === currentPage.split("/").pop()) {
-//         a.classList.add("active");
 
-//         console.log(a.getAttribute())
-//     }
-// });
-
-async function loadComponent(id, file, url) { //async function maksundya asinkronus, dia hasilnya terlambat
+async function loadComponent(id, file, url) { 
     loadCSS(url);
     const target = document.getElementById(id);
-    const result = await fetch(file); //ambil hasil dari server
-    const html = await result.text(); //konversi data mentah menjadi html
+    const result = await fetch(file); 
+    const html = await result.text(); 
     target.innerHTML = html;
     return target;
 }
@@ -27,23 +20,20 @@ document.addEventListener("DOMContentLoaded", async function () {
     await loadComponent(
         "sidebar",
         "/PBL-SMT-3/Admin/Sidebar.html",
-        "/PBL-SMT-3/Assets/Css/Admin/Sidebar.css"); //fungsi async bisa pake await
+        "/PBL-SMT-3/Assets/Css/Admin/Sidebar.css"); 
 
     const sidebar = document.getElementById("ini-sidebar");
     const content = document.getElementById("content");
     const logo = document.getElementById("sidebar-toggle");
 
     logo.addEventListener("click", () => {
-        // sidebar.classList.toggle("sidebar");
+        
         sidebar.classList.toggle("collapsed");
         content.classList.toggle("collapsed");
     });
 
     document.querySelectorAll("li a").forEach(a => {
-        // if (a.getAttribute("href") === currentPage.split("/")) {
-        //     a.classList.add("active");
-        //     console.log(a.getAttribute("href"))
-        // }
+  
         const link = a.getAttribute("href");
 
         if (a.getAttribute("href") === currentPage.split("/")) {
@@ -56,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const menuItems = document.querySelectorAll(".sidebar-menu .menu-item a");
 
     menuItems.forEach(link => {
-        // Ambil file terakhir dari href
+        
         let linkFile = link.getAttribute("href").split("/").pop();
 
         if (currentFile === linkFile) {

@@ -11,7 +11,7 @@ require '../PHPMailer/src/SMTP.php';
 header('Content-Type: application/json');
 
 try {
-    // Ambil data form
+    
     $nama_peminjam     = $_POST['nama_peminjam'];
     $email             = $_POST['email'];
     $instansi          = $_POST['instansi'];
@@ -19,7 +19,7 @@ try {
     $tanggal_pakai     = $_POST['tanggal_pakai'];
     $keperluan         = $_POST['keperluan'];
 
-    // Insert ke database
+    
     $sql = "INSERT INTO peminjaman_lab 
             (nama_peminjam, email, instansi, tanggal_pengajuan, tanggal_pakai, keperluan)
             VALUES
@@ -35,7 +35,7 @@ try {
         ':keperluan'     => $keperluan
     ]);
 
-    //      KIRIM EMAIL KE ADMIN 
+    
     $mail = new PHPMailer(true);
 
     try {
@@ -43,16 +43,16 @@ try {
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
         $mail->Username   = 'rakhmatariyantodummymail@gmail.com';
-        $mail->Password   = 'sezb qgne mzzn rzus'; // APP PASSWORD TANPA SPASI
+        $mail->Password   = 'sezb qgne mzzn rzus'; 
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
 
-        // Pengirim & penerima
+        
         $mail->Username = 'rakhmatariyantodummymail@gmail.com';
         $mail->setFrom('rakhmatariyantodummymail@gmail.com', 'Notifikasi Peminjaman Lab');
         $mail->addAddress('rakhmatariyantodummymail@gmail.com'); 
 
-        // Isi email
+        
         $mail->isHTML(true);
         $mail->Subject = "Peminjaman Baru dari $nama_peminjam";
         $mail->Body = "
@@ -67,7 +67,7 @@ try {
         $mail->send();
 
     } catch (Exception $e) {
-        // INI WAJIB → tampilin error biar keliatan kenapa gagal
+        
         echo json_encode([
             'status' => 'error_email',
             'message' => $mail->ErrorInfo

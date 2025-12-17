@@ -2,10 +2,18 @@
     require_once __DIR__ . '../../../Cek_Autentikasi.php';
     require_once 'config.php';
 
-    // ===== Author server-side (display only) =====
+    $status  = $_SESSION['flash_status']  ?? '';
+    $message = $_SESSION['flash_message'] ?? '';
+    $redirectTo = $_SESSION['flash_redirect'] ?? '';
+
+    unset(
+        $_SESSION['flash_status'],
+        $_SESSION['flash_message'],
+        $_SESSION['flash_redirect']
+    );
+
     $author_name = $_SESSION['nama'] ?? ($_SESSION['nama'] ?? 'Admin');
 
-    // ===== Get berita data =====
     $id = (int)($_GET['id'] ?? 0);
     $stmt = $pdo->prepare("SELECT * FROM berita WHERE id_berita = ?");
     $stmt->execute([$id]);
@@ -16,18 +24,6 @@
         exit;
     }
 
-    // ===== Flash notification (from proses_berita.php) =====
-    $status     = $_SESSION['flash_status']   ?? '';
-    $message    = $_SESSION['flash_message']  ?? '';
-    $redirectTo = $_SESSION['flash_redirect'] ?? '';
-
-    unset(
-        $_SESSION['flash_status'],
-        $_SESSION['flash_message'],
-        $_SESSION['flash_redirect']
-    );
-
-    // ===== Status current (session override > db) =====
     $currentStatus = $_SESSION['form_data']['status'] ?? ($berita['status'] ?? 'publish');
     $statusLabel   = ($currentStatus === 'draft') ? 'Draft' : 'Publish';
 ?>
@@ -49,7 +45,7 @@
 </head>
 
 <body>
-    <!-- Sidebar -->
+    
     <div id="sidebar"></div>
 
     <main class="content" id="content">
@@ -128,7 +124,7 @@
                                     <button type="button" class="dropdown-item" data-value="draft">Draft</button>
                                 </div>
 
-                                <!-- SATU-SATUNYA INPUT STATUS -->
+                                
                                 <input
                                     type="hidden"
                                     name="status"
@@ -207,10 +203,24 @@
         </section>
     </main>
 
+    <div id="notification" class="notification" style="display:none;">
+        <div class="notification-content">
+            <div class="notification-icon" id="notification-icon"></div>
+            <div class="notification-text">
+                <div class="notification-title" id="notification-title"></div>
+                <div class="notification-message" id="notification-message"></div>
+            </div>
+            <button id="closeNotification" class="close-btn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div id="overlay" class="overlay" style="display:none;"></div>                                   
+
     <script src="../../../Assets/Javascript/Admin/berita.js"></script>
 
     <script>
-        // ===== STATUS DROPDOWN -> hidden input
         document.addEventListener('DOMContentLoaded', function () {
             const dropdown = document.getElementById('statusSelect');
             if (dropdown) {
@@ -245,7 +255,6 @@
             }
         });
 
-        // ===== FILE PICKER + PREVIEW + VALIDATION
         document.addEventListener('DOMContentLoaded', function () {
             const uploadArea = document.getElementById('uploadArea');
             const inputFile = document.getElementById('gambar');
@@ -293,7 +302,6 @@
             });
         });
 
-        // ===== FORM VALIDATION (NO AUTHOR CHECK)
         function validateForm() {
             const judul = document.getElementById('judul').value.trim();
             const tanggal = document.getElementById('tanggal').value;
@@ -321,7 +329,6 @@
             if (isi.length < 20) { alert('Isi berita minimal 20 karakter!'); return false; }
             if (isi.length > 10000) { alert('Isi berita maksimal 10.000 karakter!'); return false; }
 
-            // gambar hanya divalidasi jika upload baru
             if (gambar > 0) {
                 const file = document.getElementById('gambar').files[0];
                 const allowed = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
@@ -330,7 +337,6 @@
                 if (file.size > 5 * 1024 * 1024) { alert('Ukuran gambar terlalu besar! Maksimal 5MB.'); return false; }
             }
 
-            // kalau tidak ada gambar baru dan tidak ada gambar lama
             if (gambar === 0 && !gambarLama) {
                 alert('Gambar berita harus diupload! Belum ada gambar sebelumnya.');
                 return false;
@@ -353,7 +359,6 @@
             });
         });
 
-        // ===== CHARACTER COUNTER
         document.addEventListener('DOMContentLoaded', function () {
             const isiTextarea = document.getElementById('isi');
             if (!isiTextarea) return;
@@ -378,14 +383,13 @@
     <script src="../../../Assets/Javascript/Admin/Sidebar.js"></script>
 
     <script>
-        window.profileStatus = <?= json_encode($status ?? '') ?>;
+        window.profileStatus = <?= json_encode($status  ?? '') ?>;
         window.profileMessage = <?= json_encode($message ?? '') ?>;
-        window.profileRedirectUrl = <?= json_encode($redirectTo ?? '') ?>;
+        window.profileRedirectUrl = <?= json_encode($redirectTo) ?>;
     </script>
 
     <script src="../../../Assets/Javascript/Admin/Profile.js"></script>
     <script src="../../../Assets/Javascript/Admin/Header.js"></script>
-    <script src="../../../Assets/Javascript/Admin/FormBerita.js"></script>
 </body>
 
 </html>

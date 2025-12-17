@@ -2,9 +2,8 @@
 require_once __DIR__ . '../../../Cek_Autentikasi.php';
 require_once 'config.php';
 
-$user_name = $_SESSION['nama'] ?? ($_SESSION['username'] ?? 'Maria Savira');
+$user_name = $_SESSION['nama'] ?? ($_SESSION['username'] ?? '');
 
-// default tanggal: kalau session ada pakai itu, kalau tidak pakai hari ini
 $defaultTanggal = $_SESSION['form_data']['tanggal_upload'] ?? date('Y-m-d');
 ?>
 <!DOCTYPE html>
@@ -14,7 +13,6 @@ $defaultTanggal = $_SESSION['form_data']['tanggal_upload'] ?? date('Y-m-d');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tambah Galeri</title>
 
-    <!-- SAMAIN CSS KE EDIT_BERITA -->
     <link rel="stylesheet" href="/PBL-SMT-3/Assets/Css/Admin/FormBerita.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,7 +27,6 @@ $defaultTanggal = $_SESSION['form_data']['tanggal_upload'] ?? date('Y-m-d');
 <body>
     <div id="sidebar"></div>
 
-    <!-- SAMAIN STRUKTUR KE EDIT_BERITA -->
     <main class="content" id="content">
         <div id="header"></div>
 
@@ -54,7 +51,7 @@ $defaultTanggal = $_SESSION['form_data']['tanggal_upload'] ?? date('Y-m-d');
                     <p class="form-subtitle">Lengkapi informasi mengenai galeri berikut.</p>
 
                     <div class="form-grid">
-                        <!-- Judul -->
+                        
                         <div class="field-group">
                             <label for="judul">Judul</label>
                             <input
@@ -68,7 +65,6 @@ $defaultTanggal = $_SESSION['form_data']['tanggal_upload'] ?? date('Y-m-d');
                             >
                         </div>
 
-                        <!-- Tanggal Upload -->
                         <div class="field-group">
                             <label for="tanggal_upload">Tanggal Terbit</label>
                             <input
@@ -81,21 +77,24 @@ $defaultTanggal = $_SESSION['form_data']['tanggal_upload'] ?? date('Y-m-d');
                             >
                         </div>
 
-                        <!-- Author -->
                         <div class="field-group">
                             <label for="uploaded_by">Author</label>
                             <input
                                 type="text"
-                                id="uploaded_by"
-                                name="uploaded_by"
                                 placeholder="Masukkan nama author"
                                 class="field-input"
                                 value="<?= htmlspecialchars($_SESSION['form_data']['uploaded_by'] ?? $user_name) ?>"
-                                required
+                                disabled
+                            >
+                            <input
+                                type="hidden"
+                                id="uploaded_by"
+                                name="uploaded_by"
+                                class="field-input"
+                                value="<?= htmlspecialchars($_SESSION['id_anggota']) ?>"
                             >
                         </div>
 
-                        <!-- Tipe Media (biar konsisten: pakai select native aja) -->
                         <div class="field-group">
                             <label for="tipe_media">Tipe Media</label>
                             <select id="tipe_media" name="tipe_media" class="field-input" required>
@@ -105,7 +104,6 @@ $defaultTanggal = $_SESSION['form_data']['tanggal_upload'] ?? date('Y-m-d');
                             </select>
                         </div>
 
-                        <!-- Upload Foto (pakai pola upload-area edit_berita) -->
                         <div class="field-group">
                             <label for="fileInput">Gambar</label>
 
@@ -141,7 +139,6 @@ $defaultTanggal = $_SESSION['form_data']['tanggal_upload'] ?? date('Y-m-d');
                             >
                         </div>
 
-                        <!-- Deskripsi -->
                         <div class="field-group">
                             <label for="deskripsi">Deskripsi</label>
                             <textarea
@@ -169,11 +166,9 @@ $defaultTanggal = $_SESSION['form_data']['tanggal_upload'] ?? date('Y-m-d');
     <script>
     document.addEventListener('DOMContentLoaded', function () {
 
-        // default tanggal (jangan override kalau sudah ada)
         const tgl = document.getElementById('tanggal_upload');
         if (tgl && !tgl.value) tgl.valueAsDate = new Date();
 
-        // upload area click
         const uploadArea = document.getElementById('uploadArea');
         const inputFile  = document.getElementById('fileInput');
         const preview    = document.getElementById('imagePreview');
@@ -187,7 +182,6 @@ $defaultTanggal = $_SESSION['form_data']['tanggal_upload'] ?? date('Y-m-d');
         uploadArea?.addEventListener('click', openPicker);
         changeBtn?.addEventListener('click', openPicker);
 
-        // preview + validasi file
         inputFile?.addEventListener('change', function () {
             if (!this.files || !this.files[0]) return;
 
@@ -217,7 +211,6 @@ $defaultTanggal = $_SESSION['form_data']['tanggal_upload'] ?? date('Y-m-d');
             reader.readAsDataURL(file);
         });
 
-        // submit UI
         const form = document.getElementById('formGaleri');
         const submitBtn = document.getElementById('submitBtn');
         form?.addEventListener('submit', function () {

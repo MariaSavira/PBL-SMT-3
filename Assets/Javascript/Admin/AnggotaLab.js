@@ -29,7 +29,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const toggleBtn = e.target.closest(".action-toggle");
             const deleteBtn = e.target.closest(".action-delete");
 
-            
             if (toggleBtn) {
                 const cell = toggleBtn.closest(".action-cell");
                 const menu = cell ? cell.querySelector(".action-menu") : null;
@@ -43,7 +42,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 e.stopPropagation();
                 return;
             }
-
             
             if (deleteBtn && deleteBtn.closest(".action-cell")) {
                 const cell = deleteBtn.closest(".action-cell");
@@ -61,7 +59,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
         });
-
         
         document.addEventListener("click", function (e) {
             if (!e.target.closest(".action-cell")) {
@@ -69,7 +66,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-
     
     const deleteSelectionBtn = document.querySelector(".delete-selection");
 

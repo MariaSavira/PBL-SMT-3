@@ -22,7 +22,7 @@
 <body>
     <div id="header"></div>
 
-    <!-- HERO -->
+    
     <!-- <section class="profil-hero">
         <div class="profil-overlay"></div>
         <div class="profil-hero-content">
@@ -42,11 +42,10 @@
             
             pengetahuan di lingkungan akademik.</p>
     </div>
-
-    <!-- WRAPPER PUTIH FLOATING -->
+    
     <section class="wrapper-section">
         <div class="wrapper">
-        <!-- FOTO + TEKS -->
+        
             <div class="profil-top">
                 <div class="profil-img">
                     <img src="../Assets/Image/TentangKami/gambar-lab.jpg" alt="Gedung Lab">
@@ -68,7 +67,7 @@
 
     <section class="wrapper-section" style="background-color: #F7F9FB;">
         <div class="wrapper">
-        <!-- RUANG LINGKUP -->
+        
             <h2 class="section-title">Ruang Lingkup dan Tugas</h2>
 
             <div class="grid-card">
@@ -99,7 +98,7 @@
         </div>
     </section>
 
-    <!-- VISI MISI -->
+    
     <section class="wrapper-section" style="background-color: #FFF;">
         <div class="wrapper">
             <h2 class="section-title">Visi dan Misi Kami</h2>
@@ -142,7 +141,7 @@
 
     <section class="wrapper-section">
         <div class="wrapper">
-            <!-- FASILITAS LAB -->
+            
             <h2 class="section-title">Fasilitas Lab</h2>
 
             <div class="grid-card">

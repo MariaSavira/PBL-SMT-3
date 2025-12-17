@@ -50,10 +50,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 5000);
     }
 
-    btnTutupNotif.addEventListener('click', function () {
+    function hideNotif() {
         notifEl.style.display = 'none';
         overlay.style.display = 'none';
-    });
+    }
+
+    btnTutupNotif.addEventListener('click', hideNotif);
 
     const statusFromPhp = window.profileStatus || '';
     const messageFromPhp = window.profileMessage || '';
@@ -62,19 +64,13 @@ document.addEventListener('DOMContentLoaded', function () {
     if (statusFromPhp === 'success') {
         tampilNotif(true, messageFromPhp);
 
-        setTimeout(function () {
-            if (redirectUrl) {
-                window.location.href = redirectUrl;
-            } else {
-                window.history.back();
-            }
+        setTimeout(() => {
+            if (redirectUrl) window.location.href = redirectUrl;
+            else window.history.back();
         }, 2000);
 
         setTimeout(hideNotif, 2000);
     } else if (statusFromPhp === 'error') {
-
         tampilNotif(false, messageFromPhp);
-
-        setTimeout(hideNotif, 5000);
     }
 });

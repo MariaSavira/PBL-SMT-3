@@ -2,25 +2,18 @@
 require_once __DIR__ . '/Cek_Autentikasi.php';
 require_once __DIR__ . '/Koneksi/KoneksiSasa.php';
 
-/**
- * Helper aman: ambil 1 row assoc
- */
 function fetch_one_assoc(string $sql): ?array {
     $res = q($sql);
     $row = $res ? pg_fetch_assoc($res) : false;
     return $row ?: null;
 }
 
-/**
- * Helper: parsing keahlian dari MV (bisa "A, B" atau "{A,B}" atau "A|B")
- */
 function parse_keahlian(?string $raw): array {
     if (!$raw) return [];
 
     $raw = trim($raw);
     if ($raw === '') return [];
 
-    // Postgres array: {"A","B"}
     if ($raw[0] === '{') {
         $raw = trim($raw, '{}');
         $items = explode(',', $raw);
@@ -29,7 +22,7 @@ function parse_keahlian(?string $raw): array {
     }
 
     return array_values(array_filter(array_map(function ($v) {
-        return trim($v, " \t\n\r\0\x0B\""); // ⬅️ HAPUS TANDA PETIK
+        return trim($v, " \t\n\r\0\x0B\""); 
     }, $items)));
 }
 
@@ -40,25 +33,21 @@ $totalAjuanPeminjaman = 0;
 $labelsBulan = [];
 $dataBulan   = [];
 
-/* ------------------- TOTAL ARTIKEL ------------------- */
 try {
     $row = fetch_one_assoc("SELECT COUNT(*) AS total FROM berita");
     $totalArtikel = (int)($row['total'] ?? 0);
 } catch (Throwable $e) {}
 
-/* ------------------- TOTAL AJUAN ------------------- */
 try {
     $row = fetch_one_assoc("SELECT COUNT(*) AS total FROM peminjaman_lab");
     $totalAjuanPeminjaman = (int)($row['total'] ?? 0);
 } catch (Throwable $e) {}
 
-/* ------------------- TOTAL ANGGOTA AKTIF ------------------- */
 try {
     $row = fetch_one_assoc("SELECT COUNT(*) AS total FROM anggotalab WHERE status = TRUE");
     $totalAnggotaAktif = (int)($row['total'] ?? 0);
 } catch (Throwable $e) {}
 
-/* ------------------- DATA PEMINJAMAN PER BULAN ------------------- */
 try {
     $sql = "
         SELECT 
@@ -79,11 +68,9 @@ try {
     }
 } catch (Throwable $e) {}
 
-/* ------------------- ANGGOTA TERBARU (dari MV) ------------------- */
 $anggotaTerbaru = null;
 try {
-    // Pake created_at kalau ada. Kalau ternyata MV kamu gak punya created_at,
-    // kamu bisa ganti ORDER BY jadi "id_anggota DESC" aja.
+
     $sql = "
         SELECT id_anggota, nama, jabatan, foto, keahlian, status, created_at
         FROM mv_anggota_keahlian
@@ -93,7 +80,6 @@ try {
     ";
     $anggotaTerbaru = fetch_one_assoc($sql);
 
-    // Fallback: kalau created_at tidak ada di MV / query error di atas, coba tanpa created_at
     if (!$anggotaTerbaru) {
         $sql2 = "
             SELECT id_anggota, nama, jabatan, foto, keahlian, status
@@ -105,7 +91,7 @@ try {
         $anggotaTerbaru = fetch_one_assoc($sql2);
     }
 } catch (Throwable $e) {
-    // fallback terakhir
+
     try {
         $sql2 = "
             SELECT id_anggota, nama, jabatan, foto, keahlian, status
@@ -118,7 +104,6 @@ try {
     } catch (Throwable $e2) {}
 }
 
-/* ------------------- NOTIFIKASI ------------------- */
 $notifAjuan = [];
 $jumlahNotifBaru = 0;
 
@@ -139,7 +124,6 @@ try {
     }
 } catch (Throwable $e) {}
 
-/* ------------------- PENGUMUMAN ------------------- */
 $pengumumanTerbaru = [];
 try {
     $sql = "
@@ -254,7 +238,7 @@ try {
                     </button>
 
                     <div class="profile-menu" id="profileMenu">
-                        <a href="../ProfilAdmin/EditProfil.php" class="profile-menu-item">
+                        <a href="/PBL-SMT-3/Admin/CRUD/ProfilAdmin/EditProfil.php" class="profile-menu-item">
                             <i class="fa-regular fa-user"></i>
                             <span>Lihat Profil</span>
                         </a>
@@ -285,9 +269,7 @@ try {
         </section>
 
         <section class="content-grid">
-            <!-- ============================= -->
-            <!-- ANGGOTA TERBARU -->
-            <!-- ============================= -->
+
             <div class="anggota-section">
                 <h3 class="section-title">Anggota Terbaru</h3>
 
@@ -300,7 +282,6 @@ try {
                         <?php
                         $tags = parse_keahlian($anggotaTerbaru['keahlian'] ?? '');
 
-                        // Foto anggota terbaru
                         $fotoUrl = '';
                         if (!empty($anggotaTerbaru['foto'])) {
                             $fotoUrl = '/PBL-SMT-3/Assets/Image/AnggotaLab/' . $anggotaTerbaru['foto'];
@@ -350,9 +331,6 @@ try {
                 </div>
             </div>
 
-            <!-- ============================= -->
-            <!-- AJUAN TERBARU - KANAN -->
-            <!-- ============================= -->
             <div class="ajuan-section">
                 <div class="card card-ajuan">
                     <h3 class="card-title-center">Ajuan Terbaru</h3>
@@ -414,9 +392,6 @@ try {
                 </div>
             </div>
 
-            <!-- ============================= -->
-            <!-- PENGUMUMAN & GRAFIK -->
-            <!-- ============================= -->
             <div class="pengumuman-section">
                 <div class="row-1-cols">
 

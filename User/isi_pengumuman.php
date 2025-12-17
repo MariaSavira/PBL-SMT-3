@@ -123,7 +123,7 @@
 <body>
   <div id="header"></div>
  
-  <!-- HERO SECTION -->
+  
   <section class="hero">
       <img src="../Assets/Image/Galeri-Berita/Heading.png" alt="Hero">
       <div class="hero-overlay"></div>
@@ -133,11 +133,11 @@
       </p>
   </section>
 
-  <!-- MAIN CONTENT -->
+  
   <div class="container">
-      <!-- KONTEN PENGUMUMAN -->
+      
       <div class="content" id="pengumuman-content">
-          <!-- Skeleton Loading -->
+          
           <div class="skeleton skeleton-title"></div>
           <div class="skeleton skeleton-meta"></div>
           <div class="skeleton skeleton-text"></div>
@@ -146,11 +146,11 @@
           <div class="skeleton skeleton-text"></div>
       </div>
 
-      <!-- SIDEBAR -->
+      
       <aside class="sidebar">
           <h3>Pengumuman Terbaru</h3>
           <div id="pengumuman-sidebar">
-              <!-- Skeleton Loading -->
+              
               <div class="skeleton sidebar-skeleton"></div>
               <div class="skeleton sidebar-skeleton"></div>
               <div class="skeleton sidebar-skeleton"></div>
@@ -162,7 +162,7 @@
   <script src="../Assets/Javascript/HeaderFooter.js"></script>
   
   <script>
-      // Fungsi format tanggal lengkap
+    
       function formatTanggalLengkap(dateString) {
           const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
                         'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
@@ -176,22 +176,18 @@
           return `${day} ${month} ${year} | ${hours}:${minutes} WIB`;
       }
 
-      // Get ID dari URL
       function getPengumumanId() {
           const urlParams = new URLSearchParams(window.location.search);
           return urlParams.get('id');
       }
 
-      // Format isi pengumuman
       function formatIsiPengumuman(isi) {
           if (!isi) return '';
           
-          // Jika sudah ada HTML tags, kembalikan apa adanya
           if (isi.includes('<p>') || isi.includes('<ul>') || isi.includes('<ol>')) {
               return isi;
           }
           
-          // Jika plain text, convert newlines to <br>
           return isi.split('\n\n').map(p => {
               if (p.trim()) {
                   return `<p>${p.replace(/\n/g, '<br>')}</p>`;
@@ -200,7 +196,6 @@
           }).join('');
       }
 
-      // Load pengumuman detail
       async function loadPengumumanDetail() {
           const id = getPengumumanId();
           const contentDiv = document.getElementById('pengumuman-content');
@@ -237,7 +232,6 @@
                   return;
               }
 
-              // Cari pengumuman berdasarkan ID
               const pengumuman = result.data.find(item => item.id_pengumuman == id);
 
               if (!pengumuman) {
@@ -254,10 +248,8 @@
                   return;
               }
 
-              // Update title halaman
               document.title = 'Pengumuman - Laboratorium';
 
-              // Tampilkan konten pengumuman
               contentDiv.innerHTML = `
                   <span class="pengumuman-badge">
                       <i class="fas fa-bullhorn me-2"></i>Pengumuman
@@ -285,7 +277,6 @@
           }
       }
 
-      // Load pengumuman terbaru untuk sidebar
       async function loadPengumumanTerbaru() {
           const sidebar = document.getElementById('pengumuman-sidebar');
           
@@ -302,7 +293,6 @@
 
               const currentId = getPengumumanId();
               
-              // Filter pengumuman aktif dan exclude current
               const pengumumanList = result.data
                   .filter(p => p.status === 'Aktif' && p.id_pengumuman != currentId)
                   .sort((a, b) => new Date(b.tanggal_terbit) - new Date(a.tanggal_terbit))
@@ -335,7 +325,6 @@
           }
       }
 
-      // Load saat halaman dimuat
       document.addEventListener('DOMContentLoaded', function() {
           loadPengumumanDetail();
           loadPengumumanTerbaru();

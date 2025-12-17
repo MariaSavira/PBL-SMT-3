@@ -28,6 +28,13 @@
         }
     }
 
+    $search = trim($_GET['q'] ?? '');
+
+    if ($search !== '') {
+        $conditions[] = "(nama_peminjam ILIKE :q OR email ILIKE :q OR instansi ILIKE :q OR keperluan ILIKE :q)";
+        $params[':q'] = '%' . $search . '%';
+    }
+
     $whereSql = $conditions ? 'WHERE ' . implode(' AND ', $conditions) : '';
 
     $sort = $_GET['sort'] ?? 'default';
@@ -78,8 +85,13 @@
     $totalPages = max(1, (int)ceil($totalData / $limit));
 
     $sql = "
-        SELECT *
-        FROM peminjaman_lab
+        SELECT 
+            p.*,
+            a.nama AS approved_name,
+            a.username AS approved_username
+        FROM peminjaman_lab p
+        LEFT JOIN anggotalab a 
+            ON a.id_anggota = p.approved_by
         $whereSql
         $orderSql
         LIMIT :limit OFFSET :offset
@@ -188,7 +200,6 @@
                                 'page'        => 1
                             ])) ?>" class="clear-filter">Hapus Filter</a>
             </div>
-
             
             <div class="right-actions">
                 <a href="export.php" style="text-decoration:none;">
@@ -204,7 +215,6 @@
                         Urutkan : <strong id="sort-label"><?= htmlspecialchars($sortLabel) ?></strong>
                     </button>
 
-                    
                     <div id="sort-menu" class="sort-menu hidden">
                         <div data-sort="default" class="<?= $sort === 'default' ? 'active' : '' ?>">Default</div>
                         <div data-sort="latest"  class="<?= $sort === 'latest'  ? 'active' : '' ?>">Terbaru</div>
@@ -215,7 +225,6 @@
                 </div>
             </div>
         </div>
-
         
         <div class="table-container">
             <table>
@@ -282,9 +291,15 @@
                             </td>
 
                             <td class="approved-by">
-                                <?= !empty($row['approved_by'])
-                                    ? htmlspecialchars($row['approved_by'])
-                                    : '-' ?>
+                                <?php
+                                    $approvedText = '-';
+                                    if (!empty($row['approved_by'])) {
+
+                                        $approvedText = $row['approved_name']
+                                            ?: ($row['approved_username'] ?: $row['approved_by']);
+                                    }
+                                    echo htmlspecialchars($approvedText);
+                                ?>
                             </td>
 
                             <td>
@@ -319,7 +334,6 @@
                 </tbody>
             </table>
         </div>
-
         
         <div id="catatan-modal" class="modal-overlay">
             <div class="modal-box">
@@ -339,7 +353,6 @@
             </div>
         </div>
 
-        
         <div class="table-footer">
             <div class="delete-selection" style="cursor: pointer">
                 <i class="fa-solid fa-trash"></i>
@@ -348,30 +361,25 @@
 
             <div class="pagination">
                 <?php
-                // PREV
                 if ($page > 1) {
                     echo "<a href='" . htmlspecialchars(build_query(['page' => $page - 1])) . "' class='page-link prev'>&laquo; Sebelumnya</a>";
                 }
 
-                // Page 1
                 if ($page > 3) {
                     echo "<a href='" . htmlspecialchars(build_query(['page' => 1])) . "' class='page-link'>1</a>";
                     echo "<span class='dots'>...</span>";
                 }
 
-                // current-1, current, current+1
                 for ($i = max(1, $page - 1); $i <= min($totalPages, $page + 1); $i++) {
                     $activeClass = ($i == $page) ? "active" : "";
                     echo "<a href='" . htmlspecialchars(build_query(['page' => $i])) . "' class='page-link {$activeClass}'>{$i}</a>";
                 }
 
-                // last page
                 if ($page < $totalPages - 2) {
                     echo "<span class='dots'>...</span>";
                     echo "<a href='" . htmlspecialchars(build_query(['page' => $totalPages])) . "' class='page-link'>{$totalPages}</a>";
                 }
 
-                // NEXT
                 if ($page < $totalPages) {
                     echo "<a href='" . htmlspecialchars(build_query(['page' => $page + 1])) . "' class='page-link next'>Berikutnya &raquo;</a>";
                 }

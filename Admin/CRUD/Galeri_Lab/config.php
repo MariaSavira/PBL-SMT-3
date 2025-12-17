@@ -13,7 +13,6 @@
         die("Connection failed: " . $e->getMessage());
     }
 
-    // Fungsi helper untuk sanitasi input
     function clean_input($data) {
         $data = trim($data);
         $data = stripslashes($data);
@@ -21,6 +20,5 @@
         return $data;
     }
 
-    // Set timezone
     date_default_timezone_set('Asia/Jakarta');
 ?>

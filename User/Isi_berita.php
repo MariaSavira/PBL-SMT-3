@@ -233,15 +233,12 @@
 
               const berita = result.data;
 
-              // Update title halaman
               document.title = berita.judul + ' - Berita Laboratorium';
 
-              // Tampilkan konten berita
               const gambarUrl = berita.gambar 
                   ? `../Assets/Image/Galeri-Berita/${berita.gambar}` 
                   : '../Assets/Image/Galeri-Berita/default.jpg';
 
-                // SESUDAH - Gunakan nama_author dengan fallback
                 const authorName = berita.nama_author || 'Admin';
 
                 contentDiv.innerHTML = `
@@ -273,7 +270,6 @@
           }
       }
 
-      // Load berita terbaru untuk sidebar
       async function loadBeritaTerbaru() {
           const sidebar = document.getElementById('berita-sidebar');
           
@@ -291,7 +287,6 @@
               const currentId = getBeritaId();
               const beritaList = result.data;
               
-              // Filter berita (exclude current)
               const otherBerita = beritaList.filter(b => b.id_berita != currentId).slice(0, 5);
 
               if (otherBerita.length === 0) {
@@ -316,7 +311,6 @@
           }
       }
 
-      // Load saat halaman dimuat
       document.addEventListener('DOMContentLoaded', function() {
           loadBeritaDetail();
           loadBeritaTerbaru();

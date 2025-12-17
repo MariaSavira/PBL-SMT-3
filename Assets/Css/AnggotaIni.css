@@ -192,6 +192,34 @@ div.footer-logo {
     flex-wrap: wrap;
 }
 
+.kepala-card-clickable{ position: relative; }
+
+/* overlay nutup seluruh card */
+.card-overlay-link{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  border-radius: inherit;
+  text-decoration:none;
+}
+
+.kepala-lab-card.kepala-click {
+    display: flex;
+    width: 100%;
+    text-decoration: none;
+    color: inherit;
+}
+
+.kepala-lab-card.kepala-click .kepala-lab-photo,
+.kepala-lab-card.kepala-click .kepala-lab-info{
+  flex: 0 0 auto;
+}
+
+.kepala-lab-card.kepala-click .kepala-lab-info{
+  flex: 1 1 auto;
+  min-width: 0; /* penting biar text tidak mendorong layout */
+}
+
 .kepala-lab-photo {
     position: relative;
     /* width: min(260px, 100%); */
@@ -205,6 +233,7 @@ div.footer-logo {
     border-radius: 12px;
     object-fit: cover;
     display: block;
+    object-position: center;
     /* background: #ffffff; */
 }
 
@@ -330,6 +359,7 @@ div.footer-logo {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
 }
 
 .peneliti-name {
@@ -344,6 +374,64 @@ div.footer-logo {
     flex-wrap: wrap;
     justify-content: center;
     gap: 6px;
+}
+
+.detail-topbar {
+    max-width: 1200px;
+    margin: 0 auto 14px;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    color: #111827;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.detail-card {
+    margin-top: 6px;
+}
+
+.detail-role {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 8px 0 8px;
+    opacity: .85;
+}
+
+.socmed-icon-img {
+    width: 18px;
+    height: 18px;
+    display: block;
+}
+
+.socmed-empty {
+    font-size: 12px;
+    color: #6b7280;
+    font-style: italic;
+}
+
+.tag-empty {
+    font-size: 12px;
+    color: #6b7280;
+    font-style: italic;
+}
+
+.kepala-click {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.kepala-click:hover {
+    text-decoration: none;
 }
 
 @media (max-width: 900px) {

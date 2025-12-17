@@ -1,6 +1,4 @@
 <?php
-// admin/test_config.php
-// Test koneksi database
 require_once __DIR__ . '../../../Cek_Autentikasi.php';
 require_once 'config.php';
 
@@ -74,11 +72,10 @@ echo "<!DOCTYPE html>
     <div class='container'>";
 
 try {
-    // Test query
     $stmt = $pdo->query("SELECT version()");
     $version = $stmt->fetchColumn();
     
-    echo "<h2>✅ Test Koneksi Database</h2>";
+    echo "<h2>Test Koneksi Database</h2>";
     echo "<div class='success'>
             <strong>Koneksi Berhasil!</strong><br>
             Database terhubung dengan baik.

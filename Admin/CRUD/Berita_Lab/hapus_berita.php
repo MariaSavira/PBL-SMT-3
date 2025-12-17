@@ -2,7 +2,6 @@
     require_once __DIR__ . '../../../Cek_Autentikasi.php';
     require_once 'config.php';
 
-    // Handle bulk delete (multiple IDs via POST)
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ids'])) {
         $ids = $_POST['ids'] ?? [];
         
@@ -18,17 +17,14 @@
             foreach ($ids as $id) {
                 $id = (int)$id;
                 
-                // Get gambar filename first
                 $stmt = $pdo->prepare("SELECT gambar FROM berita WHERE id_berita = ?");
                 $stmt->execute([$id]);
                 $berita = $stmt->fetch();
                 
                 if ($berita) {
-                    // Delete from database
                     $stmt = $pdo->prepare("DELETE FROM berita WHERE id_berita = ?");
                     $stmt->execute([$id]);
                     
-                    // Delete image file
                     if ($berita['gambar']) {
                         hapusGambar($berita['gambar']);
                     }
@@ -47,22 +43,20 @@
         exit;
     }
 
-    // Handle single delete (single ID via GET)
     $id = $_GET['id'] ?? 0;
 
     if ($id > 0) {
         try {
-            // Get gambar filename first
+
             $stmt = $pdo->prepare("SELECT gambar FROM berita WHERE id_berita = ?");
             $stmt->execute([$id]);
             $berita = $stmt->fetch();
             
             if ($berita) {
-                // Delete from database
+
                 $stmt = $pdo->prepare("DELETE FROM berita WHERE id_berita = ?");
                 $stmt->execute([$id]);
                 
-                // Delete image file
                 if ($berita['gambar']) {
                     hapusGambar($berita['gambar']);
                 }

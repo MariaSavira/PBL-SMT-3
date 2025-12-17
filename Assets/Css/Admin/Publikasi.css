@@ -425,6 +425,12 @@ tbody tr:hover {
     color: #92400e;
 }
 
+.badge.nonaktif {
+    background: #fee8e8;
+    border: 1px solid #e17070;
+    color: #9c5454;
+}
+
 .action-cell {
     position: relative;
     text-align: right;

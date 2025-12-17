@@ -2,7 +2,7 @@
 <html lang="id">
 
 <?php
-    require_once __DIR__ . '/../Admin/Cek_Autentikasi.php';
+    require_once __DIR__ . '../../Admin/Cek_Autentikasi.php';
 ?>
 
 <head>
@@ -14,10 +14,9 @@
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="../Assets/Image/Logo/Logo Without Text.png" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <title>Berita Laboratorium</title>
     <style>
-    /* Loading Skeleton */
     .skeleton {
         background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
         background-size: 200% 100%;
@@ -50,13 +49,13 @@
         width: 60%;
     }
 
-    /* Highlight Section Skeleton */
+    
     .skeleton-highlight {
         height: 400px;
         border-radius: 16px;
     }
 
-    /* Pengumuman Skeleton */
+    
     .skeleton-pengumuman {
         display: flex;
         gap: 15px;
@@ -75,7 +74,7 @@
         flex: 1;
     }
 
-    /* Error State */
+    
     .error-state {
         background: #fee2e2;
         color: #991b1b;
@@ -90,7 +89,7 @@
         margin-bottom: 15px;
     }
 
-    /* Empty State */
+    
     .empty-state {
         text-align: center;
         padding: 60px 20px;
@@ -103,7 +102,7 @@
         opacity: 0.5;
     }
 
-    /* Pengumuman Item Enhancement */
+    
     .pengumuman-item {
         cursor: pointer;
         transition: all 0.3s ease;
@@ -113,7 +112,7 @@
         transform: translateX(5px);
     }
 
-    /* Author Badge Styling */
+    
     .author {
         display: inline-flex;
         align-items: center;
@@ -131,10 +130,10 @@
 
 <body>
 
-    <!-- NAVBAR -->
+    
     <div id="header"></div>
 
-    <!-- HEADING -->
+    
     <div class="heading">
         <h1>Berita Laboratorium</h1>
         <p style="margin-top: 16px; color: #fff;">
@@ -145,25 +144,25 @@
         </p>
     </div>
 
-    <!-- HIGHLIGHT BERITA (Dinamis dari API - Berita Terbaru) -->
+    
     <section class="highlight-floating">
         <div class="highlight-wrapper">
             <div class="highlight-card" id="highlight-berita">
-                <!-- Skeleton Loading -->
+                
                 <div class="skeleton skeleton-highlight"></div>
             </div>
         </div>
     </section>
 
-    <!-- SECTION BAWAH WRAPPER -->
+    
     <section class="content-wrapper">
 
-        <!-- PENGUMUMAN (Dinamis dari API) -->
+        
         <div class="pengumuman-wrapper">
             <h3 class="judul-pengumuman">Pengumuman</h3>
 
             <div class="pengumuman" id="pengumuman-list">
-                <!-- Skeleton Loading -->
+                
                 <div class="skeleton-pengumuman">
                     <div class="skeleton skeleton-icon"></div>
                     <div class="skeleton-content">
@@ -188,7 +187,7 @@
             </div>
         </div>
 
-        <!-- BERITA TERKINI (Dinamis dari API) -->
+        
         <div class="berita-terkini">
             <div class="berita-terkini-header">
                 <h3>Berita Terkini</h3>
@@ -213,9 +212,9 @@
                 </div>
             </div>
 
-            <!-- LIST BERITA (Dinamis) -->
+            
             <div id="berita-list">
-                <!-- Skeleton Loading -->
+                
                 <div class="berita-card">
                     <div class="skeleton skeleton-img"></div>
                     <div class="text">
@@ -243,14 +242,12 @@
     <script src="../Assets/Javascript/HeaderFooter.js"></script>
 
     <script>
-    // Icon images untuk pengumuman
     const pengumumanIcons = [
         '../Assets/Image/Galeri-Berita/icon1.svg',
         '../Assets/Image/Galeri-Berita/icon1.svg',
         '../Assets/Image/Galeri-Berita/icon1.svg'
     ];
 
-    // Fungsi format tanggal Indonesia
     function formatTanggal(dateString) {
         const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
             'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
@@ -265,7 +262,6 @@
         return `${month} ${day}, ${year} | ${hours}:${minutes} WIB`;
     }
 
-    // Fungsi format tanggal pendek untuk pengumuman
     function formatTanggalPendek(dateString) {
         const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
             'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
@@ -278,7 +274,6 @@
         return `${month} ${day}, ${year}`;
     }
 
-    // Fungsi truncate text
     function truncateText(text, maxLength) {
         if (!text) return '';
         const stripped = text.replace(/<[^>]*>/g, '');
@@ -286,7 +281,6 @@
         return stripped.substr(0, maxLength) + '...';
     }
 
-    // Load Pengumuman (Dinamis dari database)
     async function loadPengumuman() {
         const container = document.getElementById('pengumuman-list');
 
@@ -306,13 +300,13 @@
                 return;
             }
 
-            // Filter hanya pengumuman yang aktif
+            
             const pengumumanAktif = result.data.filter(item => item.status === 'Aktif');
 
-            // Sort by date descending
+            
             pengumumanAktif.sort((a, b) => new Date(b.tanggal_terbit) - new Date(a.tanggal_terbit));
 
-            // Ambil 3 pengumuman terbaru
+            
             const pengumumanTerbaru = pengumumanAktif.slice(0, 3);
 
             if (pengumumanTerbaru.length === 0) {
@@ -366,7 +360,7 @@
         }
     }
 
-    // Load Highlight Berita (Berita Terbaru)
+    
     async function loadHighlightBerita() {
         const container = document.getElementById('highlight-berita');
 
@@ -411,12 +405,12 @@
         }
     }
 
-    // Load List Berita Terkini dengan Filter
+    
     async function loadBeritaTerkini(filterTag = '', filterTahun = '') {
         const container = document.getElementById('berita-list');
 
         try {
-            // Tampilkan loading
+            
             container.innerHTML = `
             <div class="berita-card">
                 <div class="skeleton skeleton-img"></div>
@@ -457,18 +451,18 @@
                 return;
             }
 
-            // Skip berita pertama (sudah ditampilkan di highlight)
+            
             beritaList = beritaList.slice(1);
 
-            // Filter berdasarkan tag
+            
             if (filterTag) {
                 beritaList = beritaList.filter(berita => {
-                    // Pastikan tag ada dan cocok (case insensitive)
+                    
                     return berita.tag && berita.tag.toLowerCase() === filterTag.toLowerCase();
                 });
             }
 
-            // Filter berdasarkan tahun
+            
             if (filterTahun) {
                 beritaList = beritaList.filter(berita => {
                     const tahunBerita = new Date(berita.tanggal).getFullYear().toString();
@@ -476,7 +470,7 @@
                 });
             }
 
-            // Cek apakah ada hasil setelah filter
+            
             if (beritaList.length === 0) {
                 let pesanFilter = '';
 
@@ -501,7 +495,7 @@
                 return;
             }
 
-            // Tampilkan berita
+            
             beritaList.forEach(berita => {
                 const gambarUrl = berita.gambar ?
                     `../Assets/Image/Galeri-Berita/${berita.gambar}` :
@@ -541,28 +535,28 @@
         }
     }
 
-    // Fungsi reset filter
+    
     function resetFilter() {
         document.getElementById('filterTag').value = '';
         document.getElementById('filterTahun').value = '';
         loadBeritaTerkini();
     }
 
-    // Inisialisasi saat halaman dimuat
+    
     document.addEventListener('DOMContentLoaded', function() {
-        // Load semua data saat halaman dimuat
+        
         loadPengumuman();
         loadHighlightBerita();
         loadBeritaTerkini();
 
-        // Event listener untuk filter Tag
+        
         document.getElementById('filterTag')?.addEventListener('change', function() {
             const selectedTag = this.value;
             const selectedTahun = document.getElementById('filterTahun').value;
             loadBeritaTerkini(selectedTag, selectedTahun);
         });
 
-        // Event listener untuk filter Tahun
+        
         document.getElementById('filterTahun')?.addEventListener('change', function() {
             const selectedTahun = this.value;
             const selectedTag = document.getElementById('filterTag').value;

@@ -4,23 +4,14 @@
 
     $user_name = $_SESSION['user_name'] ?? 'Maria Savira';
 
-    // ========================
-    // Ambil parameter URL
-    // ========================
     $search       = trim($_GET['search'] ?? '');
     $filterStatus = trim($_GET['status'] ?? '');
     $sort         = $_GET['sort'] ?? 'default';
 
-    // ========================
-    // Pagination
-    // ========================
-    $perPage = 10;
+    $perPage = 6;
     $page    = max(1, (int)($_GET['page'] ?? 1));
     $offset  = ($page - 1) * $perPage;
 
-    // ========================
-    // Helper: build_query (karena config.php kamu gak punya)
-    // ========================
     function build_query(array $overrides = []): string {
         $current = $_GET ?? [];
         foreach ($overrides as $k => $v) {
@@ -37,16 +28,10 @@
         return $cond ? 'active' : '';
     }
 
-    // ========================
-    // Dropdown status (ambil dari DB) - PDO
-    // ========================
     $statusList = [];
     $stmtStatus = $pdo->query("SELECT DISTINCT status FROM berita ORDER BY status ASC");
     $statusList = $stmtStatus->fetchAll(PDO::FETCH_COLUMN);
 
-    // ========================
-    // Build WHERE + params (pakai placeholder ? konsisten)
-    // ========================
     $where  = [];
     $params = [];
 
@@ -68,9 +53,6 @@
 
     $whereSql = $where ? ("WHERE " . implode(" AND ", $where)) : "";
 
-    // ========================
-    // Sort
-    // ========================
     switch ($sort) {
         case "latest":
             $orderBy   = "ORDER BY b.tanggal DESC";
@@ -94,18 +76,12 @@
             break;
     }
 
-    // ========================
-    // Hitung total data (PDO)
-    // ========================
     $sqlCount = "SELECT COUNT(*) AS total {$sqlBase} {$whereSql}";
     $stmtCount = $pdo->prepare($sqlCount);
     $stmtCount->execute($params);
     $totalData = (int)($stmtCount->fetch()['total'] ?? 0);
     $totalPages = max(1, (int)ceil($totalData / $perPage));
 
-    // ========================
-    // Ambil data per halaman (PDO)
-    // ========================
     $sqlData = "
         SELECT b.*, a.nama AS nama_uploader
         {$sqlBase}
@@ -142,7 +118,7 @@
 
     <div class="top-controls">
         <div class="left-tools">
-            <!-- SEARCH -->
+            
             <div class="search-box">
                 <form method="GET" class="search-container">
                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -200,7 +176,7 @@
             </div>
         </div>
 
-        <!-- RIGHT TOOLS -->
+        
         <div class="right-tools">
             <a href="ExportBerita.php" style="text-decoration:none;">
                 <button type="button" class="export">
@@ -208,7 +184,7 @@
                 </button>
             </a>
 
-            <!-- SORT -->
+            
             <div class="sort-wrapper">
                 <button id="sort-btn" class="sort" type="button">
                     <i class="fa-solid fa-arrow-down-wide-short"></i>
@@ -230,7 +206,7 @@
         </div>
     </div>
 
-    <!-- TABLE -->
+    
     <div class="table-container">
         <table>
             <thead>
@@ -312,7 +288,7 @@
         </table>
     </div>
 
-    <!-- FOOTER + PAGINATION -->
+    
     <div class="table-footer" id="deleteToast">
         <div class="delete-selection" style="cursor: pointer">
             <button class="btn-delete-bulk" onclick="return confirmBulkDelete()" type="button" style="background: transparent; color: #1E5AA8;">
